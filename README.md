@@ -20,6 +20,12 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Switch.tsx` | `Switch` |
 | `Badge.tsx` | `Badge` (5 tone, có chấm trạng thái) |
 | `Card.tsx` | `Card`, `CardHeader`, `Metric` |
+| `Alert.tsx` | `Alert` — thông báo nằm tại chỗ (khác Toast là thoáng qua) |
+| `Progress.tsx` | `Progress` |
+| `Table.tsx` | `Table` — cuộn ngang, ẩn cột trên mobile, cột số canh phải |
+| `Pagination.tsx` | `Pagination` — tự rút gọn bằng dấu `…` |
+| `Accordion.tsx` | `Accordion` — mở nhiều hoặc chỉ một mục |
+| `Tooltip.tsx` | `Tooltip` |
 | `Avatar.tsx` | `Avatar` — chữ cái đầu, màu suy ra từ tên |
 | `states.tsx` | `Skeleton`, `SkeletonListRow`, `EmptyState`, `LoadingState` |
 | `Modal.tsx` | `Modal`, `ConfirmDialog` |
@@ -68,3 +74,5 @@ không hardcode `violet-600` hay `stone-200`, nên đổi biến là đổi cả
 - **Biến thể `peer-*` không áp cho con cháu**, chỉ áp cho anh em của input. Nên Checkbox/Radio đổi màu ô ngoài và để dấu tick ăn theo `currentColor`, thay vì đặt `peer-checked` thẳng lên dấu tick.
 - **Modal/Sheet giam focus và trả focus** về đúng nút đã mở nó khi đóng.
 - **Toast dùng `aria-live="polite"`**, toast lỗi để lâu gấp đôi.
+- **Accordion tháo hẳn phần đang đóng khỏi DOM**, không chỉ ẩn — tránh Tab lạc vào chỗ không nhìn thấy.
+- **Tooltip chỉ dùng cho chú thích thêm.** Thiết bị cảm ứng không có "rê chuột", việc gì quan trọng thì viết thẳng ra màn hình.

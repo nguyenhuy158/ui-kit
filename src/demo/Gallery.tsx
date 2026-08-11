@@ -1,7 +1,9 @@
 import { useState } from "react";
 import {
+  AlertTriangle,
   Home,
   Inbox,
+  Info,
   MoreHorizontal,
   Pencil,
   Plus,
@@ -10,8 +12,14 @@ import {
   Trash2,
   User,
 } from "lucide-react";
+import { Accordion } from "../ui/Accordion";
+import { Alert } from "../ui/Alert";
 import { Avatar } from "../ui/Avatar";
 import { Badge } from "../ui/Badge";
+import { Pagination } from "../ui/Pagination";
+import { Progress } from "../ui/Progress";
+import { Table } from "../ui/Table";
+import { Tooltip } from "../ui/Tooltip";
 import { BottomNav, Fab } from "../ui/BottomNav";
 import { Button } from "../ui/Button";
 import { Card, CardHeader, Metric } from "../ui/Card";
@@ -28,6 +36,16 @@ import { Switch } from "../ui/Switch";
 import { Tabs } from "../ui/Tabs";
 import { ThemeToggle } from "../ui/theme";
 import { useToast } from "../ui/Toast";
+
+type Row = { id: string; name: string; status: "Đang mở" | "Xong"; amount: number };
+
+const ROWS: Row[] = [
+  { id: "1", name: "Ăn tối quận 1", status: "Đang mở", amount: 1250000 },
+  { id: "2", name: "Cà phê sáng", status: "Xong", amount: 180000 },
+  { id: "3", name: "Đi Đà Lạt", status: "Đang mở", amount: 4300000 },
+];
+
+const money = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
 
 const NAV = [
   { id: "home", label: "Trang chủ", icon: Home },
@@ -55,6 +73,7 @@ export function Gallery() {
   const [modal, setModal] = useState(false);
   const [sheet, setSheet] = useState(false);
   const [confirm, setConfirm] = useState(false);
+  const [page, setPage] = useState(3);
 
   const emailError =
     email.length > 0 && !email.includes("@") ? "Email phải có ký tự @" : undefined;
@@ -179,6 +198,80 @@ export function Gallery() {
             <Avatar name="Nguyễn Văn A" size="sm" />
             <Avatar name="Trần Thị Bích" />
             <Avatar name="Lê Hoàng" size="lg" />
+          </div>
+        </Section>
+
+        <Section title="Bảng và phân trang">
+          <Table
+            columns={[
+              { key: "name", header: "Cuộc chia", cell: (row) => row.name },
+              {
+                key: "status",
+                header: "Trạng thái",
+                hideOnMobile: true,
+                cell: (row) => (
+                  <Badge tone={row.status === "Xong" ? "success" : "primary"}>{row.status}</Badge>
+                ),
+              },
+              {
+                key: "amount",
+                header: "Số tiền",
+                numeric: true,
+                cell: (row) => money.format(row.amount),
+              },
+            ]}
+            rows={ROWS}
+            rowKey={(row) => row.id}
+            onRowClick={(row) => toast.info(row.name)}
+          />
+          <Pagination page={page} pageCount={12} onChange={setPage} />
+        </Section>
+
+        <Section title="Alert và tiến độ">
+          <Alert tone="info" title="Bản nháp chưa lưu" icon={<Info size={18} />}>
+            Thay đổi sẽ mất nếu bạn rời trang.
+          </Alert>
+          <Alert
+            tone="warning"
+            title="Sắp hết dung lượng"
+            icon={<AlertTriangle size={18} />}
+            action={
+              <Button size="sm" variant="outline">
+                Nâng cấp
+              </Button>
+            }
+          >
+            Đã dùng 4,6 GB trên 5 GB.
+          </Alert>
+          <Alert tone="danger" title="Không kết nối được máy chủ" />
+
+          <Card className="space-y-3">
+            <Progress value={92} label="Dung lượng" showValue tone="warning" />
+            <Progress value={38} label="Tiến độ chia tiền" showValue />
+          </Card>
+        </Section>
+
+        <Section title="Accordion và tooltip">
+          <Accordion
+            single
+            defaultOpen={["a"]}
+            items={[
+              { id: "a", title: "Chia tiền kiểu gì?", content: "Chia đều hoặc nhập tay từng người." },
+              { id: "b", title: "Sửa được sau khi chốt không?", content: "Được, mọi thay đổi đều có lịch sử." },
+              { id: "c", title: "Xoá cuộc chia có lấy lại được?", content: "Nằm trong thùng rác 30 ngày." },
+            ]}
+          />
+          <div className="flex gap-2">
+            <Tooltip label="Sao chép mã mời">
+              <Button variant="outline" size="sm">
+                Rê chuột vào đây
+              </Button>
+            </Tooltip>
+            <Tooltip label="Hiện bên dưới" side="bottom">
+              <Button variant="outline" size="sm">
+                Hoặc đây
+              </Button>
+            </Tooltip>
           </div>
         </Section>
 
