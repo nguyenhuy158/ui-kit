@@ -16,7 +16,12 @@ import { Accordion } from "../ui/Accordion";
 import { Alert } from "../ui/Alert";
 import { Avatar } from "../ui/Avatar";
 import { Badge } from "../ui/Badge";
+import { Combobox } from "../ui/Combobox";
+import { CommandPalette, useCommandPalette } from "../ui/CommandPalette";
+import { DatePicker } from "../ui/DatePicker";
+import { FileUpload } from "../ui/FileUpload";
 import { Pagination } from "../ui/Pagination";
+import { Stepper } from "../ui/Stepper";
 import { Progress } from "../ui/Progress";
 import { Table } from "../ui/Table";
 import { Tooltip } from "../ui/Tooltip";
@@ -47,6 +52,21 @@ const ROWS: Row[] = [
 
 const money = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
 
+const CITIES = [
+  { value: "hcm", label: "TP. Hồ Chí Minh", description: "Miền Nam" },
+  { value: "hn", label: "Hà Nội", description: "Miền Bắc" },
+  { value: "dn", label: "Đà Nẵng", description: "Miền Trung" },
+  { value: "ct", label: "Cần Thơ", description: "Miền Tây" },
+  { value: "hp", label: "Hải Phòng", description: "Miền Bắc" },
+  { value: "dl", label: "Đà Lạt", description: "Tây Nguyên" },
+];
+
+const STEPS = [
+  { id: "info", label: "Thông tin", description: "Tên, ngày" },
+  { id: "people", label: "Thành viên", description: "Ai tham gia" },
+  { id: "done", label: "Hoàn tất" },
+];
+
 const NAV = [
   { id: "home", label: "Trang chủ", icon: Home },
   { id: "inbox", label: "Hộp thư", icon: Inbox, badge: 3 },
@@ -74,6 +94,11 @@ export function Gallery() {
   const [sheet, setSheet] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [page, setPage] = useState(3);
+  const [date, setDate] = useState("");
+  const [city, setCity] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
+  const [step, setStep] = useState(1);
+  const [paletteOpen, setPaletteOpen] = useCommandPalette();
 
   const emailError =
     email.length > 0 && !email.includes("@") ? "Email phải có ký tự @" : undefined;
@@ -85,6 +110,11 @@ export function Gallery() {
         subtitle="Component chuẩn, copy sang project khác là chạy"
         actions={
           <>
+            <Tooltip label="Ctrl K">
+              <Button variant="ghost" size="icon" onClick={() => setPaletteOpen(true)}>
+                <Search size={18} />
+              </Button>
+            </Tooltip>
             <ThemeToggle />
             <Menu
               trigger={(props) => (
@@ -199,6 +229,61 @@ export function Gallery() {
             <Avatar name="Trần Thị Bích" />
             <Avatar name="Lê Hoàng" size="lg" />
           </div>
+        </Section>
+
+        <Section title="Chọn ngày, tìm chọn, tải tệp">
+          <Card className="space-y-4">
+            <Field label="Ngày đi" hint="Không cho chọn ngày trong quá khứ">
+              <DatePicker value={date} onChange={setDate} min="2026-08-11" />
+            </Field>
+
+            <Field label="Thành phố" hint="Gõ không dấu vẫn tìm ra">
+              <Combobox
+                value={city}
+                onChange={setCity}
+                options={CITIES}
+                placeholder="Tìm thành phố..."
+              />
+            </Field>
+
+            <Field label="Ảnh hoá đơn">
+              <FileUpload
+                files={files}
+                onChange={setFiles}
+                accept="image/*,.pdf"
+                maxSize={2 * 1024 * 1024}
+                maxFiles={3}
+              />
+            </Field>
+          </Card>
+        </Section>
+
+        <Section title="Stepper">
+          <Card className="space-y-6">
+            <Stepper
+              steps={STEPS}
+              current={step}
+              onStepClick={setStep}
+            />
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={step === 0}
+                onClick={() => setStep((current) => current - 1)}
+              >
+                Quay lại
+              </Button>
+              <Button
+                size="sm"
+                disabled={step >= STEPS.length - 1}
+                onClick={() => setStep((current) => current + 1)}
+              >
+                Tiếp tục
+              </Button>
+            </div>
+            <Stepper steps={STEPS} current={step} orientation="vertical" onStepClick={setStep} />
+          </Card>
         </Section>
 
         <Section title="Bảng và phân trang">
@@ -380,6 +465,43 @@ export function Gallery() {
           </Button>
         </div>
       </Sheet>
+
+      <CommandPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        commands={[
+          {
+            id: "new",
+            label: "Tạo cuộc chia mới",
+            group: "Hành động",
+            shortcut: "N",
+            icon: <Plus size={16} />,
+            onRun: () => toast.success("Tạo mới"),
+          },
+          {
+            id: "settings",
+            label: "Mở cài đặt",
+            group: "Hành động",
+            icon: <Settings size={16} />,
+            onRun: () => toast.info("Cài đặt"),
+          },
+          {
+            id: "home",
+            label: "Về trang chủ",
+            group: "Điều hướng",
+            keywords: "trang chu home",
+            icon: <Home size={16} />,
+            onRun: () => setNav("home"),
+          },
+          {
+            id: "inbox",
+            label: "Hộp thư",
+            group: "Điều hướng",
+            icon: <Inbox size={16} />,
+            onRun: () => setNav("inbox"),
+          },
+        ]}
+      />
 
       <ConfirmDialog
         open={confirm}

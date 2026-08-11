@@ -15,6 +15,11 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Button.tsx` | `Button` (primary / secondary / outline / ghost / danger, size sm-md-lg-icon, loading, block) |
 | `Input.tsx` | `Input` (leading/trailing icon), `Textarea`, `Select` |
 | `Field.tsx` | `Field` — label + hint + lỗi, tự nối `id` / `aria-describedby` |
+| `Combobox.tsx` | `Combobox` — chọn có tìm kiếm, gõ không dấu vẫn ra |
+| `DatePicker.tsx` | `DatePicker`, `formatDate` — lịch tiếng Việt, tuần bắt đầu thứ Hai |
+| `FileUpload.tsx` | `FileUpload`, `formatBytes` — kéo thả, giới hạn dung lượng và số tệp |
+| `Stepper.tsx` | `Stepper` — ngang hoặc dọc |
+| `CommandPalette.tsx` | `CommandPalette`, `useCommandPalette` — Ctrl/Cmd + K |
 | `Checkbox.tsx` | `Checkbox` (có trạng thái indeterminate) |
 | `Radio.tsx` | `Radio`, `RadioGroup` |
 | `Switch.tsx` | `Switch` |
@@ -75,4 +80,8 @@ không hardcode `violet-600` hay `stone-200`, nên đổi biến là đổi cả
 - **Modal/Sheet giam focus và trả focus** về đúng nút đã mở nó khi đóng.
 - **Toast dùng `aria-live="polite"`**, toast lỗi để lâu gấp đôi.
 - **Accordion tháo hẳn phần đang đóng khỏi DOM**, không chỉ ẩn — tránh Tab lạc vào chỗ không nhìn thấy.
+- **Ngày luôn là chuỗi `"YYYY-MM-DD"`, không dùng `Date` làm giá trị.** `new Date("2026-01-01")` là 00:00 UTC — ở múi giờ âm sẽ đọc ra 31/12. Với ngày-tháng-năm thuần thì chuỗi mới là kiểu dữ liệu đúng, và so sánh `<` `>` giữa hai chuỗi cũng ra đúng thứ tự thời gian.
+- **Combobox / CommandPalette bỏ dấu khi tìm** (NFD rồi xoá `U+0300–U+036F`, `đ` → `d`), gõ "da nang" vẫn ra "Đà Nẵng".
+- **Combobox chọn bằng `pointerdown`, không phải `click`.** Click xảy ra sau `blur` của ô nhập, lúc đó danh sách đã đóng nên không bắt được lựa chọn.
+- **Stepper chỉ cho bấm quay lại bước đã xong**, nhảy tới bước chưa làm thường bỏ qua bước kiểm tra dữ liệu ở giữa.
 - **Tooltip chỉ dùng cho chú thích thêm.** Thiết bị cảm ứng không có "rê chuột", việc gì quan trọng thì viết thẳng ra màn hình.
