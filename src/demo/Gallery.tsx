@@ -1,0 +1,305 @@
+import { useState } from "react";
+import {
+  Home,
+  Inbox,
+  MoreHorizontal,
+  Pencil,
+  Plus,
+  Search,
+  Settings,
+  Trash2,
+  User,
+} from "lucide-react";
+import { Avatar } from "../ui/Avatar";
+import { Badge } from "../ui/Badge";
+import { BottomNav, Fab } from "../ui/BottomNav";
+import { Button } from "../ui/Button";
+import { Card, CardHeader, Metric } from "../ui/Card";
+import { Checkbox } from "../ui/Checkbox";
+import { Field } from "../ui/Field";
+import { HeaderBar } from "../ui/HeaderBar";
+import { Input, Select, Textarea } from "../ui/Input";
+import { Menu } from "../ui/Menu";
+import { ConfirmDialog, Modal } from "../ui/Modal";
+import { RadioGroup } from "../ui/Radio";
+import { Sheet } from "../ui/Sheet";
+import { EmptyState, LoadingState, SkeletonListRow } from "../ui/states";
+import { Switch } from "../ui/Switch";
+import { Tabs } from "../ui/Tabs";
+import { ThemeToggle } from "../ui/theme";
+import { useToast } from "../ui/Toast";
+
+const NAV = [
+  { id: "home", label: "Trang chủ", icon: Home },
+  { id: "inbox", label: "Hộp thư", icon: Inbox, badge: 3 },
+  { id: "profile", label: "Cá nhân", icon: User },
+];
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="space-y-3">
+      <h2 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">{title}</h2>
+      {children}
+    </section>
+  );
+}
+
+export function Gallery() {
+  const toast = useToast();
+  const [tab, setTab] = useState("all");
+  const [nav, setNav] = useState("home");
+  const [checked, setChecked] = useState(true);
+  const [notify, setNotify] = useState(true);
+  const [plan, setPlan] = useState("free");
+  const [email, setEmail] = useState("");
+  const [modal, setModal] = useState(false);
+  const [sheet, setSheet] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+
+  const emailError =
+    email.length > 0 && !email.includes("@") ? "Email phải có ký tự @" : undefined;
+
+  return (
+    <div className="min-h-dvh pb-28">
+      <HeaderBar
+        title="UI Kit"
+        subtitle="Component chuẩn, copy sang project khác là chạy"
+        actions={
+          <>
+            <ThemeToggle />
+            <Menu
+              trigger={(props) => (
+                <Button variant="ghost" size="icon" {...props}>
+                  <MoreHorizontal size={18} />
+                </Button>
+              )}
+              items={[
+                { label: "Sửa", icon: <Pencil size={16} />, onSelect: () => toast.info("Sửa") },
+                { label: "Cài đặt", icon: <Settings size={16} />, onSelect: () => toast.info("Cài đặt") },
+                {
+                  label: "Xoá",
+                  icon: <Trash2 size={16} />,
+                  destructive: true,
+                  onSelect: () => setConfirm(true),
+                },
+              ]}
+            />
+          </>
+        }
+      />
+
+      <main className="mx-auto max-w-3xl space-y-8 px-4 py-6">
+        <Section title="Button">
+          <div className="flex flex-wrap gap-2">
+            <Button>Primary</Button>
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="outline">Outline</Button>
+            <Button variant="ghost">Ghost</Button>
+            <Button variant="danger">Danger</Button>
+            <Button loading>Đang lưu</Button>
+            <Button disabled>Tắt</Button>
+            <Button size="icon" variant="outline">
+              <Search size={18} />
+            </Button>
+          </div>
+        </Section>
+
+        <Section title="Form">
+          <Card className="space-y-4">
+            <Field label="Tên hiển thị" hint="Người khác sẽ thấy tên này" required>
+              <Input placeholder="Nguyễn Văn A" />
+            </Field>
+
+            <Field label="Email" error={emailError} required>
+              <Input
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                leading={<Search size={16} />}
+                placeholder="ban@email.com"
+              />
+            </Field>
+
+            <Field label="Loại tài khoản">
+              <Select defaultValue="personal">
+                <option value="personal">Cá nhân</option>
+                <option value="team">Nhóm</option>
+              </Select>
+            </Field>
+
+            <Field label="Ghi chú" hint="Không bắt buộc">
+              <Textarea placeholder="Vài dòng mô tả..." />
+            </Field>
+
+            <Checkbox
+              checked={checked}
+              onChange={(event) => setChecked(event.target.checked)}
+              label="Đồng ý điều khoản"
+              description="Bạn có thể đổi lại bất cứ lúc nào"
+            />
+
+            <RadioGroup
+              label="Gói dịch vụ"
+              name="plan"
+              value={plan}
+              onChange={setPlan}
+              options={[
+                { value: "free", label: "Miễn phí", description: "3 project" },
+                { value: "pro", label: "Pro", description: "Không giới hạn" },
+              ]}
+            />
+
+            <Switch
+              checked={notify}
+              onChange={setNotify}
+              label="Nhận thông báo"
+              description="Gửi qua email mỗi khi có thay đổi"
+            />
+          </Card>
+        </Section>
+
+        <Section title="Hiển thị dữ liệu">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <Metric label="Tổng thu" value="12.400.000 ₫" />
+            <Metric label="Đã chi" value="8.150.000 ₫" />
+            <Metric label="Còn lại" value="4.250.000 ₫" />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge>Mặc định</Badge>
+            <Badge tone="primary">Mới</Badge>
+            <Badge tone="success" dot>
+              Đang chạy
+            </Badge>
+            <Badge tone="warning">Chờ duyệt</Badge>
+            <Badge tone="danger">Lỗi</Badge>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Avatar name="Nguyễn Văn A" size="sm" />
+            <Avatar name="Trần Thị Bích" />
+            <Avatar name="Lê Hoàng" size="lg" />
+          </div>
+        </Section>
+
+        <Section title="Tabs">
+          <Tabs
+            items={[
+              { id: "all", label: "Tất cả", count: 12 },
+              { id: "open", label: "Đang mở", count: 4 },
+              { id: "done", label: "Xong", count: 8 },
+            ]}
+            active={tab}
+            onChange={setTab}
+          />
+          <Tabs
+            variant="pill"
+            items={[
+              { id: "all", label: "Tất cả" },
+              { id: "open", label: "Đang mở" },
+              { id: "done", label: "Xong" },
+            ]}
+            active={tab}
+            onChange={setTab}
+          />
+        </Section>
+
+        <Section title="Trạng thái">
+          <Card padded={false} className="divide-y divide-border px-4">
+            <SkeletonListRow avatar />
+            <SkeletonListRow avatar />
+          </Card>
+          <LoadingState />
+          <EmptyState
+            title="Chưa có gì ở đây"
+            description="Tạo mục đầu tiên để bắt đầu."
+            icon={<Inbox size={28} />}
+            action={<Button size="sm">Tạo mới</Button>}
+          />
+        </Section>
+
+        <Section title="Lớp phủ và thông báo">
+          <Card>
+            <CardHeader title="Thử các lớp phủ" description="Esc để đóng, Tab bị giữ bên trong" />
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button variant="outline" onClick={() => setModal(true)}>
+                Modal
+              </Button>
+              <Button variant="outline" onClick={() => setSheet(true)}>
+                Bottom sheet
+              </Button>
+              <Button variant="outline" onClick={() => setConfirm(true)}>
+                Xác nhận xoá
+              </Button>
+              <Button variant="outline" onClick={() => toast.success("Đã lưu")}>
+                Toast xong
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => toast.error("Lưu thất bại", { description: "Mất kết nối máy chủ" })}
+              >
+                Toast lỗi
+              </Button>
+            </div>
+          </Card>
+        </Section>
+      </main>
+
+      <Fab onClick={() => toast.info("Thêm mới")} label="Thêm mới" icon={<Plus size={24} />} />
+      <BottomNav items={NAV} active={nav} onChange={setNav} mobileOnly={false} />
+
+      <Modal
+        open={modal}
+        onClose={() => setModal(false)}
+        title="Sửa thông tin"
+        description="Thay đổi được lưu ngay khi bấm Lưu."
+        footer={
+          <>
+            <Button variant="ghost" onClick={() => setModal(false)}>
+              Huỷ
+            </Button>
+            <Button
+              onClick={() => {
+                setModal(false);
+                toast.success("Đã lưu");
+              }}
+            >
+              Lưu
+            </Button>
+          </>
+        }
+      >
+        <Field label="Tên">
+          <Input defaultValue="Nguyễn Văn A" />
+        </Field>
+      </Modal>
+
+      <Sheet open={sheet} onClose={() => setSheet(false)} title="Tuỳ chọn">
+        <div className="flex flex-col gap-1">
+          <Button variant="ghost" block className="justify-start">
+            Chia sẻ
+          </Button>
+          <Button variant="ghost" block className="justify-start">
+            Nhân bản
+          </Button>
+          <Button variant="ghost" block className="justify-start text-danger">
+            Xoá
+          </Button>
+        </div>
+      </Sheet>
+
+      <ConfirmDialog
+        open={confirm}
+        onClose={() => setConfirm(false)}
+        onConfirm={() => {
+          setConfirm(false);
+          toast.success("Đã xoá");
+        }}
+        title="Xoá mục này?"
+        description="Hành động này không hoàn tác được."
+        confirmLabel="Xoá"
+        destructive
+      />
+    </div>
+  );
+}
