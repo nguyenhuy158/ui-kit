@@ -46,6 +46,8 @@ Its contract:
 - `pnpm install`: install dependencies.
 - `pnpm dev`: start the gallery on `http://127.0.0.1:5173`.
 - `pnpm check`: TypeScript project check (`tsc -b`).
+- `pnpm lint`: Biome lint + format check (`biome check .`).
+- `pnpm format`: apply Biome formatting (`biome format --write .`).
 - `pnpm build`: type-check, then build the gallery with Vite.
 - `pnpm preview`: preview the production build on `127.0.0.1`.
 
