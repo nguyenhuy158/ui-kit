@@ -29,6 +29,13 @@ import {
 } from "lucide-react";
 import { Accordion } from "../ui/Accordion";
 import { Listbox } from "../ui/Listbox";
+import { Backdrop } from "../ui/Backdrop";
+import { Breadcrumbs } from "../ui/Breadcrumbs";
+import { Chip } from "../ui/Chip";
+import { Link } from "../ui/Link";
+import { Slider } from "../ui/Slider";
+import { SpeedDial } from "../ui/SpeedDial";
+import { TransferList } from "../ui/TransferList";
 import { Alert } from "../ui/Alert";
 import { Avatar } from "../ui/Avatar";
 import { Badge } from "../ui/Badge";
@@ -129,6 +136,12 @@ export function Gallery() {
   const [date, setDate] = useState("");
   const [city, setCity] = useState("");
   const [accountType, setAccountType] = useState("personal");
+  const [drawer, setDrawer] = useState(false);
+  const [backdrop, setBackdrop] = useState(false);
+  const [volume, setVolume] = useState(60);
+  const [filters, setFilters] = useState<string[]>(["food"]);
+  const [tags, setTags] = useState(["Đà Lạt", "Cuối tuần", "Bạn bè"]);
+  const [members, setMembers] = useState<string[]>(["an"]);
   const [files, setFiles] = useState<File[]>([]);
   const [step, setStep] = useState(1);
   const [paletteOpen, setPaletteOpen] = useCommandPalette();
@@ -275,7 +288,7 @@ export function Gallery() {
           </div>
         </Section>
 
-        <Section title="Chọn ngày, tìm chọn, tải tệp">
+        <Section title="Chọn ngày, Autocomplete (Combobox), tải tệp">
           <Card className="space-y-4">
             <Field label="Ngày đi" hint="Không cho chọn ngày trong quá khứ">
               <DatePicker value={date} onChange={setDate} min="2026-08-11" />
@@ -299,6 +312,94 @@ export function Gallery() {
                 maxFiles={3}
               />
             </Field>
+          </Card>
+        </Section>
+
+        <Section title="Slider, Chip, Transfer list">
+          <Card className="space-y-5">
+            <Field label="Âm lượng">
+              <Slider value={volume} onChange={setVolume} format={(v) => `${v}%`} />
+            </Field>
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-fg">Chip lọc</p>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { id: "food", label: "Ăn uống", icon: <Wallet size={14} /> },
+                  { id: "travel", label: "Du lịch", icon: <Calendar size={14} /> },
+                  { id: "fav", label: "Yêu thích", icon: <Heart size={14} /> },
+                ].map((chip) => (
+                  <Chip
+                    key={chip.id}
+                    icon={chip.icon}
+                    selected={filters.includes(chip.id)}
+                    onClick={() =>
+                      setFilters((list) =>
+                        list.includes(chip.id) ? list.filter((id) => id !== chip.id) : [...list, chip.id],
+                      )
+                    }
+                  >
+                    {chip.label}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-fg">Chip tag (bấm x để xoá)</p>
+              <div className="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <Chip key={tag} onRemove={() => setTags((list) => list.filter((t) => t !== tag))}>
+                    {tag}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <TransferList
+              titles={["Bạn bè", "Thành viên"]}
+              selected={members}
+              onChange={setMembers}
+              items={[
+                { value: "an", label: "An" },
+                { value: "binh", label: "Bình" },
+                { value: "chi", label: "Chi" },
+                { value: "dung", label: "Dũng" },
+                { value: "giang", label: "Giang" },
+              ]}
+            />
+          </Card>
+        </Section>
+
+        <Section title="Navigation: Breadcrumbs, Link, Drawer, Speed dial">
+          <Card className="space-y-5">
+            <Breadcrumbs
+              items={[
+                { label: "Trang chủ", href: "#" },
+                { label: "Cuộc chia", href: "#" },
+                { label: "Đi Đà Lạt" },
+              ]}
+            />
+            <p className="text-sm text-fg">
+              <Link href="#">Link nội bộ</Link> ·{" "}
+              <Link href="https://github.com/nguyenhuy158/ui-kit" external>
+                Link ra ngoài
+              </Link>
+            </p>
+            <div className="flex flex-wrap items-center gap-4">
+              <Button variant="outline" onClick={() => setDrawer(true)}>
+                Mở Drawer
+              </Button>
+              <SpeedDial
+                direction="left"
+                icon={<Plus size={24} />}
+                actions={[
+                  { label: "Sao chép", icon: <Copy size={18} />, onSelect: () => toast.info("Sao chép") },
+                  { label: "Chia sẻ", icon: <Share2 size={18} />, onSelect: () => toast.info("Chia sẻ") },
+                  { label: "Tải xuống", icon: <Download size={18} />, onSelect: () => toast.info("Tải xuống") },
+                ]}
+              />
+            </div>
+            <p className="text-xs text-fg-muted">
+              Có sẵn ở các mục khác: Bottom Navigation (thanh dưới), Menu (nút ⋯ trên header), Pagination, Stepper, Tabs, FAB (nút + góc phải).
+            </p>
           </Card>
         </Section>
 
@@ -497,11 +598,17 @@ export function Gallery() {
               <Button variant="outline" onClick={() => setConfirm(true)}>
                 Xác nhận xoá
               </Button>
+              <Button variant="outline" onClick={() => {
+                setBackdrop(true);
+                setTimeout(() => setBackdrop(false), 2000);
+              }}>
+                Backdrop 2 giây
+              </Button>
             </div>
           </Card>
         </Section>
 
-        <Section title="Toast">
+        <Section title="Snackbar (Toast)">
           <Card>
             <CardHeader title="Thông báo nổi" description="Tự tắt sau 4 giây, bấm vào để tắt ngay" />
             <div className="mt-3 flex flex-wrap gap-2">
@@ -562,6 +669,18 @@ export function Gallery() {
           <Input defaultValue="Nguyễn Văn A" />
         </Field>
       </Modal>
+
+      <Sheet open={drawer} onClose={() => setDrawer(false)} title="Drawer" side="right">
+        <nav className="flex flex-col gap-1">
+          {NAV.map((item) => (
+            <Button key={item.id} variant="ghost" block className="justify-start" onClick={() => setDrawer(false)}>
+              <item.icon size={18} /> {item.label}
+            </Button>
+          ))}
+        </nav>
+      </Sheet>
+
+      <Backdrop open={backdrop} />
 
       <Sheet open={sheet} onClose={() => setSheet(false)} title="Tuỳ chọn">
         <div className="flex flex-col gap-1">
