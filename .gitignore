@@ -1,3 +1,20 @@
-node_modules
-dist
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+coverage/
 *.tsbuildinfo
+
+# Environment / Cloudflare local dev
+.env*
+.dev.vars*
+.wrangler/
+
+# OS files
+.DS_Store
+
+# Stray package-manager template dirs
+{{pkgetc}}/
+{{HOMEBREW_PREFIX}}/
