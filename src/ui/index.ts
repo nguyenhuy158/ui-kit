@@ -34,3 +34,4 @@ export { Tabs, type TabItem } from "./Tabs";
 export { Menu, type MenuItem } from "./Menu";
 export { ThemeProvider, ThemeToggle, useTheme, type ThemeMode } from "./theme";
 export { useOverlay } from "./use-overlay";
+export { useDismiss } from "./use-dismiss";

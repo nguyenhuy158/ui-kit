@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { cn } from "./cn";
+import { useDismiss } from "./use-dismiss";
 
 /* Ngay luon o dang chuoi "YYYY-MM-DD", khong dung Date cho gia tri.
    Date luon keo theo mui gio: `new Date("2026-01-01")` la 00:00 UTC, o Viet Nam
@@ -59,7 +60,7 @@ export function DatePicker({
   className,
 }: DatePickerProps) {
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useDismiss(open, () => setOpen(false));
 
   const today = useMemo(() => {
     const now = new Date();
@@ -78,22 +79,6 @@ export function DatePicker({
     const base = parse(value) ?? parse(today)!;
     setView({ year: base.year, month: base.month });
   }, [open, value, today]);
-
-  useEffect(() => {
-    if (!open) return;
-    const onPointerDown = (event: PointerEvent) => {
-      if (!ref.current?.contains(event.target as Node)) setOpen(false);
-    };
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [open]);
 
   const shiftMonth = (delta: number) => {
     setView((current) => {

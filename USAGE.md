@@ -23,7 +23,7 @@ cp $UIKIT/src/ui/{cn.ts,Button.tsx,Input.tsx,Field.tsx} src/ui/
 ```
 
 Chỉ chép cái nào cần. Mỗi component chỉ phụ thuộc `cn.ts` và biến màu trong `tokens.css`.
-Riêng `Modal.tsx`, `Sheet.tsx`, `CommandPalette.tsx` cần thêm `use-overlay.ts`.
+Riêng `Modal.tsx`, `Sheet.tsx`, `CommandPalette.tsx` cần thêm `use-overlay.ts`; `Menu.tsx`, `DatePicker.tsx` cần thêm `use-dismiss.ts`.
 Đừng chép `index.ts` trừ khi lấy gần hết — nó import mọi thứ nên sẽ kéo cả bộ vào bundle.
 
 **2. Đổi file CSS gốc.** Thay `@import "tailwindcss"` bằng:

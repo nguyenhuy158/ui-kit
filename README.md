@@ -44,11 +44,12 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Spinner.tsx` | `Spinner` |
 | `cn.ts` | ghép class |
 | `use-overlay.ts` | Esc để đóng + khoá cuộn + giam focus, dùng chung cho Modal/Sheet |
+| `use-dismiss.ts` | Bấm ra ngoài / Esc để đóng popover, dùng chung cho Menu/DatePicker |
 
 ## Copy sang project khác
 
 1. Copy `src/styles/tokens.css`, import nó thay cho `@import "tailwindcss"` trong file CSS gốc.
-2. Copy `src/ui/cn.ts` và những file component thực sự cần. Mỗi component chỉ phụ thuộc `cn.ts` + biến màu trong `tokens.css` (riêng `Modal`/`Sheet` cần thêm `use-overlay.ts`).
+2. Copy `src/ui/cn.ts` và những file component thực sự cần. Mỗi component chỉ phụ thuộc `cn.ts` + biến màu trong `tokens.css` (riêng `Modal`/`Sheet` cần thêm `use-overlay.ts`, `Menu`/`DatePicker` cần thêm `use-dismiss.ts`).
 3. Bọc app bằng `ThemeProvider` và `ToastProvider` nếu dùng theme / toast.
 
 Không copy `src/ui/index.ts` trừ khi lấy gần hết — nó import mọi thứ, để lại sẽ kéo cả bộ vào bundle.

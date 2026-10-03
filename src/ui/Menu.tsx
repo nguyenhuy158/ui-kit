@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { cn } from "./cn";
+import { useDismiss } from "./use-dismiss";
 
 export type MenuItem = {
   label: string;
@@ -21,26 +22,7 @@ export type MenuProps = {
 /** Menu tha xuong. Dong khi bam ra ngoai, bam Esc, hoac chon mot muc. */
 export function Menu({ trigger, items, align = "right", className }: MenuProps) {
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-
-    const onPointerDown = (event: PointerEvent) => {
-      if (!ref.current?.contains(event.target as Node)) setOpen(false);
-    };
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-
-    // pointerdown chu khong phai click: dong ngay khi vua cham, khong doi nha tay.
-    document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [open]);
+  const ref = useDismiss(open, () => setOpen(false));
 
   return (
     <div ref={ref} className={cn("relative", className)}>
