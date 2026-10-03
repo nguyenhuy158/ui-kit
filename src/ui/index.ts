@@ -16,6 +16,8 @@ export { Breadcrumbs, type Crumb } from "./Breadcrumbs";
 export { Link } from "./Link";
 export { SpeedDial, type SpeedDialAction } from "./SpeedDial";
 export { Backdrop } from "./Backdrop";
+export { ImageList, type ImageItem } from "./ImageList";
+export { Timeline, type TimelineItem } from "./Timeline";
 export { DatePicker, formatDate, type DateString } from "./DatePicker";
 export { FileUpload, formatBytes } from "./FileUpload";
 export { Stepper, type Step } from "./Stepper";

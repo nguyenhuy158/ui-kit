@@ -36,6 +36,8 @@ import { Link } from "../ui/Link";
 import { Slider } from "../ui/Slider";
 import { SpeedDial } from "../ui/SpeedDial";
 import { TransferList } from "../ui/TransferList";
+import { ImageList } from "../ui/ImageList";
+import { Timeline } from "../ui/Timeline";
 import { Alert } from "../ui/Alert";
 import { Avatar } from "../ui/Avatar";
 import { Badge } from "../ui/Badge";
@@ -90,6 +92,13 @@ const FONT_WEIGHTS = [
 const FONT_SIZES = ["text-xs", "text-sm", "text-base", "text-lg", "text-xl", "text-2xl"];
 
 const money = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
+
+const PHOTOS = [
+  [1015, 600, 400, "Sông núi"], [1025, 400, 560, "Cún"], [1039, 600, 420, "Thác nước"],
+  [1043, 400, 600, "Núi rừng"], [1050, 600, 380, "Biển"], [1062, 400, 500, "Chó con"],
+].map(([id, w, h, title]) => ({ src: `https://picsum.photos/id/${id}/${w}/${h}`, alt: String(title), title: String(title) }));
+
+const LAYOUT_BOX = "rounded-ui border border-dashed border-primary/50 bg-primary-soft p-2 text-xs text-primary";
 
 const CITIES = [
   { value: "hcm", label: "TP. Hồ Chí Minh", description: "Miền Nam" },
@@ -400,6 +409,42 @@ export function Gallery() {
             <p className="text-xs text-fg-muted">
               Có sẵn ở các mục khác: Bottom Navigation (thanh dưới), Menu (nút ⋯ trên header), Pagination, Stepper, Tabs, FAB (nút + góc phải).
             </p>
+          </Card>
+        </Section>
+
+        <Section title="Layout: Box, Container, Grid, Stack (Tailwind)">
+          <Card className="space-y-4">
+            <p className="text-sm text-fg-muted">
+              Không cần component: dùng class Tailwind. Container = <code>mx-auto max-w-3xl px-4</code>, Stack ={" "}
+              <code>flex flex-col gap-3</code>, Grid = <code>grid grid-cols-12 gap-2</code>.
+            </p>
+            <div className="flex gap-2">
+              {["Stack ngang", "flex gap-2", "items-center"].map((t) => (
+                <div key={t} className={`${LAYOUT_BOX} flex-1`}>{t}</div>
+              ))}
+            </div>
+            <div className="grid grid-cols-12 gap-2">
+              <div className={`${LAYOUT_BOX} col-span-12 sm:col-span-8`}>col-span-8</div>
+              <div className={`${LAYOUT_BOX} col-span-12 sm:col-span-4`}>col-span-4</div>
+              <div className={`${LAYOUT_BOX} col-span-6 sm:col-span-3`}>3</div>
+              <div className={`${LAYOUT_BOX} col-span-6 sm:col-span-3`}>3</div>
+              <div className={`${LAYOUT_BOX} col-span-12 sm:col-span-6`}>6</div>
+            </div>
+          </Card>
+        </Section>
+
+        <Section title="Image list, Masonry, Timeline">
+          <Card className="space-y-5">
+            <ImageList items={PHOTOS} cols={3} onSelect={(item) => toast.info(item.title ?? "")} />
+            <ImageList items={PHOTOS} variant="masonry" cols={3} />
+            <Timeline
+              items={[
+                { id: "1", title: "Tạo cuộc chia", time: "08:00", description: "An tạo “Đi Đà Lạt”" },
+                { id: "2", title: "Thêm 4 thành viên", time: "08:05" },
+                { id: "3", title: "Ghi khoản 1.250.000 ₫", time: "12:30", description: "Ăn trưa ở chợ" },
+                { id: "4", title: "Đang chờ thanh toán", time: "Bây giờ", active: true },
+              ]}
+            />
           </Card>
         </Section>
 
