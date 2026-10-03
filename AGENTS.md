@@ -18,6 +18,10 @@ src/
     index.ts          #   Barrel export for the gallery; do not copy it to apps
   demo/Gallery.tsx    # Gallery page showing every component
   main.tsx            # Entry: imports tokens.css, wraps Gallery in providers
+e2e/                  # Playwright smoke over the built gallery
+  run.mjs             #   `pnpm e2e`: build -> vite preview -> smoke -> stop
+  gallery-smoke.mjs   #   Render + popover dismiss + theme toggle (`pnpm e2e:smoke`)
+  chromium.mjs        #   Finds Chromium (env, Playwright cache, system Chrome)
 index.html            # HTML shell
 README.md             # Component list, copy instructions, deliberate conventions
 USAGE.md              # Per-component usage snippets (Vietnamese)
@@ -51,9 +55,14 @@ Its contract:
 - `pnpm format`: apply Biome formatting (`biome format --write .`).
 - `pnpm build`: type-check, then build the gallery with Vite.
 - `pnpm preview`: preview the production build on `127.0.0.1`.
+- `pnpm e2e`: build the gallery, serve it with `vite preview` on
+  `127.0.0.1:4173` (`E2E_PORT`), run `e2e/gallery-smoke.mjs` in Chromium,
+  then stop the server. `E2E_SKIP_BUILD=1` reuses `dist/`.
+- `pnpm e2e:smoke`: run only the smoke against a running server
+  (`E2E_BASE_URL`).
 
-Use `pnpm` for all package commands. There is no test suite and no deploy
-target; the gallery is the visual check.
+Use `pnpm` for all package commands. There is no unit test suite and no
+deploy target (so no `e2e:prod`); the gallery is the visual check.
 
 ## Coding Style & Naming Conventions
 
@@ -67,9 +76,12 @@ touch targets at least 44px, and dates as `"YYYY-MM-DD"` strings; see
 
 ## Testing Guidelines
 
-No automated tests. Verify changes in the gallery (`pnpm dev`) in both light
-and dark mode, at a mobile width and at desktop width, and keep
-`pnpm check` and `pnpm build` green.
+No unit tests. `pnpm e2e` (also a CI job) smoke-tests the built gallery:
+it renders, Menu/DatePicker close on Escape and outside click, ThemeToggle
+switches the `<html>` class, and no uncaught page errors. Still verify
+changes in the gallery (`pnpm dev`) in both light and dark mode, at a mobile
+width and at desktop width, and keep `pnpm check`, `pnpm build` and
+`pnpm e2e` green. A failed run saves `e2e-failure.png`.
 
 ## Commit & Pull Request Guidelines
 

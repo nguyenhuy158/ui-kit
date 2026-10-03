@@ -12,6 +12,9 @@ coverage/
 .dev.vars*
 .wrangler/
 
+# E2E failure screenshot
+e2e-failure.png
+
 # OS files
 .DS_Store
 
