@@ -8,6 +8,7 @@ export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from ".
 export { Input, Textarea, Select } from "./Input";
 export { Field } from "./Field";
 export { Combobox, type ComboboxOption } from "./Combobox";
+export { Listbox, type ListboxOption } from "./Listbox";
 export { DatePicker, formatDate, type DateString } from "./DatePicker";
 export { FileUpload, formatBytes } from "./FileUpload";
 export { Stepper, type Step } from "./Stepper";

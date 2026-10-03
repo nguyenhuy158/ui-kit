@@ -28,6 +28,7 @@ import {
   X,
 } from "lucide-react";
 import { Accordion } from "../ui/Accordion";
+import { Listbox } from "../ui/Listbox";
 import { Alert } from "../ui/Alert";
 import { Avatar } from "../ui/Avatar";
 import { Badge } from "../ui/Badge";
@@ -127,6 +128,7 @@ export function Gallery() {
   const [page, setPage] = useState(3);
   const [date, setDate] = useState("");
   const [city, setCity] = useState("");
+  const [accountType, setAccountType] = useState("personal");
   const [files, setFiles] = useState<File[]>([]);
   const [step, setStep] = useState(1);
   const [paletteOpen, setPaletteOpen] = useCommandPalette();
@@ -201,6 +203,17 @@ export function Gallery() {
             </Field>
 
             <Field label="Loại tài khoản">
+              <Listbox
+                value={accountType}
+                onChange={setAccountType}
+                options={[
+                  { value: "personal", label: "Cá nhân", icon: <User size={16} />, description: "Một người dùng" },
+                  { value: "team", label: "Nhóm", icon: <Inbox size={16} />, description: "Chia sẻ với thành viên" },
+                ]}
+              />
+            </Field>
+
+            <Field label="Select gốc (mobile dùng picker hệ điều hành)">
               <Select defaultValue="personal">
                 <option value="personal">Cá nhân</option>
                 <option value="team">Nhóm</option>
