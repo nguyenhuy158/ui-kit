@@ -1,16 +1,31 @@
 import { useState } from "react";
 import {
   AlertTriangle,
+  Bell,
+  Calendar,
+  Check,
+  ChevronRight,
+  Copy,
+  Download,
+  Filter,
+  Heart,
   Home,
   Inbox,
   Info,
+  LogOut,
+  Mail,
   MoreHorizontal,
   Pencil,
   Plus,
   Search,
   Settings,
+  Share2,
+  Star,
   Trash2,
+  Upload,
   User,
+  Wallet,
+  X,
 } from "lucide-react";
 import { Accordion } from "../ui/Accordion";
 import { Alert } from "../ui/Alert";
@@ -48,7 +63,23 @@ const ROWS: Row[] = [
   { id: "1", name: "Ăn tối quận 1", status: "Đang mở", amount: 1250000 },
   { id: "2", name: "Cà phê sáng", status: "Xong", amount: 180000 },
   { id: "3", name: "Đi Đà Lạt", status: "Đang mở", amount: 4300000 },
+  { id: "4", name: "Bún chả Hà Nội", status: "Xong", amount: 320000 },
+  { id: "5", name: "Xem phim", status: "Đang mở", amount: 450000 },
 ];
+
+const ICONS = {
+  Home, Inbox, User, Search, Settings, Bell, Mail, Calendar, Wallet, Filter, Download,
+  Upload, Share2, Copy, Pencil, Trash2, Plus, Check, X, ChevronRight, Star, Heart, LogOut, Info,
+};
+
+const FONT_WEIGHTS = [
+  { className: "font-normal", label: "400 Regular" },
+  { className: "font-medium", label: "500 Medium" },
+  { className: "font-semibold", label: "600 Semibold" },
+  { className: "font-bold", label: "700 Bold" },
+];
+
+const FONT_SIZES = ["text-xs", "text-sm", "text-base", "text-lg", "text-xl", "text-2xl"];
 
 const money = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
 
@@ -289,11 +320,12 @@ export function Gallery() {
         <Section title="Bảng và phân trang">
           <Table
             columns={[
-              { key: "name", header: "Cuộc chia", cell: (row) => row.name },
+              { key: "name", header: "Cuộc chia", cell: (row) => row.name, sortValue: (row) => row.name },
               {
                 key: "status",
                 header: "Trạng thái",
                 hideOnMobile: true,
+                sortValue: (row) => row.status,
                 cell: (row) => (
                   <Badge tone={row.status === "Xong" ? "success" : "primary"}>{row.status}</Badge>
                 ),
@@ -302,6 +334,7 @@ export function Gallery() {
                 key: "amount",
                 header: "Số tiền",
                 numeric: true,
+                sortValue: (row) => row.amount,
                 cell: (row) => money.format(row.amount),
               },
             ]}
@@ -310,6 +343,48 @@ export function Gallery() {
             onRowClick={(row) => toast.info(row.name)}
           />
           <Pagination page={page} pageCount={12} onChange={setPage} />
+        </Section>
+
+        <Section title="Font chữ">
+          <Card className="space-y-4">
+            <p className="text-sm text-fg-muted">
+              Be Vietnam Pro, dự phòng Inter → system-ui. Tải từ Google Fonts trong{" "}
+              <code className="rounded bg-surface-muted px-1">index.html</code>.
+            </p>
+            <div className="space-y-1">
+              {FONT_WEIGHTS.map((weight) => (
+                <p key={weight.label} className={`text-lg ${weight.className}`}>
+                  {weight.label} — Tiếng Việt có dấu: Ắ Ặ Ỡ Ữ đường phố
+                </p>
+              ))}
+            </div>
+            <div className="space-y-1">
+              {FONT_SIZES.map((size) => (
+                <p key={size} className={size}>
+                  <span className="inline-block w-20 text-xs text-fg-muted">{size}</span>Chia kèo dễ dàng
+                </p>
+              ))}
+            </div>
+            <p className="tabular text-lg">
+              <span className="mr-2 text-xs text-fg-muted">.tabular</span>1.111.111 ₫ · 8.888.888 ₫
+            </p>
+          </Card>
+        </Section>
+
+        <Section title="Icon (lucide-react)">
+          <Card>
+            <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
+              {Object.entries(ICONS).map(([name, Icon]) => (
+                <div
+                  key={name}
+                  className="flex flex-col items-center gap-1.5 rounded-ui p-2 text-fg-muted hover:bg-surface-muted hover:text-fg"
+                >
+                  <Icon size={20} />
+                  <span className="truncate text-[10px]">{name}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
         </Section>
 
         <Section title="Alert và tiến độ">
