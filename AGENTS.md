@@ -19,9 +19,8 @@ src/
   demo/Gallery.tsx    # Gallery page showing every component
   main.tsx            # Entry: imports tokens.css, wraps Gallery in providers
 e2e/                  # Playwright smoke over the built gallery
-  run.mjs             #   `pnpm e2e`: build -> vite preview -> smoke -> stop
+  run.mjs             #   `pnpm e2e`: build -> vite preview -> smoke -> stop (`@huyab/e2e`)
   gallery-smoke.mjs   #   Render + popover dismiss + theme toggle (`pnpm e2e:smoke`)
-  chromium.mjs        #   Finds Chromium (env, Playwright cache, system Chrome)
 index.html            # HTML shell
 README.md             # Component list, copy instructions, deliberate conventions
 USAGE.md              # Per-component usage snippets (Vietnamese)
@@ -88,6 +87,16 @@ width and at desktop width, and keep `pnpm check`, `pnpm build` and
 Conventional Commits with an emoji and scope, for example
 `✨ feat(ui): add Combobox` or `🐛 fix(overlay): restore focus on close`.
 Describe what changed and attach a gallery screenshot for visual changes.
+
+## Ecosystem
+
+See the [huyab.click ecosystem map](https://github.com/nguyenhuy158/kit/blob/main/docs/ECOSYSTEM.md) for how all personal repos connect.
+
+- Kit packages: `@huyab/config` (Biome + tsconfig base), `@huyab/e2e`
+  (`startServer`, `run`, `findChromium` in `e2e/`), reusable CI
+  `nguyenhuy158/kit/.github/workflows/check.yml@v0.1.0`.
+- Talks to: no repo at runtime. `src/styles/tokens.css` and components are
+  copied into ai-english, chia-keo, notes, monitor, share, cardstat and mytools.
 
 ## Agent-Specific Instructions
 
