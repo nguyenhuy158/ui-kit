@@ -484,14 +484,37 @@ export function Gallery() {
               <Button variant="outline" onClick={() => setConfirm(true)}>
                 Xác nhận xoá
               </Button>
+            </div>
+          </Card>
+        </Section>
+
+        <Section title="Toast">
+          <Card>
+            <CardHeader title="Thông báo nổi" description="Tự tắt sau 4 giây, bấm vào để tắt ngay" />
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button variant="outline" onClick={() => toast.info("Đã sao chép liên kết")}>
+                Info
+              </Button>
               <Button variant="outline" onClick={() => toast.success("Đã lưu")}>
-                Toast xong
+                Success
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => toast.warning("Sắp hết dung lượng", { description: "Còn 5% bộ nhớ" })}
+              >
+                Warning
               </Button>
               <Button
                 variant="outline"
                 onClick={() => toast.error("Lưu thất bại", { description: "Mất kết nối máy chủ" })}
               >
-                Toast lỗi
+                Error
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => toast.info("Giữ lâu hơn", { description: "duration: 10000", duration: 10000 })}
+              >
+                Tuỳ thời gian
               </Button>
             </div>
           </Card>
