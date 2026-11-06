@@ -1,207 +1,336 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { cn } from "./cn";
 import { useDismiss } from "./use-dismiss";
 
-/* Ngay luon o dang chuoi "YYYY-MM-DD", khong dung Date cho gia tri.
-   Date luon keo theo mui gio: `new Date("2026-01-01")` la 00:00 UTC, o Viet Nam
-   doc ra van la 01/01 nhung o mui gio am se thanh 31/12. Voi ngay-thang-nam
-   thuan tuy thi chuoi la kieu du lieu dung. */
 export type DateString = string;
+export type DateRange = { start: DateString; end: DateString };
 
-const WEEKDAYS = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
-
-function toDateString(year: number, month: number, day: number): DateString {
-  return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-}
-
-function parse(value: DateString | undefined) {
-  if (!value) return null;
-  const [year, month, day] = value.split("-").map(Number);
-  if (!year || !month || !day) return null;
-  return { year, month: month - 1, day };
-}
-
-/** Hien thi kieu Viet Nam: 05/03/2026. */
-export function formatDate(value: DateString | undefined): string {
-  const parsed = parse(value);
-  if (!parsed) return "";
-  return `${String(parsed.day).padStart(2, "0")}/${String(parsed.month + 1).padStart(2, "0")}/${parsed.year}`;
-}
-
-/** Thu trong tuan cua ngay 1, quy ve thu Hai = 0 (lich Viet Nam bat dau tu thu Hai). */
-function firstWeekdayOffset(year: number, month: number): number {
-  return (new Date(year, month, 1).getDay() + 6) % 7;
-}
-
-function daysInMonth(year: number, month: number): number {
-  return new Date(year, month + 1, 0).getDate();
-}
-
-export type DatePickerProps = {
-  value?: DateString;
-  onChange: (value: DateString) => void;
-  /** Gioi han duoi/tren, cung dang "YYYY-MM-DD". */
+type CommonProps = {
   min?: DateString;
   max?: DateString;
   placeholder?: string;
   disabled?: boolean;
   invalid?: boolean;
   className?: string;
+  id?: string;
+  "aria-label"?: string;
+  "aria-describedby"?: string;
 };
+export type DatePickerProps = CommonProps & {
+  value?: DateString;
+  onChange: (value: DateString) => void;
+};
+export type DateRangePickerProps = CommonProps & {
+  value?: DateRange;
+  onChange: (value: DateRange) => void;
+};
+type Props =
+  | (DatePickerProps & { range?: false })
+  | (DateRangePickerProps & { range: true });
+const WEEKDAYS = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
 
-export function DatePicker({
-  value,
-  onChange,
-  min,
-  max,
-  placeholder = "Chọn ngày",
-  disabled,
-  invalid,
-  className,
-}: DatePickerProps) {
+function parse(value?: string) {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const date = new Date(`${value}T12:00:00`);
+  return Number.isNaN(date.getTime()) || toDateString(date) !== value
+    ? null
+    : date;
+}
+
+function toDateString(date: Date): DateString {
+  return `${String(date.getFullYear()).padStart(4, "0")}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+export function formatDate(value?: DateString): string {
+  return parse(value)
+    ? `${value?.slice(8, 10)}/${value?.slice(5, 7)}/${value?.slice(0, 4)}`
+    : "";
+}
+
+function moveDay(value: string, days: number) {
+  const date = parse(value);
+  if (!date) return value;
+  date.setDate(date.getDate() + days);
+  return toDateString(date);
+}
+
+function moveMonth(value: string, months: number) {
+  const date = parse(value);
+  if (!date) return value;
+  const day = date.getDate();
+  date.setDate(1);
+  date.setMonth(date.getMonth() + months);
+  const last = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  date.setDate(Math.min(day, last));
+  return toDateString(date);
+}
+
+export function DatePicker(props: DatePickerProps) {
+  return <DateControl {...props} />;
+}
+
+export function DateRangePicker(props: DateRangePickerProps) {
+  return <DateControl {...props} range />;
+}
+
+function DateControl(props: Props) {
+  const {
+    min,
+    max,
+    disabled,
+    invalid,
+    className,
+    id,
+    "aria-label": ariaLabel,
+    "aria-describedby": describedBy,
+  } = props;
+  const today = toDateString(new Date());
+  const bounded = (date: string) =>
+    min && date < min ? min : max && date > max ? max : date;
+  const allowed = (date: string) =>
+    !!parse(date) && !(min && date < min) && !(max && date > max);
+  const valueStart = props.range ? props.value?.start : props.value;
+  const valueEnd = props.range ? props.value?.end : props.value;
   const [open, setOpen] = useState(false);
+  const [start, setStart] = useState<string>();
+  const [hover, setHover] = useState<string>();
+  const [active, setActive] = useState(
+    bounded(parse(valueStart) ? (valueStart ?? today) : today),
+  );
+  const [view, setView] = useState(active);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const calendar = useRef<HTMLDivElement>(null);
+  const popupId = useId();
   const ref = useDismiss(open, () => setOpen(false));
+  const base = parse(view) ?? new Date();
+  const year = base.getFullYear();
+  const month = base.getMonth();
+  const offset = (new Date(year, month, 1).getDay() + 6) % 7;
+  const total = new Date(year, month + 1, 0).getDate();
+  const label = props.range ? "Chọn khoảng ngày" : "Chọn ngày";
+  const display =
+    props.range && valueStart && valueEnd
+      ? `${formatDate(valueStart)} – ${formatDate(valueEnd)}`
+      : !props.range
+        ? formatDate(valueStart)
+        : "";
+  const first = start ?? valueStart;
+  const last = start ? (hover ?? active) : valueEnd;
+  const rangeStart = first && last ? (first < last ? first : last) : first;
+  const rangeEnd = first && last ? (first > last ? first : last) : first;
 
-  const today = useMemo(() => {
-    const now = new Date();
-    return toDateString(now.getFullYear(), now.getMonth(), now.getDate());
-  }, []);
-
-  const selected = parse(value);
-  const [view, setView] = useState(() => {
-    const base = selected ?? parse(today)!;
-    return { year: base.year, month: base.month };
-  });
-
-  // Mo lai lich thi nhay ve thang cua ngay dang chon, khong giu thang cu.
   useEffect(() => {
-    if (!open) return;
-    const base = parse(value) ?? parse(today)!;
-    setView({ year: base.year, month: base.month });
-  }, [open, value, today]);
+    if (open && !disabled)
+      calendar.current
+        ?.querySelector<HTMLButtonElement>(`[data-date="${active}"]`)
+        ?.focus();
+  }, [open, active, disabled]);
 
-  const shiftMonth = (delta: number) => {
-    setView((current) => {
-      const month = current.month + delta;
-      // Chia lay du de tu nhay nam khi vuot qua thang 12 hoac lui truoc thang 1.
-      return {
-        year: current.year + Math.floor(month / 12),
-        month: ((month % 12) + 12) % 12,
-      };
-    });
-  };
+  function show() {
+    const initial = bounded(parse(valueStart) ? (valueStart ?? today) : today);
+    setActive(initial);
+    setView(initial);
+    setStart(undefined);
+    setHover(undefined);
+    setOpen(true);
+  }
 
-  const offset = firstWeekdayOffset(view.year, view.month);
-  const total = daysInMonth(view.year, view.month);
+  function close() {
+    setOpen(false);
+    trigger.current?.focus();
+  }
+
+  function choose(date: string) {
+    if (disabled || !allowed(date)) return;
+    if (!props.range) {
+      props.onChange(date);
+      close();
+    } else if (!start) {
+      setStart(date);
+      setActive(date);
+      setHover(undefined);
+    } else {
+      props.onChange(
+        date < start ? { start: date, end: start } : { start, end: date },
+      );
+      close();
+    }
+  }
+
+  function navigate(date: string) {
+    const next = bounded(date);
+    if (!parse(next)) return;
+    setActive(next);
+    setView(next);
+    setHover(undefined);
+  }
 
   return (
-    <div ref={ref} className={cn("relative", className)}>
+    <div
+      ref={ref}
+      className={cn("relative", className)}
+      onBlurCapture={(event) => {
+        if (
+          event.relatedTarget &&
+          !event.currentTarget.contains(event.relatedTarget)
+        )
+          setOpen(false);
+      }}
+    >
       <button
+        ref={trigger}
+        id={id}
         type="button"
         disabled={disabled}
-        onClick={() => setOpen((current) => !current)}
+        aria-label={ariaLabel}
+        aria-describedby={describedBy}
         aria-haspopup="dialog"
-        aria-expanded={open}
+        aria-expanded={open && !disabled}
+        aria-controls={open && !disabled ? popupId : undefined}
         aria-invalid={invalid || undefined}
+        onClick={() => (open ? close() : show())}
         className={cn(
-          "flex h-11 w-full items-center justify-between rounded-ui border border-border bg-surface px-3 text-left sm:h-10",
-          "text-base sm:pointer-fine:text-sm",
-          "outline-none transition focus:border-primary focus:ring-2 focus:ring-ring",
-          "disabled:cursor-not-allowed disabled:opacity-60",
+          "flex min-h-11 w-full items-center justify-between gap-2 rounded-ui border border-border bg-surface px-3 py-2 text-left text-base sm:pointer-fine:text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-60",
           invalid && "border-danger",
-          value ? "text-fg" : "text-fg-muted",
+          display ? "text-fg" : "text-fg-muted",
         )}
       >
-        {value ? formatDate(value) : placeholder}
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-4 w-4 text-fg-muted">
+        <span>{display || props.placeholder || label}</span>
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          className="h-4 w-4 shrink-0 text-fg-muted"
+        >
           <rect x="3" y="4.5" width="14" height="12" rx="2" />
           <path d="M3 8h14M7 3v3m6-3v3" strokeLinecap="round" />
         </svg>
       </button>
-
-      {open && (
+      {open && !disabled && (
         <div
+          id={popupId}
           role="dialog"
-          aria-label="Chọn ngày"
-          style={{ animation: "ui-slide-down 120ms ease-out" }}
-          className="absolute left-0 z-50 mt-1 w-72 rounded-ui border border-border bg-surface p-3 shadow-lg"
+          onKeyDown={(event) => {
+            if (event.key === "Escape" && open) {
+              event.stopPropagation();
+              close();
+            }
+          }}
+          aria-label={label}
+          className="absolute left-0 z-50 mt-1 w-[21rem] max-sm:fixed max-sm:inset-x-2 max-sm:top-1/2 max-sm:mt-0 max-sm:w-auto max-sm:-translate-y-1/2 max-h-[70dvh] overflow-y-auto rounded-ui border border-border bg-surface p-1.5 shadow-lg"
         >
           <div className="flex items-center justify-between">
             <button
               type="button"
-              onClick={() => shiftMonth(-1)}
               aria-label="Tháng trước"
-              className="grid h-8 w-8 place-items-center rounded-ui text-fg-muted transition hover:bg-surface-muted"
+              disabled={
+                !!min && moveMonth(view, -1).slice(0, 7) < min.slice(0, 7)
+              }
+              onClick={() => navigate(moveMonth(view, -1))}
+              className="grid size-11 place-items-center rounded-ui text-fg-muted hover:bg-surface-muted disabled:opacity-30"
             >
               ‹
             </button>
-            <span className="text-sm font-semibold text-fg">
-              Tháng {view.month + 1} / {view.year}
+            <span aria-live="polite" className="text-sm font-semibold text-fg">
+              Tháng {month + 1} / {year}
             </span>
             <button
               type="button"
-              onClick={() => shiftMonth(1)}
               aria-label="Tháng sau"
-              className="grid h-8 w-8 place-items-center rounded-ui text-fg-muted transition hover:bg-surface-muted"
+              disabled={
+                !!max && moveMonth(view, 1).slice(0, 7) > max.slice(0, 7)
+              }
+              onClick={() => navigate(moveMonth(view, 1))}
+              className="grid size-11 place-items-center rounded-ui text-fg-muted hover:bg-surface-muted disabled:opacity-30"
             >
               ›
             </button>
           </div>
-
-          <div className="mt-2 grid grid-cols-7 gap-0.5">
-            {WEEKDAYS.map((weekday) => (
-              <div key={weekday} className="py-1 text-center text-[11px] font-medium text-fg-muted">
-                {weekday}
-              </div>
+          {props.range && (
+            <p role="status" className="px-2 py-1 text-sm text-fg-muted">
+              {start
+                ? `Từ ${formatDate(start)} · Chọn ngày kết thúc`
+                : "Chọn ngày bắt đầu"}
+            </p>
+          )}
+          <div ref={calendar} className="grid grid-cols-7">
+            {WEEKDAYS.map((day) => (
+              <span
+                key={day}
+                className="py-2 text-center text-xs text-fg-muted"
+              >
+                {day}
+              </span>
             ))}
-
-            {/* O trong lap cho den dung thu cua ngay mung 1. */}
-            {Array.from({ length: offset }, (_, index) => (
-              <div key={`pad-${index}`} />
+            {WEEKDAYS.slice(0, offset).map((day) => (
+              <span key={day} />
             ))}
-
             {Array.from({ length: total }, (_, index) => {
-              const day = index + 1;
-              const date = toDateString(view.year, view.month, day);
-              const isSelected = date === value;
-              const isToday = date === today;
-              // So sanh chuoi "YYYY-MM-DD" la du: dinh dang nay xep thu tu chu
-              // cai trung voi thu tu thoi gian.
-              const isDisabled = Boolean((min && date < min) || (max && date > max));
-
+              const date = `${year}-${String(month + 1).padStart(2, "0")}-${String(index + 1).padStart(2, "0")}`;
+              const edge = date === rangeStart || date === rangeEnd;
+              const between =
+                props.range &&
+                rangeStart &&
+                rangeEnd &&
+                date > rangeStart &&
+                date < rangeEnd;
               return (
                 <button
                   key={date}
                   type="button"
-                  disabled={isDisabled}
-                  aria-pressed={isSelected}
-                  onClick={() => {
-                    onChange(date);
-                    setOpen(false);
+                  data-date={date}
+                  aria-label={formatDate(date)}
+                  aria-pressed={Boolean(edge || between)}
+                  aria-current={date === today ? "date" : undefined}
+                  disabled={!allowed(date)}
+                  tabIndex={date === active ? 0 : -1}
+                  onClick={() => choose(date)}
+                  onKeyDown={(event) => {
+                    const day = (event.target as HTMLElement).dataset.date;
+                    if (!day) return;
+                    const weekday = ((parse(day)?.getDay() ?? 1) + 6) % 7;
+                    const steps: Record<string, number> = {
+                      ArrowLeft: -1,
+                      ArrowRight: 1,
+                      ArrowUp: -7,
+                      ArrowDown: 7,
+                      Home: -weekday,
+                      End: 6 - weekday,
+                    };
+                    if (event.key in steps) {
+                      event.preventDefault();
+                      navigate(moveDay(day, steps[event.key]));
+                    }
+                    if (event.key === "PageUp" || event.key === "PageDown") {
+                      event.preventDefault();
+                      navigate(moveMonth(day, event.key === "PageUp" ? -1 : 1));
+                    }
+                  }}
+                  onPointerEnter={() => {
+                    if (start && allowed(date)) setHover(date);
                   }}
                   className={cn(
-                    "grid h-9 place-items-center rounded-ui text-sm tabular outline-none transition",
-                    "focus-visible:ring-2 focus-visible:ring-ring",
-                    "disabled:pointer-events-none disabled:opacity-30",
-                    isSelected
+                    "grid min-h-11 place-items-center rounded-ui text-sm tabular outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-30 disabled:cursor-not-allowed",
+                    edge
                       ? "bg-primary font-semibold text-primary-fg"
-                      : "text-fg hover:bg-surface-muted",
-                    !isSelected && isToday && "font-semibold text-primary",
+                      : between
+                        ? "bg-primary-soft text-primary"
+                        : "text-fg hover:bg-surface-muted",
+                    !edge && date === today && "font-semibold text-primary",
                   )}
                 >
-                  {day}
+                  {index + 1}
                 </button>
               );
             })}
           </div>
-
           <button
             type="button"
-            onClick={() => {
-              onChange(today);
-              setOpen(false);
-            }}
-            className="mt-2 w-full rounded-ui py-2 text-sm font-medium text-primary transition hover:bg-surface-muted"
+            disabled={!allowed(today)}
+            onClick={() => choose(today)}
+            className="mt-1 min-h-11 w-full rounded-ui text-sm font-medium text-primary hover:bg-surface-muted disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Hôm nay
           </button>
