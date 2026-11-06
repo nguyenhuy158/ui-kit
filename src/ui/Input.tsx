@@ -4,6 +4,8 @@ import type {
   SelectHTMLAttributes,
   TextareaHTMLAttributes,
 } from "react";
+import { useLayoutEffect, useRef } from "react";
+import { autosizeTextarea } from "../dom/textarea.mjs";
 import { cn } from "./cn";
 
 /* 16px la nguong iOS Safari khong tu zoom khi focus. Chi ha xuong 14px tu sm
@@ -70,12 +72,34 @@ export function Input({
 }
 
 export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  autoSize?: boolean;
   invalid?: boolean;
 };
 
-export function Textarea({ invalid, className, rows = 3, ...rest }: TextareaProps) {
+export function Textarea({
+  autoSize = false,
+  invalid,
+  className,
+  rows = 3,
+  ...rest
+}: TextareaProps) {
+  const element = useRef<HTMLTextAreaElement>(null);
+  const sizing = useRef<ReturnType<typeof autosizeTextarea> | null>(null);
+  useLayoutEffect(() => {
+    if (!autoSize || !element.current) return;
+    const controller = autosizeTextarea(element.current);
+    sizing.current = controller;
+    return () => {
+      controller.destroy();
+      sizing.current = null;
+    };
+  }, [autoSize]);
+  useLayoutEffect(() => {
+    sizing.current?.resize();
+  });
   return (
     <textarea
+      ref={element}
       rows={rows}
       aria-invalid={invalid || undefined}
       className={cn(CONTROL, "px-3 py-2.5 resize-y", className)}

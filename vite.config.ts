@@ -4,6 +4,10 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   base: process.env.PAGES_BASE ?? "/",
-  build: { rollupOptions: { input: ["index.html", "dom-demo.html"] } },
+  build: {
+    rollupOptions: {
+      input: ["index.html", "dom-demo.html", "picker-demo.html"],
+    },
+  },
   plugins: [react(), tailwindcss()],
 });

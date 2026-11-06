@@ -510,3 +510,7 @@ Muốn chặn nháy trắng lúc tải trang, thêm script này vào `<head>` c�
 **Bảng đầy trên mobile thì đổi sang card.** `Table` cuộn ngang được nhưng cuộn ngang vốn khó dùng. Quá 3 cột thì cân nhắc render danh sách `Card` ở màn nhỏ.
 
 **Nội dung bị bottom nav che.** Thêm `pb-28` (hoặc hơn) cho phần nội dung khi có `BottomNav`.
+
+### Custom select, date range và textarea tự giãn
+
+Xem [hướng dẫn form controls](docs/form-controls.md) cho `Listbox`, `DateRangePicker` và `<Textarea autoSize>`. Demo chạy tại `/picker-demo.html`.

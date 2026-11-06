@@ -16,7 +16,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Input.tsx` | `Input` (leading/trailing icon), `Textarea`, `Select` |
 | `Field.tsx` | `Field` — label + hint + lỗi, tự nối `id` / `aria-describedby` |
 | `Combobox.tsx` | `Combobox` — chọn có tìm kiếm, gõ không dấu vẫn ra |
-| `DatePicker.tsx` | `DatePicker`, `formatDate` — lịch tiếng Việt, tuần bắt đầu thứ Hai |
+| `DatePicker.tsx` | `DatePicker`, `DateRangePicker`, `formatDate` — chọn một ngày hoặc khoảng ngày |
 | `FileUpload.tsx` | `FileUpload`, `formatBytes` — kéo thả, giới hạn dung lượng và số tệp |
 | `Stepper.tsx` | `Stepper` — ngang hoặc dọc |
 | `CommandPalette.tsx` | `CommandPalette`, `useCommandPalette` — Ctrl/Cmd + K |
@@ -88,3 +88,5 @@ không hardcode `violet-600` hay `stone-200`, nên đổi biến là đổi cả
 - **Tooltip chỉ dùng cho chú thích thêm.** Thiết bị cảm ứng không có "rê chuột", việc gì quan trọng thì viết thẳng ra màn hình.
 
 Static JavaScript apps: [DOM buttons, loading, toast and action gate](docs/dom-feedback.md).
+
+[Custom select, date range và textarea tự giãn](docs/form-controls.md) · demo `/picker-demo.html`.
