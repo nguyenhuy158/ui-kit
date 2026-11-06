@@ -86,3 +86,5 @@ không hardcode `violet-600` hay `stone-200`, nên đổi biến là đổi cả
 - **Combobox chọn bằng `pointerdown`, không phải `click`.** Click xảy ra sau `blur` của ô nhập, lúc đó danh sách đã đóng nên không bắt được lựa chọn.
 - **Stepper chỉ cho bấm quay lại bước đã xong**, nhảy tới bước chưa làm thường bỏ qua bước kiểm tra dữ liệu ở giữa.
 - **Tooltip chỉ dùng cho chú thích thêm.** Thiết bị cảm ứng không có "rê chuột", việc gì quan trọng thì viết thẳng ra màn hình.
+
+Static JavaScript apps: [DOM buttons, loading, toast and action gate](docs/dom-feedback.md).

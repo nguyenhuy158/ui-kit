@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM feedback · ui-kit</title>
+    <link rel="stylesheet" href="/src/styles/tokens.css" />
+    <link rel="stylesheet" href="/src/dom/feedback.css" />
+  </head>
+  <body>
+    <main class="mx-auto max-w-xl space-y-6 p-6">
+      <a class="text-primary underline" href="./">← Gallery</a>
+      <h1 class="text-2xl font-semibold">DOM feedback</h1>
+      <p class="text-fg-muted">Toast và khóa thao tác cho app không dùng React. Bấm liên tục chỉ chạy một lần.</p>
+      <form class="space-y-4">
+        <label class="flex gap-2"><input type="checkbox" name="fail" /> Giả lập lỗi</label>
+        <button type="submit" class="ui-button" data-variant="primary">Lưu thay đổi</button>
+      </form>
+      <p role="status">Số lần thực hiện: <output id="count">0</output></p>
+      <button class="ui-button" id="theme" type="button">Đổi giao diện sáng / tối</button>
+    </main>
+    <script type="module">
+      import { createActionGate, createToasts, setButtonPending } from "/src/dom/feedback.mjs";
+
+      const gate = createActionGate();
+      const toast = createToasts();
+      const form = document.querySelector("form");
+      const count = document.querySelector("#count");
+      document.querySelector("#theme").onclick = () => document.documentElement.classList.toggle("dark");
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const release = gate.claim("save");
+        if (!release) return;
+        const restore = setButtonPending(form.querySelector("button"));
+        const fail = form.elements.fail.checked;
+        count.value = String(Number(count.value) + 1);
+        try {
+          await new Promise((resolve) => setTimeout(resolve, 1200));
+          if (fail) throw new Error("Lưu chưa thành công. Bạn có thể thử lại.");
+          toast.show("success", "Đã lưu thay đổi");
+        } catch (error) {
+          toast.show("error", error.message);
+        } finally {
+          restore();
+          release();
+        }
+      });
+    </script>
+  </body>
+</html>
