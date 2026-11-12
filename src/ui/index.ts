@@ -17,6 +17,7 @@ export {
   type ButtonVariant,
 } from "./Button";
 export { Card, CardHeader, Metric } from "./Card";
+export { Celebrate, type CelebrateProps } from "./Celebrate";
 export { Checkbox } from "./Checkbox";
 export { Chip } from "./Chip";
 export { Combobox, type ComboboxOption } from "./Combobox";
@@ -40,6 +41,7 @@ export { FileUpload, formatBytes } from "./FileUpload";
 export { HeaderBar } from "./HeaderBar";
 export { type ImageItem, ImageList } from "./ImageList";
 export { Input, Select, Textarea } from "./Input";
+export { Lightbox, LightboxButton, type LightboxProps } from "./Lightbox";
 export { Link } from "./Link";
 export { Listbox, type ListboxOption } from "./Listbox";
 export { Menu, type MenuItem } from "./Menu";
@@ -52,6 +54,7 @@ export { Slider } from "./Slider";
 export { SpeedDial, type SpeedDialAction } from "./SpeedDial";
 export { Spinner } from "./Spinner";
 export { type Step, Stepper } from "./Stepper";
+export { SwipeAction, type SwipeActionProps } from "./SwipeAction";
 export { Switch } from "./Switch";
 export { EmptyState, LoadingState, Skeleton, SkeletonListRow } from "./states";
 export { type Column, Table } from "./Table";

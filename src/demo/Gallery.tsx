@@ -66,6 +66,9 @@ import { Switch } from "../ui/Switch";
 import { Tabs } from "../ui/Tabs";
 import { ThemeToggle } from "../ui/theme";
 import { useToast } from "../ui/Toast";
+import { Celebrate } from "../ui/Celebrate";
+import { Lightbox, LightboxButton } from "../ui/Lightbox";
+import { SwipeAction } from "../ui/SwipeAction";
 
 type Row = { id: string; name: string; status: "Đang mở" | "Xong"; amount: number };
 
@@ -141,6 +144,9 @@ export function Gallery() {
   const [modal, setModal] = useState(false);
   const [sheet, setSheet] = useState(false);
   const [confirm, setConfirm] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [celebrateKey, setCelebrateKey] = useState(0);
+  const photo = PHOTOS[lightboxIndex ?? 0];
   const [page, setPage] = useState(3);
   const [date, setDate] = useState("");
   const [city, setCity] = useState("");
@@ -445,6 +451,27 @@ export function Gallery() {
                 { id: "4", title: "Đang chờ thanh toán", time: "Bây giờ", active: true },
               ]}
             />
+          </Card>
+        </Section>
+
+        <Section title="Lightbox, Swipe action, Celebrate">
+          <Card className="space-y-5">
+            <Button variant="outline" size="sm" onClick={() => setLightboxIndex(0)}>
+              Mở ảnh toàn màn hình
+            </Button>
+            <SwipeAction label="Xoá" icon={<Trash2 size={15} />} onAction={() => toast.success("Đã xoá")}>
+              <div className="rounded-ui border border-border px-3 py-3 text-sm text-fg">
+                Vuốt trái dòng này trên điện thoại để lộ nút Xoá
+              </div>
+            </SwipeAction>
+            <div className="flex flex-col items-center gap-3 py-4">
+              <Celebrate key={celebrateKey}>
+                <Check size={44} className="text-success" />
+              </Celebrate>
+              <Button size="sm" onClick={() => setCelebrateKey((value) => value + 1)}>
+                Bắn pháo giấy
+              </Button>
+            </div>
           </Card>
         </Section>
 
@@ -776,6 +803,23 @@ export function Gallery() {
             onRun: () => setNav("inbox"),
           },
         ]}
+      />
+
+      <Lightbox
+        open={lightboxIndex !== null}
+        src={photo.src}
+        alt={photo.alt}
+        index={lightboxIndex ?? 0}
+        total={PHOTOS.length}
+        onClose={() => setLightboxIndex(null)}
+        onPrev={() => setLightboxIndex((value) => ((value ?? 0) - 1 + PHOTOS.length) % PHOTOS.length)}
+        onNext={() => setLightboxIndex((value) => ((value ?? 0) + 1) % PHOTOS.length)}
+        actions={
+          <LightboxButton label="Tải ảnh về" onClick={() => toast.info("Tải ảnh")}>
+            <Download size={20} />
+          </LightboxButton>
+        }
+        footer={<p className="text-center text-sm text-white/80">{photo.title}</p>}
       />
 
       <ConfirmDialog
