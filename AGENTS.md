@@ -105,5 +105,9 @@ assumptions.
 Design UI/UX to fit inside a single viewport by default. Avoid page-level
 scrolling; use compact layouts, tabs, panes, or contained internal lists when
 content can overflow.
+ui-kit is the only source of UI primitives for the consumer apps listed under
+Ecosystem. When an app needs a primitive that is missing here, add it here
+first (generic API, Gallery demo, tests), then the app copies it; apps must
+not hand-roll or fork primitives locally.
 When changing `tokens.css`, keep the token names stable and update this file,
 `README.md`, and every component that relies on a renamed token.
