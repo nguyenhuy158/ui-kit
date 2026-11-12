@@ -90,7 +90,7 @@ Describe what changed and attach a gallery screenshot for visual changes.
 
 ## Ecosystem
 
-See the [huyab.click ecosystem map](https://github.com/nguyenhuy158/kit/blob/main/docs/ECOSYSTEM.md) for how all personal repos connect.
+See the [huyab.cfd ecosystem map](https://github.com/nguyenhuy158/kit/blob/main/docs/ECOSYSTEM.md) for how all personal repos connect.
 
 - Kit packages: `@huyab/config` (Biome + tsconfig base), `@huyab/e2e`
   (`startServer`, `run`, `findChromium` in `e2e/`), reusable CI
