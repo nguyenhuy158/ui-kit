@@ -42,6 +42,9 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Menu.tsx` | `Menu` — menu thả xuống |
 | `theme.tsx` | `ThemeProvider`, `ThemeToggle`, `useTheme` — sáng / tối / theo hệ thống |
 | `Spinner.tsx` | `Spinner` |
+| `Lightbox.tsx` | `Lightbox`, `LightboxButton` — xem ảnh toàn màn hình, ← → / vuốt, khe `actions` + `footer` (cần `use-overlay.ts`) |
+| `SwipeAction.tsx` | `SwipeAction` — vuốt trái lộ một nút hành động (chỉ cảm ứng) |
+| `Celebrate.tsx` | `Celebrate` — pháo giấy + pop quanh nội dung khi thành công (keyframe `ui-celebrate`, `ui-pop` trong `tokens.css`) |
 | `cn.ts` | ghép class |
 | `use-overlay.ts` | Esc để đóng + khoá cuộn + giam focus, dùng chung cho Modal/Sheet |
 | `use-dismiss.ts` | Bấm ra ngoài / Esc để đóng popover, dùng chung cho Menu/DatePicker |

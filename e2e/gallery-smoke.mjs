@@ -52,6 +52,20 @@ try {
     page.getByRole("dialog", { name: "Chọn ngày" }),
   );
 
+  await page.getByRole("button", { name: "Mở ảnh toàn màn hình" }).click();
+  const lightbox = page.getByRole("dialog").filter({ has: page.getByRole("button", { name: "Ảnh sau" }) });
+  await lightbox.waitFor({ state: "visible", ...WAIT });
+  await page.keyboard.press("ArrowRight");
+  await lightbox.getByText(/^2\//).waitFor(WAIT);
+  await page.keyboard.press("Escape");
+  await lightbox.waitFor({ state: "hidden", ...WAIT });
+  ok("Lightbox navigates with arrows and closes on Escape");
+
+  await page.getByRole("button", { name: "Bắn pháo giấy" }).click();
+  const pieces = await page.locator("[data-celebrate-piece]").count();
+  if (pieces < 10) throw new Error(`Celebrate render ${pieces} manh`);
+  ok("Celebrate renders the confetti burst");
+
   const html = page.locator("html");
   const before = await html.getAttribute("class");
   await page.getByRole("button", { name: /^Giao diện:/ }).click();
