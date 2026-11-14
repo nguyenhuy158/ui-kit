@@ -66,9 +66,9 @@ Use `pnpm` for all package commands. There is no unit test suite and no
 
 The gallery is served at `https://uikit.huyab.cfd` by a Cloudflare Worker with
 static assets (`wrangler.jsonc`, Worker name `ui-kit`, assets from `dist/`).
-Deploy runs `pnpm build` then `npx wrangler deploy` on every push to `main`
-(Workers Builds). The `Pages` workflow still publishes the same build to
-GitHub Pages under `/ui-kit/`.
+Deploy is manual for now: `pnpm build`, then `wrangler deploy`. Workers Builds
+is not connected yet, so a push to `main` does not update the site. The `Pages`
+workflow still publishes the same build to GitHub Pages under `/ui-kit/`.
 
 ## Coding Style & Naming Conventions
 
