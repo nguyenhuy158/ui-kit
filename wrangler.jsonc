@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ui-kit",
+  "compatibility_date": "2025-04-04",
+  "assets": {
+    "directory": "./dist"
+  },
+  "routes": [
+    {
+      "pattern": "uikit.huyab.cfd",
+      "custom_domain": true
+    }
+  ]
+}
