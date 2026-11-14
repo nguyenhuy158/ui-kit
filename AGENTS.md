@@ -62,7 +62,13 @@ Its contract:
   (`E2E_BASE_URL`).
 
 Use `pnpm` for all package commands. There is no unit test suite and no
-deploy target (so no `e2e:prod`); the gallery is the visual check.
+`e2e:prod`; the gallery is the visual check.
+
+The gallery is served at `https://uikit.huyab.cfd` by a Cloudflare Worker with
+static assets (`wrangler.jsonc`, Worker name `ui-kit`, assets from `dist/`).
+Deploy runs `pnpm build` then `npx wrangler deploy` on every push to `main`
+(Workers Builds). The `Pages` workflow still publishes the same build to
+GitHub Pages under `/ui-kit/`.
 
 ## Coding Style & Naming Conventions
 
