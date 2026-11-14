@@ -46,6 +46,16 @@ Its contract:
   the apps. Components use semantic classes only (`bg-primary`,
   `text-fg-muted`), never palette classes like `violet-600`.
 
+## Ecosystem
+
+See the [huyab.cfd ecosystem map](https://github.com/nguyenhuy158/kit/blob/main/docs/ECOSYSTEM.md) for how all personal repos connect.
+
+- Kit packages: `@huyab/config` (Biome + tsconfig base), `@huyab/e2e`
+  (`startServer`, `run`, `findChromium` in `e2e/`), reusable CI
+  `nguyenhuy158/kit/.github/workflows/check.yml@v0.1.0`.
+- Talks to: no repo at runtime. `src/styles/tokens.css` and components are
+  copied into ai-english, chia-keo, notes, monitor, share, cardstat and mytools.
+
 ## Build, Test, and Development Commands
 
 - `pnpm install`: install dependencies.
@@ -63,12 +73,6 @@ Its contract:
 
 Use `pnpm` for all package commands. There is no unit test suite and no
 `e2e:prod`; the gallery is the visual check.
-
-The gallery is served at `https://uikit.huyab.cfd` by a Cloudflare Worker with
-static assets (`wrangler.jsonc`, Worker name `ui-kit`, assets from `dist/`).
-Deploy is manual for now: `pnpm build`, then `wrangler deploy`. Workers Builds
-is not connected yet, so a push to `main` does not update the site. The `Pages`
-workflow still publishes the same build to GitHub Pages under `/ui-kit/`.
 
 ## Coding Style & Naming Conventions
 
@@ -95,15 +99,13 @@ Conventional Commits with an emoji and scope, for example
 `✨ feat(ui): add Combobox` or `🐛 fix(overlay): restore focus on close`.
 Describe what changed and attach a gallery screenshot for visual changes.
 
-## Ecosystem
+## Deploy & CI
 
-See the [huyab.cfd ecosystem map](https://github.com/nguyenhuy158/kit/blob/main/docs/ECOSYSTEM.md) for how all personal repos connect.
-
-- Kit packages: `@huyab/config` (Biome + tsconfig base), `@huyab/e2e`
-  (`startServer`, `run`, `findChromium` in `e2e/`), reusable CI
-  `nguyenhuy158/kit/.github/workflows/check.yml@v0.1.0`.
-- Talks to: no repo at runtime. `src/styles/tokens.css` and components are
-  copied into ai-english, chia-keo, notes, monitor, share, cardstat and mytools.
+The gallery is served at `https://uikit.huyab.cfd` by a Cloudflare Worker with
+static assets (`wrangler.jsonc`, Worker name `ui-kit`, assets from `dist/`).
+Deploy is manual for now: `pnpm build`, then `wrangler deploy`. Workers Builds
+is not connected yet, so a push to `main` does not update the site. The `Pages`
+workflow still publishes the same build to GitHub Pages under `/ui-kit/`.
 
 ## Agent-Specific Instructions
 
