@@ -93,3 +93,5 @@ không hardcode `violet-600` hay `stone-200`, nên đổi biến là đổi cả
 Static JavaScript apps: [DOM buttons, loading, toast and action gate](docs/dom-feedback.md).
 
 [Custom select, date range và textarea tự giãn](docs/form-controls.md) · demo `/picker-demo.html`.
+
+[Dùng token không cần copy hay build (trang tĩnh)](docs/hosted.md).

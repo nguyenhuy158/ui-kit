@@ -21,6 +21,7 @@ src/
 e2e/                  # Playwright smoke over the built gallery
   run.mjs             #   `pnpm e2e`: build -> vite preview -> smoke -> stop (`@huyab/e2e`)
   gallery-smoke.mjs   #   Render + popover dismiss + theme toggle (`pnpm e2e:smoke`)
+hosted/loader.js      # Injects tokens.css into the Tailwind browser runtime (docs/hosted.md)
 index.html            # HTML shell
 README.md             # Component list, copy instructions, deliberate conventions
 USAGE.md              # Per-component usage snippets (Vietnamese)
