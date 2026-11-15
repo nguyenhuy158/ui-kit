@@ -47,6 +47,7 @@ export { Listbox, type ListboxOption } from "./Listbox";
 export { Menu, type MenuItem } from "./Menu";
 export { ConfirmDialog, Modal } from "./Modal";
 export { Pagination } from "./Pagination";
+export { Popover, type PopoverProps } from "./Popover";
 export { Progress } from "./Progress";
 export { Radio, RadioGroup } from "./Radio";
 export { Sheet } from "./Sheet";

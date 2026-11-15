@@ -23,7 +23,7 @@ cp $UIKIT/src/ui/{cn.ts,Button.tsx,Input.tsx,Field.tsx} src/ui/
 ```
 
 Chỉ chép cái nào cần. Mỗi component chỉ phụ thuộc `cn.ts` và biến màu trong `tokens.css`.
-Riêng `Modal.tsx`, `Sheet.tsx`, `CommandPalette.tsx` cần thêm `use-overlay.ts`; `Menu.tsx`, `DatePicker.tsx` cần thêm `use-dismiss.ts`.
+Riêng `Modal.tsx`, `Sheet.tsx`, `CommandPalette.tsx` cần thêm `use-overlay.ts`; `Menu.tsx`, `Popover.tsx`, `DatePicker.tsx` cần thêm `use-dismiss.ts`.
 Đừng chép `index.ts` trừ khi lấy gần hết — nó import mọi thứ nên sẽ kéo cả bộ vào bundle.
 
 **2. Đổi file CSS gốc.** Thay `@import "tailwindcss"` bằng:
@@ -377,6 +377,14 @@ Nhớ đổi `role="tablist"` thành `<nav>` và `aria-selected` thành `aria-cu
 ```
 
 `Menu` truyền `trigger` là hàm — nó tiêm sẵn `onClick` và `aria-expanded` vào nút của bạn.
+
+```tsx
+<Popover trigger={(props) => <Button variant="outline" {...props}>Bộ lọc</Button>}>
+  {(close) => <FilterForm onDone={close} />}
+</Popover>
+```
+
+`Popover` giống `Menu` nhưng chứa nội dung bất kỳ. `align="right"`, `side="top"` đổi hướng mở.
 
 ### Stepper
 
