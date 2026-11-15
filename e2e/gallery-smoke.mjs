@@ -47,6 +47,11 @@ try {
 
   await checkDismiss("Menu", page.locator("header button[aria-expanded]"), page.getByRole("menu"));
   await checkDismiss(
+    "Popover",
+    page.getByRole("button", { name: "Popover", exact: true }),
+    page.getByRole("dialog"),
+  );
+  await checkDismiss(
     "DatePicker",
     page.locator('button[aria-haspopup="dialog"]').first(),
     page.getByRole("dialog", { name: "Chọn ngày" }),

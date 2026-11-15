@@ -40,6 +40,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `BottomNav.tsx` | `BottomNav`, `Fab` |
 | `Tabs.tsx` | `Tabs` (line / pill) |
 | `Menu.tsx` | `Menu` — menu thả xuống |
+| `Popover.tsx` | `Popover` — bong bóng chứa nội dung tuỳ ý (cần `use-dismiss.ts`) |
 | `theme.tsx` | `ThemeProvider`, `ThemeToggle`, `useTheme` — sáng / tối / theo hệ thống |
 | `Spinner.tsx` | `Spinner` |
 | `Lightbox.tsx` | `Lightbox`, `LightboxButton` — xem ảnh toàn màn hình, ← → / vuốt, khe `actions` + `footer` (cần `use-overlay.ts`) |
@@ -47,12 +48,12 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Celebrate.tsx` | `Celebrate` — pháo giấy + pop quanh nội dung khi thành công (keyframe `ui-celebrate`, `ui-pop` trong `tokens.css`) |
 | `cn.ts` | ghép class |
 | `use-overlay.ts` | Esc để đóng + khoá cuộn + giam focus, dùng chung cho Modal/Sheet |
-| `use-dismiss.ts` | Bấm ra ngoài / Esc để đóng popover, dùng chung cho Menu/DatePicker |
+| `use-dismiss.ts` | Bấm ra ngoài / Esc để đóng popover, dùng chung cho Menu/Popover/DatePicker |
 
 ## Copy sang project khác
 
 1. Copy `src/styles/tokens.css`, import nó thay cho `@import "tailwindcss"` trong file CSS gốc.
-2. Copy `src/ui/cn.ts` và những file component thực sự cần. Mỗi component chỉ phụ thuộc `cn.ts` + biến màu trong `tokens.css` (riêng `Modal`/`Sheet` cần thêm `use-overlay.ts`, `Menu`/`DatePicker` cần thêm `use-dismiss.ts`).
+2. Copy `src/ui/cn.ts` và những file component thực sự cần. Mỗi component chỉ phụ thuộc `cn.ts` + biến màu trong `tokens.css` (riêng `Modal`/`Sheet` cần thêm `use-overlay.ts`, `Menu`/`Popover`/`DatePicker` cần thêm `use-dismiss.ts`).
 3. Bọc app bằng `ThemeProvider` và `ToastProvider` nếu dùng theme / toast.
 
 Không copy `src/ui/index.ts` trừ khi lấy gần hết — nó import mọi thứ, để lại sẽ kéo cả bộ vào bundle.

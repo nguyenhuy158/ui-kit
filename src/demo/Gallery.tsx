@@ -58,6 +58,7 @@ import { Field } from "../ui/Field";
 import { HeaderBar } from "../ui/HeaderBar";
 import { Input, Select, Textarea } from "../ui/Input";
 import { Menu } from "../ui/Menu";
+import { Popover } from "../ui/Popover";
 import { ConfirmDialog, Modal } from "../ui/Modal";
 import { RadioGroup } from "../ui/Radio";
 import { Sheet } from "../ui/Sheet";
@@ -618,6 +619,22 @@ export function Gallery() {
                 Hoặc đây
               </Button>
             </Tooltip>
+            <Popover
+              trigger={(props) => (
+                <Button variant="outline" size="sm" {...props}>
+                  Popover
+                </Button>
+              )}
+            >
+              {(close) => (
+                <div className="flex flex-col gap-2 text-sm">
+                  <p>Nội dung tuỳ ý, không chỉ là danh sách lệnh.</p>
+                  <Button size="sm" onClick={close}>
+                    Đóng
+                  </Button>
+                </div>
+              )}
+            </Popover>
           </div>
         </Section>
 
