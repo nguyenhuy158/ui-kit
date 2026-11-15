@@ -143,6 +143,28 @@ try {
     throw new Error("ThemeToggle khong doi class <html>");
   ok("ThemeToggle switches the <html> theme class");
 
+  const touchActions = await page.evaluate(() => {
+    const style = document.createElement("style");
+    style.textContent =
+      "@layer utilities { .e2e-touch-none { touch-action: none; } }";
+    document.head.append(style);
+    const plain = document.createElement("button");
+    const withUtility = document.createElement("button");
+    withUtility.className = "e2e-touch-none";
+    document.body.append(plain, withUtility);
+    const result = [
+      getComputedStyle(plain).touchAction,
+      getComputedStyle(withUtility).touchAction,
+    ];
+    plain.remove();
+    withUtility.remove();
+    style.remove();
+    return result;
+  });
+  if (touchActions[0] !== "manipulation" || touchActions[1] !== "none")
+    throw new Error(`touch-action sai: ${touchActions.join(", ")}`);
+  ok("button keeps touch-action manipulation and a utility class overrides it");
+
   if (pageErrors.length > 0)
     throw new Error(`loi JS tren trang: ${pageErrors.join(" | ")}`);
   ok("no uncaught page errors");
