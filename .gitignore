@@ -21,3 +21,33 @@ e2e-failure.png
 # Stray package-manager template dirs
 {{pkgetc}}/
 {{HOMEBREW_PREFIX}}/
+
+# Environment / secrets
+!.env.example
+!.dev.vars.example
+
+# More build and test output
+.eslintcache
+.turbo/
+.vite/
+.cache/
+playwright-report/
+test-results/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+*.log
+
+# OS and editor files
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Claude Code local files
+.claude/settings.local.json
+CLAUDE.local.md
