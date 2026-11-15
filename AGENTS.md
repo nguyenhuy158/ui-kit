@@ -54,7 +54,7 @@ See the [huyab.cfd ecosystem map](https://github.com/nguyenhuy158/kit/blob/main/
   (`startServer`, `run`, `findChromium` in `e2e/`), reusable CI
   `nguyenhuy158/kit/.github/workflows/check.yml@v0.1.0`.
 - Talks to: no repo at runtime. `src/styles/tokens.css` and components are
-  copied into ai-english, chia-keo, notes, monitor, share, cardstat and mytools.
+  copied into ai-english, chia-keo, notes, monitor, share, cardstat and huyabhome.
 
 ## Build, Test, and Development Commands
 
