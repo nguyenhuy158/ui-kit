@@ -51,8 +51,8 @@ export function FileUpload({
     let next = multiple ? [...files, ...ok] : ok.slice(0, 1);
 
     let message: string | null = null;
-    if (tooBig.length > 0) {
-      message = `Bỏ qua ${tooBig.length} tệp vượt quá ${formatBytes(maxSize!)}`;
+    if (maxSize && tooBig.length > 0) {
+      message = `Bỏ qua ${tooBig.length} tệp vượt quá ${formatBytes(maxSize)}`;
     }
     if (maxFiles && next.length > maxFiles) {
       next = next.slice(0, maxFiles);

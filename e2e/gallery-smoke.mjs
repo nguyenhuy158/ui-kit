@@ -59,7 +59,7 @@ const pageErrors = [];
 page.on("pageerror", (error) => pageErrors.push(error.message));
 
 try {
-  await page.goto(BASE + "/");
+  await page.goto(`${BASE}/`);
   await page.getByText("UI Kit", { exact: true }).waitFor(WAIT);
   await page.getByRole("heading", { name: "Button" }).waitFor(WAIT);
   ok("gallery renders header and sections");
