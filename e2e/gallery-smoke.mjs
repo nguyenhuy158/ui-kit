@@ -34,6 +34,10 @@ async function checkDismiss(name, trigger, popover) {
   ok(`${name} closes on Escape and outside click`);
 }
 
+async function goGroup(label) {
+  await page.getByRole("navigation", { name: "Nhóm component" }).getByRole("button", { name: label }).click();
+}
+
 const browser = await chromium.launch({ executablePath: findChromium() });
 const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
 const pageErrors = [];
@@ -45,18 +49,27 @@ try {
   await page.getByRole("heading", { name: "Button" }).waitFor(WAIT);
   ok("gallery renders header and sections");
 
+  await goGroup("Điều hướng");
+  await page.getByRole("heading", { name: "Tabs" }).waitFor(WAIT);
+  await goGroup("Cơ bản");
+  await page.getByRole("heading", { name: "Button" }).waitFor(WAIT);
+  ok("group menu switches sections");
+
   await checkDismiss("Menu", page.locator("header button[aria-expanded]"), page.getByRole("menu"));
+  await goGroup("Điều hướng");
   await checkDismiss(
     "Popover",
     page.getByRole("button", { name: "Popover", exact: true }),
     page.getByRole("dialog"),
   );
+  await goGroup("Form");
   await checkDismiss(
     "DatePicker",
     page.locator('button[aria-haspopup="dialog"]').first(),
     page.getByRole("dialog", { name: "Chọn ngày" }),
   );
 
+  await goGroup("Tương tác");
   await page.getByRole("button", { name: "Mở ảnh toàn màn hình" }).click();
   const lightbox = page.getByRole("dialog").filter({ has: page.getByRole("button", { name: "Ảnh sau" }) });
   await lightbox.waitFor({ state: "visible", ...WAIT });
