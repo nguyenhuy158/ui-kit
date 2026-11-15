@@ -143,3 +143,4 @@ first (generic API, Gallery demo, tests), then the app copies it; apps must
 not hand-roll or fork primitives locally.
 When changing `tokens.css`, keep the token names stable and update this file,
 `README.md`, and every component that relies on a renamed token.
+Every repo keeps a full `.gitignore` and `.dockerignore` (rule: `kit/docs/AGENTS-SKELETON.md`, "Ignore files rule").
