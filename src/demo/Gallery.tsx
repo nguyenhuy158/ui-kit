@@ -55,7 +55,7 @@ export function Gallery() {
   const View = GROUP_VIEWS[route.group];
 
   return (
-    <div className="min-h-dvh pb-28">
+    <div className="ui-mica min-h-dvh pb-28">
       <HeaderBar
         title="UI Kit"
         subtitle="Component chuẩn, copy sang project khác là chạy"
