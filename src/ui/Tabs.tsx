@@ -49,9 +49,12 @@ export function Tabs<TId extends string = string>({
       {bar && (
         <span
           aria-hidden="true"
-          style={{ left: bar.left, width: bar.width }}
+          style={{
+            width: bar.width,
+            transform: `translateX(${bar.left}px)`,
+          }}
           className={cn(
-            "pointer-events-none absolute transition-[left,width] duration-200 ease-out",
+            "pointer-events-none absolute left-0 transition-[transform,width] duration-200 ease-out",
             variant === "line" && "bottom-0 h-0.5 bg-primary",
             variant === "pill" &&
               "inset-y-1 rounded-[calc(var(--ui-radius)-0.25rem)] bg-surface shadow-sm",

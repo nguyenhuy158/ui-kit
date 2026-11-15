@@ -147,7 +147,7 @@ export function CommandPalette({
       <div
         aria-hidden="true"
         onClick={onClose}
-        className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"
+        className="absolute inset-0 bg-black/50 pointer-fine:backdrop-blur-[2px]"
       />
 
       <div

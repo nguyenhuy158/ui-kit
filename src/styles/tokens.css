@@ -150,6 +150,7 @@ textarea {
   a,
   [role="button"] {
     touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -273,16 +274,6 @@ textarea {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  ::before,
-  ::after {
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 1ms !important;
-  }
-}
-
 @keyframes ui-spin {
   to {
     transform: rotate(360deg);
@@ -316,9 +307,9 @@ textarea {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *:not([data-keep-motion]),
+  *:not([data-keep-motion])::before,
+  *:not([data-keep-motion])::after {
     /* biome-ignore lint/complexity/noImportantStyles: must beat inline `animation` styles */
     animation-duration: 0.01ms !important;
     /* biome-ignore lint/complexity/noImportantStyles: must beat inline `animation` styles */

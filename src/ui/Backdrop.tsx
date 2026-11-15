@@ -32,7 +32,7 @@ export function Backdrop({ open, onClose, children }: BackdropProps) {
         ),
       }}
       className={cn(
-        "fixed inset-0 z-[70] grid place-items-center bg-black/50 text-white backdrop-blur-sm",
+        "fixed inset-0 z-[70] grid place-items-center bg-black/50 text-white pointer-fine:backdrop-blur-sm",
         closing && "pointer-events-none",
       )}
     >
