@@ -97,6 +97,21 @@ try {
     page.getByRole("dialog", { name: "Nhóm component" }),
   );
 
+  await page.getByRole("button", { name: MENU_BUTTON }).click();
+  const drawer = page.getByRole("dialog", { name: "Nhóm component" });
+  await drawer.waitFor({ state: "visible", ...WAIT });
+  await page.waitForTimeout(400);
+  const title = await drawer.getByRole("heading").boundingBox();
+  if (!title) throw new Error("khong thay tieu de drawer");
+  const dragY = title.y + title.height / 2;
+  await page.mouse.move(title.x + 20, dragY);
+  await page.mouse.down();
+  await page.mouse.move(title.x - 60, dragY, { steps: 6 });
+  await page.mouse.move(title.x - 160, dragY, { steps: 6 });
+  await page.mouse.up();
+  await drawer.waitFor({ state: "hidden", ...WAIT });
+  ok("Sheet closes when swiped toward its edge");
+
   await checkDismiss(
     "Menu",
     page.locator("header button[aria-expanded]"),

@@ -46,7 +46,10 @@ Its contract:
   `.dark` swaps colors without regenerating utilities.
 - Token names: `bg`, `surface`, `surface-muted`, `border`, `fg`, `fg-muted`,
   `primary`, `primary-hover`, `primary-fg`, `primary-soft`, `success(-soft)`,
-  `warning(-soft)`, `danger(-soft)`, `ring`, `radius`.
+  `warning(-soft)`, `danger(-soft)`, `ring`, `radius`, `shadow-{sm,md,lg,xl}`
+  (two-layer Fluent shadows), motion vars `--ui-ease-out`, `--ui-ease-in`,
+  `--ui-dur-fast`, `--ui-dur`, `--ui-dur-gentle`, and the `.ui-acrylic` /
+  `.ui-mica` material classes.
 - Consumers copy the file and may change only the values (brand hue). Adding,
   renaming, or removing a token name happens here first, then gets synced to
   the apps. Components use semantic classes only (`bg-primary`,

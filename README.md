@@ -75,6 +75,11 @@ Sửa 3 dòng đầu trong `tokens.css`, không đụng vào component:
 Component chỉ xài class ngữ nghĩa (`bg-primary`, `text-fg-muted`, `border-border`, `rounded-ui`),
 không hardcode `violet-600` hay `stone-200`, nên đổi biến là đổi cả app. Bo góc chỉnh ở `--ui-radius`.
 
+Phong cách theo Fluent: chuyển động vào chậm dần / ra nhanh dần (`--ui-ease-out`, `--ui-ease-in`,
+`--ui-dur-*`), đổ bóng hai lớp (`shadow-sm` … `shadow-xl`), và hai lớp vật liệu: `.ui-acrylic`
+(nền mờ cho thanh, menu nổi) và `.ui-mica` (nền trang nhuốm màu thương hiệu). `Sheet` vuốt về mép
+màn hình để đóng; `Modal`/`Sheet`/`Toast`/`Menu`... có animation đóng nhờ `use-presence.ts`.
+
 ## Vài quy ước cố ý
 
 - **Chữ trong input là 16px trên mobile.** Dưới 16px thì iOS Safari tự phóng to trang khi focus. Chỉ hạ xuống 14px ở `sm:pointer-fine:` (màn rộng *và* có chuột thật) — iPad rộng hơn 640px nhưng vẫn bị zoom.
