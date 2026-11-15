@@ -210,7 +210,8 @@ a,
   }
   100% {
     opacity: 0;
-    transform: translate(var(--celebrate-x), var(--celebrate-y)) rotate(var(--celebrate-spin));
+    transform: translate(var(--celebrate-x), var(--celebrate-y))
+      rotate(var(--celebrate-spin));
   }
 }
 

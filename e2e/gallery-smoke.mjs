@@ -35,7 +35,10 @@ async function checkDismiss(name, trigger, popover) {
 }
 
 async function goGroup(label) {
-  await page.getByRole("navigation", { name: "Nhóm component" }).getByRole("button", { name: label }).click();
+  await page
+    .getByRole("navigation", { name: "Nhóm component" })
+    .getByRole("button", { name: label })
+    .click();
 }
 
 const browser = await chromium.launch({ executablePath: findChromium() });
@@ -55,7 +58,11 @@ try {
   await page.getByRole("heading", { name: "Button" }).waitFor(WAIT);
   ok("group menu switches sections");
 
-  await checkDismiss("Menu", page.locator("header button[aria-expanded]"), page.getByRole("menu"));
+  await checkDismiss(
+    "Menu",
+    page.locator("header button[aria-expanded]"),
+    page.getByRole("menu"),
+  );
   await goGroup("Điều hướng");
   await checkDismiss(
     "Popover",
@@ -71,7 +78,9 @@ try {
 
   await goGroup("Tương tác");
   await page.getByRole("button", { name: "Mở ảnh toàn màn hình" }).click();
-  const lightbox = page.getByRole("dialog").filter({ has: page.getByRole("button", { name: "Ảnh sau" }) });
+  const lightbox = page
+    .getByRole("dialog")
+    .filter({ has: page.getByRole("button", { name: "Ảnh sau" }) });
   await lightbox.waitFor({ state: "visible", ...WAIT });
   await page.keyboard.press("ArrowRight");
   await lightbox.getByText(/^2\//).waitFor(WAIT);
@@ -91,10 +100,12 @@ try {
     // Che do "theo he thong" co the trung class cu; bam them mot lan.
     await page.getByRole("button", { name: /^Giao diện:/ }).click();
   }
-  if ((await html.getAttribute("class")) === before) throw new Error("ThemeToggle khong doi class <html>");
+  if ((await html.getAttribute("class")) === before)
+    throw new Error("ThemeToggle khong doi class <html>");
   ok("ThemeToggle switches the <html> theme class");
 
-  if (pageErrors.length > 0) throw new Error(`loi JS tren trang: ${pageErrors.join(" | ")}`);
+  if (pageErrors.length > 0)
+    throw new Error(`loi JS tren trang: ${pageErrors.join(" | ")}`);
   ok("no uncaught page errors");
 } catch (error) {
   failed += 1;
