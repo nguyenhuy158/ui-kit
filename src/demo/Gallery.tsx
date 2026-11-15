@@ -71,6 +71,14 @@ import { useToast } from "../ui/Toast";
 import { Tooltip } from "../ui/Tooltip";
 import { TransferList } from "../ui/TransferList";
 import { ThemeToggle } from "../ui/theme";
+import { GroupMenu } from "./GroupMenu";
+import {
+  DEFAULT_GROUP,
+  parseRoute,
+  type Route,
+  routeHash,
+  SECTION_GROUP,
+} from "./menu";
 
 type Row = {
   id: string;
@@ -172,39 +180,25 @@ const NAV = [
   { id: "profile", label: "Cá nhân", icon: User },
 ];
 
-const GROUPS = [
-  { id: "basics", label: "Cơ bản" },
-  { id: "form", label: "Form" },
-  { id: "data", label: "Dữ liệu" },
-  { id: "nav", label: "Điều hướng" },
-  { id: "feedback", label: "Phản hồi" },
-  { id: "interact", label: "Tương tác" },
-];
+const GroupContext = createContext<string>(DEFAULT_GROUP);
 
-type GroupId = (typeof GROUPS)[number]["id"];
-
-const DEFAULT_GROUP: GroupId = GROUPS[0].id;
-
-const GroupContext = createContext<GroupId>(DEFAULT_GROUP);
-
-function readHashGroup(): GroupId {
-  const id = window.location.hash.slice(1);
-  return GROUPS.some((group) => group.id === id) ? id : DEFAULT_GROUP;
+function Anchor({ id }: { id: string }) {
+  return <span id={id} className="absolute scroll-mt-24" />;
 }
 
 function Section({
   title,
-  group,
+  id,
   children,
 }: {
   title: string;
-  group: GroupId;
+  id: string;
   children: React.ReactNode;
 }) {
-  if (useContext(GroupContext) !== group) return null;
+  if (useContext(GroupContext) !== SECTION_GROUP[id]) return null;
 
   return (
-    <section className="space-y-3">
+    <section id={id} className="scroll-mt-24 space-y-3">
       <h2 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">
         {title}
       </h2>
@@ -240,18 +234,25 @@ export function Gallery() {
   const [files, setFiles] = useState<File[]>([]);
   const [step, setStep] = useState(1);
   const [paletteOpen, setPaletteOpen] = useCommandPalette();
-  const [group, setGroup] = useState<GroupId>(readHashGroup);
+  const [route, setRoute] = useState<Route>(() =>
+    parseRoute(window.location.hash),
+  );
   const [groupMenu, setGroupMenu] = useState(false);
 
   useEffect(() => {
-    const onHashChange = () => setGroup(readHashGroup());
+    const onHashChange = () => setRoute(parseRoute(window.location.hash));
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
-  const selectGroup = (id: GroupId) => {
-    window.location.hash = id;
-    window.scrollTo({ top: 0 });
+  useEffect(() => {
+    if (route.anchor) document.getElementById(route.anchor)?.scrollIntoView();
+  }, [route]);
+
+  const selectTarget = (group: string, anchor: string) => {
+    const next: Route = { group, anchor };
+    window.history.pushState(null, "", `#${routeHash(next)}`);
+    setRoute(next);
     setGroupMenu(false);
   };
 
@@ -323,26 +324,13 @@ export function Gallery() {
         title="Nhóm component"
         side="left"
       >
-        <nav aria-label="Nhóm component" className="flex flex-col gap-1">
-          {GROUPS.map((item) => (
-            <Button
-              key={item.id}
-              variant={item.id === group ? "outline" : "ghost"}
-              block
-              className="justify-start"
-              aria-current={item.id === group ? "page" : undefined}
-              onClick={() => selectGroup(item.id)}
-            >
-              {item.label}
-            </Button>
-          ))}
-        </nav>
+        <GroupMenu route={route} onSelect={selectTarget} />
       </Sheet>
 
       <div className="mx-auto max-w-3xl px-4">
-        <GroupContext.Provider value={group}>
+        <GroupContext.Provider value={route.group}>
           <main className="space-y-8 py-6">
-            <Section title="Button" group="basics">
+            <Section title="Button" id="s-button">
               <div className="flex flex-wrap gap-2">
                 <Button>Primary</Button>
                 <Button variant="secondary">Secondary</Button>
@@ -357,8 +345,9 @@ export function Gallery() {
               </div>
             </Section>
 
-            <Section title="Form" group="form">
+            <Section title="Form" id="s-form">
               <Card className="space-y-4">
+                <Anchor id="c-input" />
                 <Field
                   label="Tên hiển thị"
                   hint="Người khác sẽ thấy tên này"
@@ -377,6 +366,7 @@ export function Gallery() {
                   />
                 </Field>
 
+                <Anchor id="c-listbox" />
                 <Field label="Loại tài khoản">
                   <Listbox
                     value={accountType}
@@ -398,6 +388,7 @@ export function Gallery() {
                   />
                 </Field>
 
+                <Anchor id="c-select" />
                 <Field label="Select gốc (mobile dùng picker hệ điều hành)">
                   <Select defaultValue="personal">
                     <option value="personal">Cá nhân</option>
@@ -405,10 +396,12 @@ export function Gallery() {
                   </Select>
                 </Field>
 
+                <Anchor id="c-textarea" />
                 <Field label="Ghi chú" hint="Không bắt buộc">
                   <Textarea placeholder="Vài dòng mô tả..." />
                 </Field>
 
+                <Anchor id="c-checkbox" />
                 <Checkbox
                   checked={checked}
                   onChange={(event) => setChecked(event.target.checked)}
@@ -416,6 +409,7 @@ export function Gallery() {
                   description="Bạn có thể đổi lại bất cứ lúc nào"
                 />
 
+                <Anchor id="c-radio" />
                 <RadioGroup
                   label="Gói dịch vụ"
                   name="plan"
@@ -435,6 +429,7 @@ export function Gallery() {
                   ]}
                 />
 
+                <Anchor id="c-switch" />
                 <Switch
                   checked={notify}
                   onChange={setNotify}
@@ -444,13 +439,15 @@ export function Gallery() {
               </Card>
             </Section>
 
-            <Section title="Hiển thị dữ liệu" group="data">
+            <Section title="Hiển thị dữ liệu" id="s-display">
+              <Anchor id="c-metric" />
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 <Metric label="Tổng thu" value="12.400.000 ₫" />
                 <Metric label="Đã chi" value="8.150.000 ₫" />
                 <Metric label="Còn lại" value="4.250.000 ₫" />
               </div>
 
+              <Anchor id="c-badge" />
               <div className="flex flex-wrap items-center gap-2">
                 <Badge>Mặc định</Badge>
                 <Badge tone="primary">Mới</Badge>
@@ -461,6 +458,7 @@ export function Gallery() {
                 <Badge tone="danger">Lỗi</Badge>
               </div>
 
+              <Anchor id="c-avatar" />
               <div className="flex items-center gap-3">
                 <Avatar name="Nguyễn Văn A" size="sm" />
                 <Avatar name="Trần Thị Bích" />
@@ -470,9 +468,10 @@ export function Gallery() {
 
             <Section
               title="Chọn ngày, Autocomplete (Combobox), tải tệp"
-              group="form"
+              id="s-pickers"
             >
               <Card className="space-y-4">
+                <Anchor id="c-datepicker" />
                 <Field label="Ngày đi" hint="Không cho chọn ngày trong quá khứ">
                   <DatePicker
                     value={date}
@@ -481,6 +480,7 @@ export function Gallery() {
                   />
                 </Field>
 
+                <Anchor id="c-combobox" />
                 <Field label="Thành phố" hint="Gõ không dấu vẫn tìm ra">
                   <Combobox
                     value={city}
@@ -490,6 +490,7 @@ export function Gallery() {
                   />
                 </Field>
 
+                <Anchor id="c-fileupload" />
                 <Field label="Ảnh hoá đơn">
                   <FileUpload
                     files={files}
@@ -502,8 +503,9 @@ export function Gallery() {
               </Card>
             </Section>
 
-            <Section title="Slider, Chip, Transfer list" group="form">
+            <Section title="Slider, Chip, Transfer list" id="s-slider">
               <Card className="space-y-5">
+                <Anchor id="c-slider" />
                 <Field label="Âm lượng">
                   <Slider
                     value={volume}
@@ -512,6 +514,7 @@ export function Gallery() {
                   />
                 </Field>
                 <div className="space-y-2">
+                  <Anchor id="c-chip-filter" />
                   <p className="text-sm font-medium text-fg">Chip lọc</p>
                   <div className="flex flex-wrap gap-2">
                     {[
@@ -549,6 +552,7 @@ export function Gallery() {
                   </div>
                 </div>
                 <div className="space-y-2">
+                  <Anchor id="c-chip-tag" />
                   <p className="text-sm font-medium text-fg">
                     Chip tag (bấm x để xoá)
                   </p>
@@ -565,6 +569,7 @@ export function Gallery() {
                     ))}
                   </div>
                 </div>
+                <Anchor id="c-transfer" />
                 <TransferList
                   titles={["Bạn bè", "Thành viên"]}
                   selected={members}
@@ -582,9 +587,10 @@ export function Gallery() {
 
             <Section
               title="Navigation: Breadcrumbs, Link, Drawer, Speed dial"
-              group="nav"
+              id="s-navigation"
             >
               <Card className="space-y-5">
+                <Anchor id="c-breadcrumbs" />
                 <Breadcrumbs
                   items={[
                     { label: "Trang chủ", href: "#" },
@@ -592,6 +598,7 @@ export function Gallery() {
                     { label: "Đi Đà Lạt" },
                   ]}
                 />
+                <Anchor id="c-link" />
                 <p className="text-sm text-fg">
                   <Link href="#">Link nội bộ</Link> ·{" "}
                   <Link href="https://github.com/nguyenhuy158/ui-kit" external>
@@ -599,9 +606,11 @@ export function Gallery() {
                   </Link>
                 </p>
                 <div className="flex flex-wrap items-center gap-4">
+                  <Anchor id="c-drawer" />
                   <Button variant="outline" onClick={() => setDrawer(true)}>
                     Mở Drawer
                   </Button>
+                  <Anchor id="c-speeddial" />
                   <SpeedDial
                     direction="left"
                     icon={<Plus size={24} />}
@@ -634,7 +643,7 @@ export function Gallery() {
 
             <Section
               title="Layout: Box, Container, Grid, Stack (Tailwind)"
-              group="basics"
+              id="s-layout"
             >
               <Card className="space-y-4">
                 <p className="text-sm text-fg-muted">
@@ -670,14 +679,17 @@ export function Gallery() {
               </Card>
             </Section>
 
-            <Section title="Image list, Masonry, Timeline" group="data">
+            <Section title="Image list, Masonry, Timeline" id="s-images">
               <Card className="space-y-5">
+                <Anchor id="c-imagelist" />
                 <ImageList
                   items={PHOTOS}
                   cols={3}
                   onSelect={(item) => toast.info(item.title ?? "")}
                 />
+                <Anchor id="c-masonry" />
                 <ImageList items={PHOTOS} variant="masonry" cols={3} />
+                <Anchor id="c-timeline" />
                 <Timeline
                   items={[
                     {
@@ -704,8 +716,9 @@ export function Gallery() {
               </Card>
             </Section>
 
-            <Section title="Lightbox, Swipe action, Celebrate" group="interact">
+            <Section title="Lightbox, Swipe action, Celebrate" id="s-gestures">
               <Card className="space-y-5">
+                <Anchor id="c-lightbox" />
                 <Button
                   variant="outline"
                   size="sm"
@@ -713,6 +726,7 @@ export function Gallery() {
                 >
                   Mở ảnh toàn màn hình
                 </Button>
+                <Anchor id="c-swipe" />
                 <SwipeAction
                   label="Xoá"
                   icon={<Trash2 size={15} />}
@@ -722,6 +736,7 @@ export function Gallery() {
                     Vuốt trái dòng này trên điện thoại để lộ nút Xoá
                   </div>
                 </SwipeAction>
+                <Anchor id="c-celebrate" />
                 <div className="flex flex-col items-center gap-3 py-4">
                   <Celebrate key={celebrateKey}>
                     <Check size={44} className="text-success" />
@@ -736,7 +751,7 @@ export function Gallery() {
               </Card>
             </Section>
 
-            <Section title="Stepper" group="data">
+            <Section title="Stepper" id="s-stepper">
               <Card className="space-y-6">
                 <Stepper steps={STEPS} current={step} onStepClick={setStep} />
                 <div className="flex gap-2">
@@ -765,7 +780,8 @@ export function Gallery() {
               </Card>
             </Section>
 
-            <Section title="Bảng và phân trang" group="data">
+            <Section title="Bảng và phân trang" id="s-table">
+              <Anchor id="c-table" />
               <Table
                 columns={[
                   {
@@ -799,10 +815,11 @@ export function Gallery() {
                 rowKey={(row) => row.id}
                 onRowClick={(row) => toast.info(row.name)}
               />
+              <Anchor id="c-pagination" />
               <Pagination page={page} pageCount={12} onChange={setPage} />
             </Section>
 
-            <Section title="Font chữ" group="basics">
+            <Section title="Font chữ" id="s-font">
               <Card className="space-y-4">
                 <p className="text-sm text-fg-muted">
                   Be Vietnam Pro, dự phòng Inter → system-ui. Tải từ Google
@@ -839,7 +856,7 @@ export function Gallery() {
               </Card>
             </Section>
 
-            <Section title="Icon (lucide-react)" group="basics">
+            <Section title="Icon (lucide-react)" id="s-icon">
               <Card>
                 <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
                   {Object.entries(ICONS).map(([name, Icon]) => (
@@ -855,7 +872,8 @@ export function Gallery() {
               </Card>
             </Section>
 
-            <Section title="Alert và tiến độ" group="feedback">
+            <Section title="Alert và tiến độ" id="s-alert">
+              <Anchor id="c-alert" />
               <Alert
                 tone="info"
                 title="Bản nháp chưa lưu"
@@ -878,6 +896,7 @@ export function Gallery() {
               <Alert tone="danger" title="Không kết nối được máy chủ" />
 
               <Card className="space-y-3">
+                <Anchor id="c-progress" />
                 <Progress
                   value={92}
                   label="Dung lượng"
@@ -888,7 +907,8 @@ export function Gallery() {
               </Card>
             </Section>
 
-            <Section title="Accordion và tooltip" group="nav">
+            <Section title="Accordion và tooltip" id="s-accordion">
+              <Anchor id="c-accordion" />
               <Accordion
                 single
                 defaultOpen={["a"]}
@@ -911,6 +931,7 @@ export function Gallery() {
                 ]}
               />
               <div className="flex gap-2">
+                <Anchor id="c-tooltip" />
                 <Tooltip label="Sao chép mã mời">
                   <Button variant="outline" size="sm">
                     Rê chuột vào đây
@@ -921,6 +942,7 @@ export function Gallery() {
                     Hoặc đây
                   </Button>
                 </Tooltip>
+                <Anchor id="c-popover" />
                 <Popover
                   trigger={(props) => (
                     <Button variant="outline" size="sm" {...props}>
@@ -940,7 +962,7 @@ export function Gallery() {
               </div>
             </Section>
 
-            <Section title="Tabs" group="nav">
+            <Section title="Tabs" id="s-tabs">
               <Tabs
                 items={[
                   { id: "all", label: "Tất cả", count: 12 },
@@ -962,12 +984,15 @@ export function Gallery() {
               />
             </Section>
 
-            <Section title="Trạng thái" group="data">
+            <Section title="Trạng thái" id="s-states">
+              <Anchor id="c-skeleton" />
               <Card padded={false} className="divide-y divide-border px-4">
                 <SkeletonListRow avatar />
                 <SkeletonListRow avatar />
               </Card>
+              <Anchor id="c-loading" />
               <LoadingState />
+              <Anchor id="c-empty" />
               <EmptyState
                 title="Chưa có gì ở đây"
                 description="Tạo mục đầu tiên để bắt đầu."
@@ -976,7 +1001,7 @@ export function Gallery() {
               />
             </Section>
 
-            <Section title="Lớp phủ và thông báo" group="feedback">
+            <Section title="Lớp phủ và thông báo" id="s-overlays">
               <Card>
                 <CardHeader
                   title="Thử các lớp phủ"
@@ -1005,7 +1030,7 @@ export function Gallery() {
               </Card>
             </Section>
 
-            <Section title="Snackbar (Toast)" group="feedback">
+            <Section title="Snackbar (Toast)" id="s-toast">
               <Card>
                 <CardHeader
                   title="Thông báo nổi"

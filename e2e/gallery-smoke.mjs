@@ -36,12 +36,18 @@ async function checkDismiss(name, trigger, popover) {
 
 const MENU_BUTTON = "Mở menu nhóm";
 
-async function goGroup(label) {
+async function openMenu() {
   await page.getByRole("button", { name: MENU_BUTTON }).click();
-  await page
-    .getByRole("navigation", { name: "Nhóm component" })
-    .getByRole("button", { name: label })
-    .click();
+  return page.getByRole("navigation", { name: "Nhóm component" });
+}
+
+/** Mo drawer, bung tung cap theo `path`, bam la cuoi cung. */
+async function goTo(...path) {
+  const nav = await openMenu();
+  for (const [index, label] of path.entries()) {
+    await nav.getByRole("button", { name: label, exact: true }).click();
+    if (index === path.length - 1) break;
+  }
   await page
     .getByRole("dialog", { name: "Nhóm component" })
     .waitFor({ state: "hidden", ...WAIT });
@@ -58,11 +64,32 @@ try {
   await page.getByRole("heading", { name: "Button" }).waitFor(WAIT);
   ok("gallery renders header and sections");
 
-  await goGroup("Điều hướng");
+  const nav = await openMenu();
+  if (
+    (await nav.getByRole("button", { name: "Tabs", exact: true }).count()) > 0
+  ) {
+    throw new Error("menu khong gap san: thay muc con khi chua bung nhom");
+  }
+  await nav.getByRole("button", { name: "Điều hướng", exact: true }).click();
+  await nav
+    .getByRole("button", { name: "Tabs", exact: true })
+    .waitFor({ state: "visible", ...WAIT });
+  await nav.getByRole("button", { name: "Tabs", exact: true }).click();
   await page.getByRole("heading", { name: "Tabs" }).waitFor(WAIT);
-  await goGroup("Cơ bản");
-  await page.getByRole("heading", { name: "Button" }).waitFor(WAIT);
-  ok("group menu switches sections");
+  ok("drawer menu starts folded and opens a section");
+
+  await goTo("Form", "Trường nhập liệu", "Select");
+  await page
+    .getByText("Select gốc", { exact: false })
+    .waitFor({ state: "visible", ...WAIT });
+  const selectTop = await page
+    .getByText("Select gốc", { exact: false })
+    .evaluate((el) => el.getBoundingClientRect().top);
+  if (selectTop < 0 || selectTop > 400)
+    throw new Error(`khong cuon toi Select (top=${selectTop})`);
+  if (!page.url().endsWith("#form/c-select"))
+    throw new Error(`hash sai: ${page.url()}`);
+  ok("3-level menu scrolls to the component and sets the hash");
 
   await checkDismiss(
     "Group drawer",
@@ -75,20 +102,20 @@ try {
     page.locator("header button[aria-expanded]"),
     page.getByRole("menu"),
   );
-  await goGroup("Điều hướng");
+  await goTo("Điều hướng", "Accordion và tooltip", "Popover");
   await checkDismiss(
     "Popover",
     page.getByRole("button", { name: "Popover", exact: true }),
     page.getByRole("dialog"),
   );
-  await goGroup("Form");
+  await goTo("Form", "Ngày, Combobox, tải tệp", "DatePicker");
   await checkDismiss(
     "DatePicker",
     page.locator('main button[aria-haspopup="dialog"]').first(),
     page.getByRole("dialog", { name: "Chọn ngày" }),
   );
 
-  await goGroup("Tương tác");
+  await goTo("Tương tác", "Lightbox, Swipe, Celebrate", "Lightbox");
   await page.getByRole("button", { name: "Mở ảnh toàn màn hình" }).click();
   const lightbox = page
     .getByRole("dialog")
