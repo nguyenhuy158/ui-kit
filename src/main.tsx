@@ -5,7 +5,10 @@ import { Gallery } from "./demo/Gallery";
 import { ToastProvider } from "./ui/Toast";
 import { ThemeProvider } from "./ui/theme";
 
-createRoot(document.getElementById("root")!).render(
+const root = document.getElementById("root");
+if (!root) throw new Error("Missing #root element");
+
+createRoot(root).render(
   <StrictMode>
     <ThemeProvider>
       <ToastProvider>

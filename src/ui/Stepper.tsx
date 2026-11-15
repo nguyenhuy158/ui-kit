@@ -120,7 +120,7 @@ export function Stepper({
                   {clickable ? (
                     <button
                       type="button"
-                      onClick={() => onStepClick!(index)}
+                      onClick={() => onStepClick?.(index)}
                       className="outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full"
                     >
                       {bubble}
@@ -147,7 +147,7 @@ export function Stepper({
                   {clickable ? (
                     <button
                       type="button"
-                      onClick={() => onStepClick!(index)}
+                      onClick={() => onStepClick?.(index)}
                       className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       {bubble}
