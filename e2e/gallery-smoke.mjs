@@ -130,6 +130,52 @@ try {
     page.getByRole("dialog", { name: "Chọn ngày" }),
   );
 
+  await goTo("Điều hướng", "Một màn hình, không cuộn", "PagedList");
+  const frame = page.getByTestId("screen-demo");
+  await frame.waitFor({ state: "visible", ...WAIT });
+  const frameRows = frame.locator("main div[style*='height: 52px']");
+  const frameOverflow = () =>
+    frame.evaluate((root) =>
+      [root, ...root.querySelectorAll("*")]
+        .filter((el) => el.scrollHeight > el.clientHeight + 1)
+        .filter((el) => {
+          const overflowY = getComputedStyle(el).overflowY;
+          return overflowY === "auto" || overflowY === "scroll";
+        })
+        .map((el) => el.tagName),
+    );
+  const firstPageCount = await frameRows.count();
+  const firstPageText = await frameRows.first().innerText();
+  if (firstPageCount < 2 || firstPageCount >= 25)
+    throw new Error(`PagedList khong chia trang: ${firstPageCount} dong`);
+  if ((await frameOverflow()).length > 0)
+    throw new Error(`khung demo cuon duoc: ${await frameOverflow()}`);
+  await frame.getByRole("button", { name: "Trang sau" }).click();
+  if ((await frameRows.first().innerText()) === firstPageText)
+    throw new Error("doi trang nhung noi dung khong doi");
+  if ((await frameOverflow()).length > 0)
+    throw new Error("khung demo cuon duoc o trang sau");
+  ok("PagedList fits the frame and pages without scrolling");
+
+  await frame.evaluate((root) => {
+    root.style.height = "14rem";
+  });
+  await page.waitForTimeout(250);
+  const shorterPageCount = await frameRows.count();
+  if (shorterPageCount >= firstPageCount)
+    throw new Error(
+      `khung thap hon nhung van ${shorterPageCount} dong (truoc: ${firstPageCount})`,
+    );
+  if ((await frameOverflow()).length > 0)
+    throw new Error("khung thap hon bi cuon");
+  await frame.evaluate((root) => {
+    root.style.height = "";
+  });
+  await page.waitForTimeout(250);
+  if ((await frameRows.count()) !== firstPageCount)
+    throw new Error("khung cao lai nhung so dong khong tro lai");
+  ok("PagedList recomputes rows per page when the size changes");
+
   await goTo("Tương tác", "Lightbox, Swipe, Celebrate", "Lightbox");
   await page.getByRole("button", { name: "Mở ảnh toàn màn hình" }).click();
   const lightbox = page

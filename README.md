@@ -37,7 +37,9 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Sheet.tsx` | `Sheet` — ngăn trượt từ dưới / trái / phải (keyframe `ui-slide-up`, `ui-slide-in-left`, `ui-slide-in-right` trong `tokens.css`) |
 | `Toast.tsx` | `ToastProvider`, `useToast` |
 | `HeaderBar.tsx` | `HeaderBar` — thanh tiêu đề dính, an toàn với notch |
-| `BottomNav.tsx` | `BottomNav`, `Fab` |
+| `BottomNav.tsx` | `BottomNav` (`inline` để đặt trong `Screen`), `Fab` |
+| `Screen.tsx` | `Screen` — khung vừa viewport: header và thanh dưới cố định, vùng giữa tự co, không cuộn |
+| `PagedList.tsx` | `PagedList` — danh sách chia trang theo chiều cao còn lại, mỗi dòng cao cố định, thanh phân trang gọn `‹ 1/7 ›` |
 | `Tabs.tsx` | `Tabs` (line / pill) |
 | `Menu.tsx` | `Menu` — menu thả xuống |
 | `Popover.tsx` | `Popover` — bong bóng chứa nội dung tuỳ ý (cần `use-dismiss.ts`) |
@@ -82,6 +84,7 @@ màn hình để đóng; `Modal`/`Sheet`/`Toast`/`Menu`... có animation đóng 
 
 ## Vài quy ước cố ý
 
+- **Một màn hình, không cuộn.** Mọi màn hình phải vừa viewport, cả điện thoại lẫn desktop: trang và khung bên trong đều không cuộn. Dùng `Screen` làm khung trang; danh sách có thể dài thì dùng `PagedList` (chia trang), không để cuộn. Chỉ có hai ngoại lệ: trang chỉ để đọc (hướng dẫn, điều khoản) và bên trong `Sheet`/`Modal` chứa form. Mỗi dòng của `PagedList` phải có chiều cao cố định (`rowHeight`) để số dòng mỗi trang tính đúng; nội dung dài hơn thì cắt bằng `truncate`.
 - **Chữ trong input là 16px trên mobile.** Dưới 16px thì iOS Safari tự phóng to trang khi focus. Chỉ hạ xuống 14px ở `sm:pointer-fine:` (màn rộng *và* có chuột thật) — iPad rộng hơn 640px nhưng vẫn bị zoom.
 - **Vùng chạm tối thiểu 44px** trên mobile, thu lại từ `sm:` trở lên.
 - **`safe-top` / `safe-bottom`** cho notch và thanh home của iPhone.

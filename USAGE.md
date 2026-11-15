@@ -336,6 +336,31 @@ const [tab, setTab] = useState<"people" | "expenses" | "more">("people");
 
 Nhớ chừa `padding-bottom` cho nội dung, nếu không bottom nav sẽ che mất phần cuối trang.
 
+### Một màn hình, không cuộn: Screen + PagedList
+
+```tsx
+<Screen
+  header={<HeaderBar sticky={false} title="Ăn tối quận 1" />}
+  footer={<BottomNav inline active={tab} onChange={setTab} items={items} />}
+>
+  <div className="h-full px-3 pt-3">
+    <PagedList
+      items={expenses}
+      rowHeight={56}
+      getKey={(expense) => expense.id}
+      renderItem={(expense) => <ExpenseRow expense={expense} />}
+    />
+  </div>
+</Screen>
+```
+
+- `Screen` cao đúng `100dvh`, `overflow-hidden`; vùng giữa tự co. Đặt trong khung khác (ô nhúng, demo) thì dùng `fill="parent"`.
+- `BottomNav` mặc định là `fixed`; trong `Screen` thêm `inline` để nó nằm trong luồng, không đè nội dung (nên không cần `pb-28`).
+- `PagedList` tự đo chiều cao còn lại và tính mỗi trang chứa mấy dòng, đổi kích thước thì tính lại. Luôn chừa sẵn 48px cho thanh phân trang nên số dòng không bị tính vòng.
+- Mọi dòng cao đúng `rowHeight`; nội dung dài hơn bị cắt, hãy dùng `truncate`.
+- Cha của `PagedList` phải có chiều cao xác định (`h-full` trong `Screen`).
+- Chưa đo được chiều cao (môi trường test, phần tử đang ẩn) thì `PagedList` hiện đủ mọi dòng thay vì chỉ một dòng.
+
 ### Dùng với router thật
 
 `BottomNav` đổi nội dung tại chỗ bằng state. Nếu muốn deep link và nút Back của trình duyệt chạy đúng, chép file rồi đổi `<button>` thành `<Link>` của router:

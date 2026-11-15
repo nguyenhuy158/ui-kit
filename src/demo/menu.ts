@@ -113,6 +113,14 @@ export const MENU: MenuGroup[] = [
       },
       { id: "s-tabs", label: "Tabs" },
       {
+        id: "s-screen",
+        label: "Một màn hình, không cuộn",
+        items: [
+          { id: "c-screen", label: "Screen" },
+          { id: "c-pagedlist", label: "PagedList" },
+        ],
+      },
+      {
         id: "s-accordion",
         label: "Accordion và tooltip",
         items: [
