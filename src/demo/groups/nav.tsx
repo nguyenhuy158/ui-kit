@@ -1,11 +1,23 @@
-import { Copy, Download, Plus, Share2 } from "lucide-react";
+import {
+  Copy,
+  Download,
+  Plus,
+  QrCode,
+  Share2,
+  Users,
+  Wallet,
+} from "lucide-react";
 import { useState } from "react";
 import { Accordion } from "../../ui/Accordion";
+import { BottomNav } from "../../ui/BottomNav";
 import { Breadcrumbs } from "../../ui/Breadcrumbs";
 import { Button } from "../../ui/Button";
 import { Card } from "../../ui/Card";
+import { HeaderBar } from "../../ui/HeaderBar";
 import { Link } from "../../ui/Link";
+import { PagedList } from "../../ui/PagedList";
 import { Popover } from "../../ui/Popover";
+import { Screen } from "../../ui/Screen";
 import { Sheet } from "../../ui/Sheet";
 import { SpeedDial } from "../../ui/SpeedDial";
 import { Tabs } from "../../ui/Tabs";
@@ -19,6 +31,12 @@ export function NavGroup(_: GroupProps) {
   const toast = useToast();
   const [tab, setTab] = useState("all");
   const [drawer, setDrawer] = useState(false);
+  const [screenTab, setScreenTab] = useState("spend");
+  const spendItems = Array.from({ length: 25 }, (_, index) => ({
+    id: `spend-${index + 1}`,
+    title: `Khoản chi ${index + 1}`,
+    amount: (index + 1) * 12_500,
+  }));
   return (
     <>
       <Section
@@ -74,6 +92,64 @@ export function NavGroup(_: GroupProps) {
             trên header), Pagination, Stepper, Tabs, FAB (nút + góc phải).
           </p>
         </Card>
+      </Section>
+      <Section
+        title="Một màn hình, không cuộn: Screen và PagedList"
+        id="s-screen"
+      >
+        <Anchor id="c-screen" />
+        <Anchor id="c-pagedlist" />
+        <p className="text-xs text-fg-muted">
+          Trang không cuộn. Header và thanh dưới cố định, vùng giữa vừa khít chỗ
+          còn lại. Danh sách dài chia trang: PagedList tự đo chiều cao để biết
+          mỗi trang chứa mấy dòng. Mỗi dòng có chiều cao cố định.
+        </p>
+        <div
+          data-testid="screen-demo"
+          className="h-[26rem] overflow-hidden rounded-ui border border-border bg-bg"
+        >
+          <Screen
+            fill="parent"
+            header={
+              <HeaderBar
+                sticky={false}
+                title="Cuộc chia mẫu"
+                subtitle="25 khoản chi"
+              />
+            }
+            footer={
+              <BottomNav
+                inline
+                mobileOnly={false}
+                active={screenTab}
+                onChange={setScreenTab}
+                items={[
+                  { id: "people", label: "Người", icon: Users },
+                  { id: "spend", label: "Chi", icon: Wallet },
+                  { id: "summary", label: "Tổng kết", icon: QrCode },
+                ]}
+              />
+            }
+          >
+            <div className="h-full px-3 pt-3">
+              <PagedList
+                items={spendItems}
+                rowHeight={52}
+                getKey={(item) => item.id}
+                renderItem={(item) => (
+                  <div className="flex h-full items-center justify-between rounded-ui border border-border bg-surface px-3 text-sm">
+                    <span className="truncate font-medium text-fg">
+                      {item.title}
+                    </span>
+                    <span className="tabular text-fg-muted">
+                      {item.amount.toLocaleString("vi-VN")} ₫
+                    </span>
+                  </div>
+                )}
+              />
+            </div>
+          </Screen>
+        </div>
       </Section>
       <Section title="Accordion và tooltip" id="s-accordion">
         <Anchor id="c-accordion" />

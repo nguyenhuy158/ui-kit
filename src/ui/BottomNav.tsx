@@ -15,6 +15,7 @@ export type BottomNavProps<TId extends string = string> = {
   onChange: (id: TId) => void;
   /** An tren desktop khi da co sidebar. Dat false neu app chi co mot layout. */
   mobileOnly?: boolean;
+  inline?: boolean;
   className?: string;
 };
 
@@ -30,13 +31,15 @@ export function BottomNav<TId extends string = string>({
   active,
   onChange,
   mobileOnly = true,
+  inline = false,
   className,
 }: BottomNavProps<TId>) {
   return (
     <div
       role="tablist"
       className={cn(
-        "safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-border ui-acrylic",
+        "safe-bottom border-t border-border ui-acrylic",
+        !inline && "fixed inset-x-0 bottom-0 z-40",
         mobileOnly && "lg:hidden",
         className,
       )}

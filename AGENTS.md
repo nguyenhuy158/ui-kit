@@ -123,9 +123,12 @@ not update the site until someone connects it in the Cloudflare dashboard. The
 
 Keep responses short and focused. If a requirement is unclear, ask before making
 assumptions.
-Design UI/UX to fit inside a single viewport by default. Avoid page-level
-scrolling; use compact layouts, tabs, panes, or contained internal lists when
-content can overflow.
+Design every screen to fit one viewport with no scrolling at all, on phones
+and on desktop: neither the page nor any pane inside it scrolls. Use `Screen`
+as the page frame and `PagedList` (paging) for any list that can grow. Only
+exceptions: reading-only pages (help, legal) and the inside of a Sheet or
+Modal that holds a form. Apps check this in e2e with `assertFitsViewport`
+from `@huyab/e2e` (kit).
 Never commit secrets. Every machine runs huyabhome `scripts/install-tools.sh`,
 which installs gitleaks and a global pre-commit hook that scans staged changes.
 Do not bypass it: no `git commit --no-verify`, no change to `core.hooksPath`.
