@@ -34,11 +34,17 @@ async function checkDismiss(name, trigger, popover) {
   ok(`${name} closes on Escape and outside click`);
 }
 
+const MENU_BUTTON = "Mở menu nhóm";
+
 async function goGroup(label) {
+  await page.getByRole("button", { name: MENU_BUTTON }).click();
   await page
     .getByRole("navigation", { name: "Nhóm component" })
     .getByRole("button", { name: label })
     .click();
+  await page
+    .getByRole("dialog", { name: "Nhóm component" })
+    .waitFor({ state: "hidden", ...WAIT });
 }
 
 const browser = await chromium.launch({ executablePath: findChromium() });
@@ -59,6 +65,12 @@ try {
   ok("group menu switches sections");
 
   await checkDismiss(
+    "Group drawer",
+    page.getByRole("button", { name: MENU_BUTTON }),
+    page.getByRole("dialog", { name: "Nhóm component" }),
+  );
+
+  await checkDismiss(
     "Menu",
     page.locator("header button[aria-expanded]"),
     page.getByRole("menu"),
@@ -72,7 +84,7 @@ try {
   await goGroup("Form");
   await checkDismiss(
     "DatePicker",
-    page.locator('button[aria-haspopup="dialog"]').first(),
+    page.locator('main button[aria-haspopup="dialog"]').first(),
     page.getByRole("dialog", { name: "Chọn ngày" }),
   );
 

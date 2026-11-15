@@ -13,6 +13,7 @@ import {
   Info,
   LogOut,
   Mail,
+  Menu as MenuIcon,
   MoreHorizontal,
   Pencil,
   Plus,
@@ -240,6 +241,7 @@ export function Gallery() {
   const [step, setStep] = useState(1);
   const [paletteOpen, setPaletteOpen] = useCommandPalette();
   const [group, setGroup] = useState<GroupId>(readHashGroup);
+  const [groupMenu, setGroupMenu] = useState(false);
 
   useEffect(() => {
     const onHashChange = () => setGroup(readHashGroup());
@@ -250,6 +252,7 @@ export function Gallery() {
   const selectGroup = (id: GroupId) => {
     window.location.hash = id;
     window.scrollTo({ top: 0 });
+    setGroupMenu(false);
   };
 
   const emailError =
@@ -262,6 +265,17 @@ export function Gallery() {
       <HeaderBar
         title="UI Kit"
         subtitle="Component chuẩn, copy sang project khác là chạy"
+        leading={
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Mở menu nhóm"
+            aria-haspopup="dialog"
+            onClick={() => setGroupMenu(true)}
+          >
+            <MenuIcon size={20} />
+          </Button>
+        }
         actions={
           <>
             <Tooltip label="Ctrl K">
@@ -303,20 +317,13 @@ export function Gallery() {
         }
       />
 
-      <div className="px-4 pt-4 lg:hidden">
-        <Tabs
-          variant="pill"
-          items={GROUPS}
-          active={group}
-          onChange={selectGroup}
-        />
-      </div>
-
-      <div className="mx-auto flex max-w-5xl gap-8 px-4">
-        <nav
-          aria-label="Nhóm component"
-          className="sticky top-24 hidden h-fit w-44 shrink-0 flex-col gap-1 py-6 lg:flex"
-        >
+      <Sheet
+        open={groupMenu}
+        onClose={() => setGroupMenu(false)}
+        title="Nhóm component"
+        side="left"
+      >
+        <nav aria-label="Nhóm component" className="flex flex-col gap-1">
           {GROUPS.map((item) => (
             <Button
               key={item.id}
@@ -330,9 +337,11 @@ export function Gallery() {
             </Button>
           ))}
         </nav>
+      </Sheet>
 
+      <div className="mx-auto max-w-3xl px-4">
         <GroupContext.Provider value={group}>
-          <main className="min-w-0 max-w-3xl flex-1 space-y-8 py-6">
+          <main className="space-y-8 py-6">
             <Section title="Button" group="basics">
               <div className="flex flex-wrap gap-2">
                 <Button>Primary</Button>
