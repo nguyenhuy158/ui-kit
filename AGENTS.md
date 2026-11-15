@@ -16,7 +16,13 @@ src/
     use-dismiss.ts    #   Outside-click/Esc close shared by Menu and DatePicker
     theme.tsx         #   ThemeProvider/ThemeToggle: toggles `.dark` on <html>
     index.ts          #   Barrel export for the gallery; do not copy it to apps
-  demo/Gallery.tsx    # Gallery page showing every component
+  demo/               # Gallery page showing every component
+    Gallery.tsx       #   Shell: header, drawer menu, shared overlays, renders the active group
+    menu.ts           #   Menu tree (group > section > component) and the URL hash route
+    GroupMenu.tsx     #   Folded 3-level tree shown in the drawer
+    section.tsx       #   `Section` and `Anchor` (scroll targets for the menu)
+    fixtures.ts       #   Sample data shared by the demos
+    groups/           #   One file per group (basics, form, data, nav, feedback, interact), each with its own state
   main.tsx            # Entry: imports tokens.css, wraps Gallery in providers
 e2e/                  # Playwright smoke over the built gallery
   run.mjs             #   `pnpm e2e`: build -> vite preview -> smoke -> stop (`@huyab/e2e`)

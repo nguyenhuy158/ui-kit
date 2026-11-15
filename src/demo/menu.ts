@@ -158,12 +158,6 @@ export const MENU: MenuGroup[] = [
 
 export const DEFAULT_GROUP = MENU[0].id;
 
-export const SECTION_GROUP: Record<string, string> = Object.fromEntries(
-  MENU.flatMap((group) =>
-    group.sections.map((section) => [section.id, group.id]),
-  ),
-);
-
 export function parseRoute(hash: string): Route {
   const [group, anchor] = hash.replace(/^#/, "").split("/");
   return MENU.some((item) => item.id === group)
