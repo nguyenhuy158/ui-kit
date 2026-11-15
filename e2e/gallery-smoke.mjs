@@ -64,6 +64,23 @@ try {
   await page.getByRole("heading", { name: "Button" }).waitFor(WAIT);
   ok("gallery renders header and sections");
 
+  const gridColumns = () =>
+    page
+      .locator(".ui-grid")
+      .first()
+      .evaluate(
+        (el) => getComputedStyle(el).gridTemplateColumns.split(" ").length,
+      );
+  const desktopColumns = await gridColumns();
+  await page.setViewportSize({ width: 390, height: 800 });
+  const mobileColumns = await gridColumns();
+  await page.setViewportSize({ width: 1280, height: 800 });
+  if (desktopColumns !== 12 || mobileColumns !== 4)
+    throw new Error(
+      `luoi sai: desktop=${desktopColumns}, mobile=${mobileColumns}`,
+    );
+  ok("grid has 12 columns on desktop and 4 on mobile");
+
   const nav = await openMenu();
   if (
     (await nav.getByRole("button", { name: "Tabs", exact: true }).count()) > 0

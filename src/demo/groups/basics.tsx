@@ -1,9 +1,12 @@
 import { Search } from "lucide-react";
 import { Button } from "../../ui/Button";
 import { Card } from "../../ui/Card";
+import { Col, Grid } from "../../ui/Grid";
 import { FONT_SIZES, FONT_WEIGHTS, ICONS, LAYOUT_BOX } from "../fixtures";
 import { Section } from "../section";
 import type { GroupProps } from "./types";
+
+const GRID_COLUMN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 export function BasicsGroup(_: GroupProps) {
   return (
@@ -30,8 +33,7 @@ export function BasicsGroup(_: GroupProps) {
           <p className="text-sm text-fg-muted">
             Không cần component: dùng class Tailwind. Container ={" "}
             <code>mx-auto max-w-3xl px-4</code>, Stack ={" "}
-            <code>flex flex-col gap-3</code>, Grid ={" "}
-            <code>grid grid-cols-12 gap-2</code>.
+            <code>flex flex-col gap-3</code>, Grid = <code>ui-grid</code>.
           </p>
           <div className="flex gap-2">
             {["Stack ngang", "flex gap-2", "items-center"].map((t) => (
@@ -40,17 +42,36 @@ export function BasicsGroup(_: GroupProps) {
               </div>
             ))}
           </div>
-          <div className="grid grid-cols-12 gap-2">
-            <div className={`${LAYOUT_BOX} col-span-12 sm:col-span-8`}>
-              col-span-8
-            </div>
-            <div className={`${LAYOUT_BOX} col-span-12 sm:col-span-4`}>
-              col-span-4
-            </div>
-            <div className={`${LAYOUT_BOX} col-span-6 sm:col-span-3`}>3</div>
-            <div className={`${LAYOUT_BOX} col-span-6 sm:col-span-3`}>3</div>
-            <div className={`${LAYOUT_BOX} col-span-12 sm:col-span-6`}>6</div>
-          </div>
+          <p className="text-sm text-fg-muted">
+            Lưới chuẩn: <b>4 cột</b> trên mobile, <b>12 cột</b> từ 768px.{" "}
+            <code>Grid</code> +{" "}
+            <code>Col mobile=&#123;1..4&#125; desktop=&#123;1..12&#125;</code>.
+            Không đặt <code>desktop</code> thì lấy <code>mobile × 3</code>.
+          </p>
+          <Grid>
+            {GRID_COLUMN_NUMBERS.map((number) => (
+              <Col key={number} mobile={1} desktop={1}>
+                <div className={LAYOUT_BOX}>{number}</div>
+              </Col>
+            ))}
+          </Grid>
+          <Grid>
+            <Col mobile={4} desktop={8}>
+              <div className={LAYOUT_BOX}>mobile 4 · desktop 8</div>
+            </Col>
+            <Col mobile={4} desktop={4}>
+              <div className={LAYOUT_BOX}>mobile 4 · desktop 4</div>
+            </Col>
+            <Col mobile={2} desktop={3}>
+              <div className={LAYOUT_BOX}>mobile 2 · desktop 3</div>
+            </Col>
+            <Col mobile={2} desktop={3}>
+              <div className={LAYOUT_BOX}>mobile 2 · desktop 3</div>
+            </Col>
+            <Col mobile={4} desktop={6}>
+              <div className={LAYOUT_BOX}>mobile 4 · desktop 6</div>
+            </Col>
+          </Grid>
         </Card>
       </Section>
       <Section title="Font chữ" id="s-font">
