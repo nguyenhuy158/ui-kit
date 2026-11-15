@@ -49,7 +49,9 @@ Its contract:
   `warning(-soft)`, `danger(-soft)`, `ring`, `radius`, `shadow-{sm,md,lg,xl}`
   (two-layer Fluent shadows), motion vars `--ui-ease-out`, `--ui-ease-in`,
   `--ui-dur-fast`, `--ui-dur`, `--ui-dur-gentle`, and the `.ui-acrylic` /
-  `.ui-mica` material classes.
+  `.ui-mica` material classes, and the layout vars `--ui-grid-cols` (4, 12 from
+  48rem), `--ui-grid-gutter`, `--ui-grid-margin`, `--ui-container-max`,
+  `--ui-space-section` with the `.ui-container` / `.ui-grid` / `.ui-col` classes.
 - Consumers copy the file and may change only the values (brand hue). Adding,
   renaming, or removing a token name happens here first, then gets synced to
   the apps. Components use semantic classes only (`bg-primary`,

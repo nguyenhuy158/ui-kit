@@ -24,6 +24,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Radio.tsx` | `Radio`, `RadioGroup` |
 | `Switch.tsx` | `Switch` |
 | `Badge.tsx` | `Badge` (5 tone, có chấm trạng thái) |
+| `Grid.tsx` | `Container`, `Grid`, `Col` — lưới 4 cột trên mobile, 12 cột từ 768px (class `ui-container`, `ui-grid`, `ui-col` trong `tokens.css`) |
 | `Card.tsx` | `Card`, `CardHeader`, `Metric` |
 | `Alert.tsx` | `Alert` — thông báo nằm tại chỗ (khác Toast là thoáng qua) |
 | `Progress.tsx` | `Progress` |
@@ -76,6 +77,8 @@ Sửa 3 dòng đầu trong `tokens.css`, không đụng vào component:
 
 Component chỉ xài class ngữ nghĩa (`bg-primary`, `text-fg-muted`, `border-border`, `rounded-ui`),
 không hardcode `violet-600` hay `stone-200`, nên đổi biến là đổi cả app. Bo góc chỉnh ở `--ui-radius`.
+
+Lưới và khoảng cách: 4 cột trên mobile, 12 cột từ 768px (`md`). Lề trang `--ui-grid-margin` (16px / 32px), khoảng cách cột `--ui-grid-gutter` (16px / 24px), khung tối đa `--ui-container-max` (80rem), khoảng cách giữa các khối lớn `--ui-space-section`. Khoảng cách trong khối chỉ dùng bậc 4px của Tailwind: 1, 2, 3, 4, 6, 8, 12, 16.
 
 Phong cách theo Fluent: chuyển động vào chậm dần / ra nhanh dần (`--ui-ease-out`, `--ui-ease-in`,
 `--ui-dur-*`), đổ bóng hai lớp (`shadow-sm` … `shadow-xl`), và hai lớp vật liệu: `.ui-acrylic`

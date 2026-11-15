@@ -60,6 +60,26 @@ createRoot(document.getElementById("root")!).render(
 
 Nhớ sửa cả khối `.dark { ... }` bên dưới cho chế độ tối.
 
+## Lưới và khoảng cách
+
+4 cột trên mobile, 12 cột từ 768px. Lề trang, khoảng cách cột và khung tối đa lấy từ token trong `tokens.css`.
+
+```tsx
+import { Col, Container, Grid } from "./ui/Grid";
+
+<Container>
+  <Grid>
+    <Col mobile={4} desktop={8}>Nội dung chính</Col>
+    <Col mobile={4} desktop={4}>Cột phụ</Col>
+    <Col mobile={2} desktop={3}>Nửa hàng trên mobile, 3/12 trên desktop</Col>
+  </Grid>
+</Container>
+```
+
+- `mobile` từ 1 đến 4 (mặc định 4 = cả hàng). `desktop` từ 1 đến 12; bỏ trống thì bằng `mobile × 3`.
+- Không dùng component: gắn class `ui-container`, `ui-grid`, `ui-col` và đặt `--ui-col-mobile` / `--ui-col-desktop` bằng `style`.
+- Khoảng cách trong khối chỉ dùng bậc Tailwind 1, 2, 3, 4, 6, 8, 12, 16 (4px mỗi bậc). Giữa các khối lớn dùng `--ui-space-section`.
+
 ## Nút và form
 
 ```tsx
