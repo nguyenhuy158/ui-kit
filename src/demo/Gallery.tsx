@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   AlertTriangle,
   Bell,
@@ -125,7 +125,29 @@ const NAV = [
   { id: "profile", label: "Cá nhân", icon: User },
 ];
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+const GROUPS = [
+  { id: "basics", label: "Cơ bản" },
+  { id: "form", label: "Form" },
+  { id: "data", label: "Dữ liệu" },
+  { id: "nav", label: "Điều hướng" },
+  { id: "feedback", label: "Phản hồi" },
+  { id: "interact", label: "Tương tác" },
+];
+
+type GroupId = (typeof GROUPS)[number]["id"];
+
+const DEFAULT_GROUP: GroupId = GROUPS[0].id;
+
+const GroupContext = createContext<GroupId>(DEFAULT_GROUP);
+
+function readHashGroup(): GroupId {
+  const id = window.location.hash.slice(1);
+  return GROUPS.some((group) => group.id === id) ? id : DEFAULT_GROUP;
+}
+
+function Section({ title, group, children }: { title: string; group: GroupId; children: React.ReactNode }) {
+  if (useContext(GroupContext) !== group) return null;
+
   return (
     <section className="space-y-3">
       <h2 className="text-xs font-semibold uppercase tracking-wide text-fg-muted">{title}</h2>
@@ -161,6 +183,18 @@ export function Gallery() {
   const [files, setFiles] = useState<File[]>([]);
   const [step, setStep] = useState(1);
   const [paletteOpen, setPaletteOpen] = useCommandPalette();
+  const [group, setGroup] = useState<GroupId>(readHashGroup);
+
+  useEffect(() => {
+    const onHashChange = () => setGroup(readHashGroup());
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  const selectGroup = (id: GroupId) => {
+    window.location.hash = id;
+    window.scrollTo({ top: 0 });
+  };
 
   const emailError =
     email.length > 0 && !email.includes("@") ? "Email phải có ký tự @" : undefined;
@@ -199,8 +233,29 @@ export function Gallery() {
         }
       />
 
-      <main className="mx-auto max-w-3xl space-y-8 px-4 py-6">
-        <Section title="Button">
+      <div className="px-4 pt-4 lg:hidden">
+        <Tabs variant="pill" items={GROUPS} active={group} onChange={selectGroup} />
+      </div>
+
+      <div className="mx-auto flex max-w-5xl gap-8 px-4">
+        <nav aria-label="Nhóm component" className="sticky top-24 hidden h-fit w-44 shrink-0 flex-col gap-1 py-6 lg:flex">
+          {GROUPS.map((item) => (
+            <Button
+              key={item.id}
+              variant={item.id === group ? "outline" : "ghost"}
+              block
+              className="justify-start"
+              aria-current={item.id === group ? "page" : undefined}
+              onClick={() => selectGroup(item.id)}
+            >
+              {item.label}
+            </Button>
+          ))}
+        </nav>
+
+        <GroupContext.Provider value={group}>
+      <main className="min-w-0 max-w-3xl flex-1 space-y-8 py-6">
+        <Section title="Button" group="basics">
           <div className="flex flex-wrap gap-2">
             <Button>Primary</Button>
             <Button variant="secondary">Secondary</Button>
@@ -215,7 +270,7 @@ export function Gallery() {
           </div>
         </Section>
 
-        <Section title="Form">
+        <Section title="Form" group="form">
           <Card className="space-y-4">
             <Field label="Tên hiển thị" hint="Người khác sẽ thấy tên này" required>
               <Input placeholder="Nguyễn Văn A" />
@@ -280,7 +335,7 @@ export function Gallery() {
           </Card>
         </Section>
 
-        <Section title="Hiển thị dữ liệu">
+        <Section title="Hiển thị dữ liệu" group="data">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             <Metric label="Tổng thu" value="12.400.000 ₫" />
             <Metric label="Đã chi" value="8.150.000 ₫" />
@@ -304,7 +359,7 @@ export function Gallery() {
           </div>
         </Section>
 
-        <Section title="Chọn ngày, Autocomplete (Combobox), tải tệp">
+        <Section title="Chọn ngày, Autocomplete (Combobox), tải tệp" group="form">
           <Card className="space-y-4">
             <Field label="Ngày đi" hint="Không cho chọn ngày trong quá khứ">
               <DatePicker value={date} onChange={setDate} min="2026-08-11" />
@@ -331,7 +386,7 @@ export function Gallery() {
           </Card>
         </Section>
 
-        <Section title="Slider, Chip, Transfer list">
+        <Section title="Slider, Chip, Transfer list" group="form">
           <Card className="space-y-5">
             <Field label="Âm lượng">
               <Slider value={volume} onChange={setVolume} format={(v) => `${v}%`} />
@@ -384,7 +439,7 @@ export function Gallery() {
           </Card>
         </Section>
 
-        <Section title="Navigation: Breadcrumbs, Link, Drawer, Speed dial">
+        <Section title="Navigation: Breadcrumbs, Link, Drawer, Speed dial" group="nav">
           <Card className="space-y-5">
             <Breadcrumbs
               items={[
@@ -419,7 +474,7 @@ export function Gallery() {
           </Card>
         </Section>
 
-        <Section title="Layout: Box, Container, Grid, Stack (Tailwind)">
+        <Section title="Layout: Box, Container, Grid, Stack (Tailwind)" group="basics">
           <Card className="space-y-4">
             <p className="text-sm text-fg-muted">
               Không cần component: dùng class Tailwind. Container = <code>mx-auto max-w-3xl px-4</code>, Stack ={" "}
@@ -440,7 +495,7 @@ export function Gallery() {
           </Card>
         </Section>
 
-        <Section title="Image list, Masonry, Timeline">
+        <Section title="Image list, Masonry, Timeline" group="data">
           <Card className="space-y-5">
             <ImageList items={PHOTOS} cols={3} onSelect={(item) => toast.info(item.title ?? "")} />
             <ImageList items={PHOTOS} variant="masonry" cols={3} />
@@ -455,7 +510,7 @@ export function Gallery() {
           </Card>
         </Section>
 
-        <Section title="Lightbox, Swipe action, Celebrate">
+        <Section title="Lightbox, Swipe action, Celebrate" group="interact">
           <Card className="space-y-5">
             <Button variant="outline" size="sm" onClick={() => setLightboxIndex(0)}>
               Mở ảnh toàn màn hình
@@ -476,7 +531,7 @@ export function Gallery() {
           </Card>
         </Section>
 
-        <Section title="Stepper">
+        <Section title="Stepper" group="data">
           <Card className="space-y-6">
             <Stepper
               steps={STEPS}
@@ -504,7 +559,7 @@ export function Gallery() {
           </Card>
         </Section>
 
-        <Section title="Bảng và phân trang">
+        <Section title="Bảng và phân trang" group="data">
           <Table
             columns={[
               { key: "name", header: "Cuộc chia", cell: (row) => row.name, sortValue: (row) => row.name },
@@ -532,7 +587,7 @@ export function Gallery() {
           <Pagination page={page} pageCount={12} onChange={setPage} />
         </Section>
 
-        <Section title="Font chữ">
+        <Section title="Font chữ" group="basics">
           <Card className="space-y-4">
             <p className="text-sm text-fg-muted">
               Be Vietnam Pro, dự phòng Inter → system-ui. Tải từ Google Fonts trong{" "}
@@ -558,7 +613,7 @@ export function Gallery() {
           </Card>
         </Section>
 
-        <Section title="Icon (lucide-react)">
+        <Section title="Icon (lucide-react)" group="basics">
           <Card>
             <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
               {Object.entries(ICONS).map(([name, Icon]) => (
@@ -574,7 +629,7 @@ export function Gallery() {
           </Card>
         </Section>
 
-        <Section title="Alert và tiến độ">
+        <Section title="Alert và tiến độ" group="feedback">
           <Alert tone="info" title="Bản nháp chưa lưu" icon={<Info size={18} />}>
             Thay đổi sẽ mất nếu bạn rời trang.
           </Alert>
@@ -598,7 +653,7 @@ export function Gallery() {
           </Card>
         </Section>
 
-        <Section title="Accordion và tooltip">
+        <Section title="Accordion và tooltip" group="nav">
           <Accordion
             single
             defaultOpen={["a"]}
@@ -638,7 +693,7 @@ export function Gallery() {
           </div>
         </Section>
 
-        <Section title="Tabs">
+        <Section title="Tabs" group="nav">
           <Tabs
             items={[
               { id: "all", label: "Tất cả", count: 12 },
@@ -660,7 +715,7 @@ export function Gallery() {
           />
         </Section>
 
-        <Section title="Trạng thái">
+        <Section title="Trạng thái" group="data">
           <Card padded={false} className="divide-y divide-border px-4">
             <SkeletonListRow avatar />
             <SkeletonListRow avatar />
@@ -674,7 +729,7 @@ export function Gallery() {
           />
         </Section>
 
-        <Section title="Lớp phủ và thông báo">
+        <Section title="Lớp phủ và thông báo" group="feedback">
           <Card>
             <CardHeader title="Thử các lớp phủ" description="Esc để đóng, Tab bị giữ bên trong" />
             <div className="mt-3 flex flex-wrap gap-2">
@@ -697,7 +752,7 @@ export function Gallery() {
           </Card>
         </Section>
 
-        <Section title="Snackbar (Toast)">
+        <Section title="Snackbar (Toast)" group="feedback">
           <Card>
             <CardHeader title="Thông báo nổi" description="Tự tắt sau 4 giây, bấm vào để tắt ngay" />
             <div className="mt-3 flex flex-wrap gap-2">
@@ -729,6 +784,8 @@ export function Gallery() {
           </Card>
         </Section>
       </main>
+        </GroupContext.Provider>
+      </div>
 
       <Fab onClick={() => toast.info("Thêm mới")} label="Thêm mới" icon={<Plus size={24} />} />
       <BottomNav items={NAV} active={nav} onChange={setNav} mobileOnly={false} />
