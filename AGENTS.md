@@ -126,6 +126,11 @@ assumptions.
 Design UI/UX to fit inside a single viewport by default. Avoid page-level
 scrolling; use compact layouts, tabs, panes, or contained internal lists when
 content can overflow.
+Never commit secrets. Every machine runs huyabhome `scripts/install-tools.sh`,
+which installs gitleaks and a global pre-commit hook that scans staged changes.
+Do not bypass it: no `git commit --no-verify`, no change to `core.hooksPath`.
+CI runs gitleaks on every push and PR, so a leak that slips through blocks the
+merge.
 ui-kit is the only source of UI primitives for the consumer apps listed under
 Ecosystem. When an app needs a primitive that is missing here, add it here
 first (generic API, Gallery demo, tests), then the app copies it; apps must
