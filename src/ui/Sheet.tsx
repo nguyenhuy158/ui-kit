@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from "react";
+import { type ReactNode, useId } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "./cn";
 import { useOverlay } from "./use-overlay";
@@ -28,15 +28,28 @@ const SIDE = {
 };
 
 /** Ngan truot tu canh man hinh. Tren mobile de bam hon Modal vi gan ngon tay hon. */
-export function Sheet({ open, onClose, title, side = "bottom", children }: SheetProps) {
+export function Sheet({
+  open,
+  onClose,
+  title,
+  side = "bottom",
+  children,
+}: SheetProps) {
   const ref = useOverlay(open, onClose);
   const titleId = useId();
 
   if (!open) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50" style={{ animation: "ui-fade-in 150ms ease-out" }}>
-      <div aria-hidden="true" onClick={onClose} className="absolute inset-0 bg-black/50" />
+    <div
+      className="fixed inset-0 z-50"
+      style={{ animation: "ui-fade-in 150ms ease-out" }}
+    >
+      <div
+        aria-hidden="true"
+        onClick={onClose}
+        className="absolute inset-0 bg-black/50"
+      />
 
       <div
         ref={ref}
@@ -52,7 +65,10 @@ export function Sheet({ open, onClose, title, side = "bottom", children }: Sheet
       >
         {/* Thanh keo: tin hieu thi giac cho biet co the vuot xuong de dong. */}
         {side === "bottom" && (
-          <div aria-hidden="true" className="mx-auto mt-2 h-1 w-10 rounded-full bg-border" />
+          <div
+            aria-hidden="true"
+            className="mx-auto mt-2 h-1 w-10 rounded-full bg-border"
+          />
         )}
 
         <div className="px-4 py-3">
@@ -61,7 +77,9 @@ export function Sheet({ open, onClose, title, side = "bottom", children }: Sheet
           </h2>
         </div>
 
-        <div className="safe-bottom min-h-0 flex-1 overflow-y-auto px-4 pb-4">{children}</div>
+        <div className="safe-bottom min-h-0 flex-1 overflow-y-auto px-4 pb-4">
+          {children}
+        </div>
       </div>
     </div>,
     document.body,
