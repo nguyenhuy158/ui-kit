@@ -112,9 +112,12 @@ Describe what changed and attach a gallery screenshot for visual changes.
 
 The gallery is served at `https://uikit.huyab.cfd` by a Cloudflare Worker with
 static assets (`wrangler.jsonc`, Worker name `ui-kit`, assets from `dist/`).
-Deploy is manual for now: `pnpm build`, then `wrangler deploy`. Workers Builds
-is not connected yet, so a push to `main` does not update the site. The `Pages`
-workflow still publishes the same build to GitHub Pages under `/ui-kit/`.
+Delivery rule (all repos, see `kit/docs/AGENTS-SKELETON.md`): CI runs lint and
+check on every pull request, and the site is deployed only by Cloudflare Workers
+Builds from `main`. Never run `wrangler deploy` from a local machine.
+TODO: Workers Builds is not connected to this repo yet, so a push to `main` does
+not update the site until someone connects it in the Cloudflare dashboard. The
+`Pages` workflow still publishes the same build to GitHub Pages under `/ui-kit/`.
 
 ## Agent-Specific Instructions
 
