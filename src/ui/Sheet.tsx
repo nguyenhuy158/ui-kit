@@ -19,11 +19,11 @@ const SIDE = {
   },
   left: {
     position: "inset-y-0 left-0 h-full w-[85%] max-w-xs",
-    animation: "ui-fade-in 200ms ease-out",
+    animation: "ui-slide-in-left 220ms cubic-bezier(0.32, 0.72, 0, 1)",
   },
   right: {
     position: "inset-y-0 right-0 h-full w-[85%] max-w-xs",
-    animation: "ui-fade-in 200ms ease-out",
+    animation: "ui-slide-in-right 220ms cubic-bezier(0.32, 0.72, 0, 1)",
   },
 };
 

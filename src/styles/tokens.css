@@ -187,6 +187,18 @@ a,
   }
 }
 
+@keyframes ui-slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes ui-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+
 @keyframes ui-slide-down {
   from {
     opacity: 0;

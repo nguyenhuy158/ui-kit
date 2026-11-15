@@ -34,7 +34,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Avatar.tsx` | `Avatar` — chữ cái đầu, màu suy ra từ tên |
 | `states.tsx` | `Skeleton`, `SkeletonListRow`, `EmptyState`, `LoadingState` |
 | `Modal.tsx` | `Modal`, `ConfirmDialog` |
-| `Sheet.tsx` | `Sheet` — ngăn trượt từ dưới / trái / phải |
+| `Sheet.tsx` | `Sheet` — ngăn trượt từ dưới / trái / phải (keyframe `ui-slide-up`, `ui-slide-in-left`, `ui-slide-in-right` trong `tokens.css`) |
 | `Toast.tsx` | `ToastProvider`, `useToast` |
 | `HeaderBar.tsx` | `HeaderBar` — thanh tiêu đề dính, an toàn với notch |
 | `BottomNav.tsx` | `BottomNav`, `Fab` |
