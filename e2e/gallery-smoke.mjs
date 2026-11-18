@@ -134,6 +134,35 @@ try {
     page.locator("header button[aria-expanded]"),
     page.getByRole("menu"),
   );
+  await goTo("Phản hồi", "Lớp phủ");
+  const confirmDialog = page.getByRole("dialog", { name: "Xoá khoản chi?" });
+  await page.getByRole("button", { name: "useConfirm", exact: true }).click();
+  await confirmDialog.waitFor({ state: "visible", ...WAIT });
+  await page.keyboard.press("Escape");
+  await confirmDialog.waitFor({ state: "hidden", ...WAIT });
+  await page.getByText("Đã huỷ", { exact: true }).first().waitFor(WAIT);
+  await page.getByRole("button", { name: "useConfirm", exact: true }).click();
+  await confirmDialog.waitFor({ state: "visible", ...WAIT });
+  await confirmDialog.getByRole("button", { name: "Xoá", exact: true }).click();
+  await page.getByText("Đã đồng ý", { exact: true }).first().waitFor(WAIT);
+  ok("useConfirm resolves false on Escape and true on confirm");
+
+  const promptDialog = page.getByRole("dialog", { name: "Đổi tên cuộc chơi" });
+  await page.getByRole("button", { name: "usePrompt", exact: true }).click();
+  await promptDialog.waitFor({ state: "visible", ...WAIT });
+  const nameInput = promptDialog.getByRole("textbox");
+  if (!(await nameInput.evaluate((el) => el === document.activeElement)))
+    throw new Error("o nhap cua usePrompt khong duoc focus");
+  await nameInput.fill("Cầu lông CN");
+  await page.keyboard.press("Enter");
+  await promptDialog.waitFor({ state: "hidden", ...WAIT });
+  await page.getByText("Tên: Cầu lông CN", { exact: true }).waitFor(WAIT);
+  await page.getByRole("button", { name: "usePrompt", exact: true }).click();
+  await promptDialog.waitFor({ state: "visible", ...WAIT });
+  await promptDialog.getByRole("button", { name: "Huỷ", exact: true }).click();
+  await promptDialog.waitFor({ state: "hidden", ...WAIT });
+  ok("usePrompt returns the typed text on Enter and null on cancel");
+
   await goTo("Điều hướng", "Accordion và tooltip", "Popover");
   await checkDismiss(
     "Popover",

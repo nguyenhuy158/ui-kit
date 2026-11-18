@@ -35,6 +35,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Avatar.tsx` | `Avatar` — chữ cái đầu, màu suy ra từ tên |
 | `states.tsx` | `Skeleton`, `SkeletonListRow`, `EmptyState`, `LoadingState` |
 | `Modal.tsx` | `Modal`, `ConfirmDialog` |
+| `ConfirmProvider.tsx` | `ConfirmProvider`, `useConfirm`, `usePrompt` (thay `confirm()`/`prompt()` gốc, gọi bằng `await`; cần `Modal`, `Button`, `Input`, `Field`) |
 | `Sheet.tsx` | `Sheet` — ngăn trượt từ dưới / trái / phải (keyframe `ui-slide-up`, `ui-slide-in-left`, `ui-slide-in-right` trong `tokens.css`) |
 | `Toast.tsx` | `ToastProvider`, `useToast` |
 | `HeaderBar.tsx` | `HeaderBar` — thanh tiêu đề dính, an toàn với notch |
@@ -93,6 +94,7 @@ màn hình để đóng; `Modal`/`Sheet`/`Toast`/`Menu`... có animation đóng 
 - **`safe-top` / `safe-bottom`** cho notch và thanh home của iPhone.
 - **Bảng dữ liệu dùng class `.tabular`** để số thẳng cột.
 - **Biến thể `peer-*` không áp cho con cháu**, chỉ áp cho anh em của input. Nên Checkbox/Radio đổi màu ô ngoài và để dấu tick ăn theo `currentColor`, thay vì đặt `peer-checked` thẳng lên dấu tick.
+- **Không dùng `alert()`, `confirm()`, `prompt()` gốc của trình duyệt** (kể cả `window.confirm`): chúng không theo theme và trông như lỗi trình duyệt. Dùng `useConfirm()` (có/không), `usePrompt()` (nhập chữ) và Toast (thông báo). `@huyab/config` bắt lỗi này bằng Biome.
 - **Modal/Sheet giam focus và trả focus** về đúng nút đã mở nó khi đóng.
 - **Toast dùng `aria-live="polite"`**, toast lỗi để lâu gấp đôi.
 - **Accordion tháo hẳn phần đang đóng khỏi DOM**, không chỉ ẩn — tránh Tab lạc vào chỗ không nhìn thấy.

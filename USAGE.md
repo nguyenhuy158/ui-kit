@@ -485,6 +485,40 @@ Cả ba lớp phủ đều: Esc để đóng, khoá cuộn trang nền, giam foc
 
 Trên mobile `Modal` tự dính đáy màn hình, từ `sm` trở lên mới ra giữa.
 
+### useConfirm và usePrompt (thay `confirm()` / `prompt()` gốc)
+
+Không dùng `alert()`, `confirm()`, `prompt()` của trình duyệt. Bọc app một lần bằng `ConfirmProvider` (trong `ToastProvider`), rồi gọi bằng `await` ở bất kỳ đâu:
+
+```tsx
+import { ConfirmProvider, useConfirm, usePrompt } from "./ui/ConfirmProvider";
+
+<ToastProvider>
+  <ConfirmProvider>
+    <App />
+  </ConfirmProvider>
+</ToastProvider>
+
+const confirm = useConfirm();
+const prompt = usePrompt();
+const toast = useToast();
+
+async function remove() {
+  // Thay: if (!window.confirm("Xoá?")) return;
+  if (!(await confirm({ title: "Xoá khoản chi?", description: "Không hoàn tác được.", confirmLabel: "Xoá", destructive: true }))) return;
+  await api.remove();
+  toast.success("Đã xoá"); // Thay alert()
+}
+
+async function rename() {
+  // Thay: const name = window.prompt("Tên mới", old);
+  const name = await prompt({ title: "Đổi tên", defaultValue: old });
+  if (name === null) return; // huỷ, giống window.prompt
+  await api.rename(name);
+}
+```
+
+`confirm` trả `true`/`false`, `prompt` trả chuỗi hoặc `null`. Esc và bấm ra ngoài là huỷ. Mỗi lúc chỉ có một hộp thoại: gọi hộp mới thì hộp cũ coi như bị huỷ. Focus ban đầu ở nút Huỷ (xác nhận bằng Enter chỉ có ở `usePrompt`), để thao tác xoá không dính Enter nhầm.
+
 ### Sheet
 
 ```tsx

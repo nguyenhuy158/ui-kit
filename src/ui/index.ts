@@ -26,6 +26,15 @@ export {
   CommandPalette,
   useCommandPalette,
 } from "./CommandPalette";
+export {
+  type ConfirmFn,
+  type ConfirmOptions,
+  ConfirmProvider,
+  type PromptFn,
+  type PromptOptions,
+  useConfirm,
+  usePrompt,
+} from "./ConfirmProvider";
 export { cn } from "./cn";
 export {
   DatePicker,
