@@ -59,6 +59,17 @@ export function NavGroup(_: GroupProps) {
               Link ra ngoài
             </Link>
           </p>
+          <p className="text-sm text-fg">
+            Trong đoạn văn dùng{" "}
+            <Link href="#" inline>
+              Link inline
+            </Link>{" "}
+            để luôn có gạch chân, kể cả{" "}
+            <Link href="https://github.com/nguyenhuy158/ui-kit" external inline>
+              link ra ngoài
+            </Link>
+            .
+          </p>
           <div className="flex flex-wrap items-center gap-4">
             <Anchor id="c-drawer" />
             <Button variant="outline" onClick={() => setDrawer(true)}>
