@@ -1,4 +1,5 @@
 import type {
+  HTMLInputTypeAttribute,
   InputHTMLAttributes,
   ReactNode,
   SelectHTMLAttributes,
@@ -21,6 +22,30 @@ const CONTROL = cn(
 
 const HEIGHT = "h-11 px-3 sm:h-10";
 
+type KeyboardHints = Pick<
+  InputHTMLAttributes<HTMLInputElement>,
+  | "inputMode"
+  | "autoComplete"
+  | "autoCapitalize"
+  | "spellCheck"
+  | "enterKeyHint"
+>;
+
+const NO_AUTOCORRECT: KeyboardHints = {
+  autoCapitalize: "none",
+  spellCheck: false,
+};
+
+const KEYBOARD_BY_TYPE: Partial<Record<HTMLInputTypeAttribute, KeyboardHints>> =
+  {
+    email: { ...NO_AUTOCORRECT, inputMode: "email", autoComplete: "email" },
+    tel: { inputMode: "tel", autoComplete: "tel" },
+    url: { ...NO_AUTOCORRECT, inputMode: "url", autoComplete: "url" },
+    search: { inputMode: "search", enterKeyHint: "search" },
+    number: { inputMode: "decimal" },
+    password: NO_AUTOCORRECT,
+  };
+
 export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   // Ten `leading`/`trailing` chu khong phai `prefix`/`suffix`: hai cai sau la
   // thuoc tinh HTML that va da co kieu string, dat de len se sai kieu.
@@ -40,6 +65,7 @@ export function Input({
 }: InputProps) {
   const input = (
     <input
+      {...(rest.type && KEYBOARD_BY_TYPE[rest.type])}
       aria-invalid={invalid || undefined}
       className={cn(
         CONTROL,

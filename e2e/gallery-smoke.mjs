@@ -272,6 +272,28 @@ try {
     throw new Error(`touch-action sai: ${touchActions.join(", ")}`);
   ok("button keeps touch-action manipulation and a utility class overrides it");
 
+  await page.goto(`${BASE}/#form`);
+  const keyboardOf = (label) =>
+    page
+      .getByRole("textbox", { name: new RegExp(`^${label}`) })
+      .evaluate((el) =>
+        [el.inputMode, el.autocomplete, el.autocapitalize].join("|"),
+      );
+  const keyboards = {
+    Email: await keyboardOf("Email"),
+    "Số điện thoại": await keyboardOf("Số điện thoại"),
+    Website: await keyboardOf("Website"),
+  };
+  const expectedKeyboards = {
+    Email: "email|email|none",
+    "Số điện thoại": "tel|tel|",
+    Website: "url|url|none",
+  };
+  for (const [label, expected] of Object.entries(expectedKeyboards))
+    if (keyboards[label] !== expected)
+      throw new Error(`ban phim ${label}: ${keyboards[label]} != ${expected}`);
+  ok("email, tel and url inputs open the matching phone keyboard");
+
   await page.goto(`${BASE}/`);
   await page.getByText("UI Kit", { exact: true }).waitFor(WAIT);
   await page.keyboard.press("Tab");

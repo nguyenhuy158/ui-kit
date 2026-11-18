@@ -97,7 +97,7 @@ TypeScript with strict settings (`noUnusedLocals`, `verbatimModuleSyntax`), so
 use `import type` for types. Two-space indentation, double quotes, trailing
 commas. Components are PascalCase files with named exports. Each component
 file depends only on `cn.ts` and the tokens (plus `use-overlay.ts` for
-overlays, `use-dismiss.ts` for popovers) so it can be copied alone. Keep inputs at 16px on mobile (iOS zoom),
+overlays, `use-dismiss.ts` for popovers) so it can be copied alone. Open the right phone keyboard: set `type` (`email`, `tel`, `url`, `search`) or `inputMode="numeric"` for whole numbers; `Input` adds the matching `inputMode`/`autoComplete`. Keep inputs at 16px on mobile (iOS zoom),
 touch targets at least 44px, and dates as `"YYYY-MM-DD"` strings; see
 "Vài quy ước cố ý" in `README.md` before changing those.
 

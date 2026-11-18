@@ -32,6 +32,7 @@ export type PromptOptions = {
   label?: string;
   defaultValue?: string;
   placeholder?: string;
+  type?: "text" | "email" | "tel" | "url" | "number";
   confirmLabel?: string;
   cancelLabel?: string;
 };
@@ -183,6 +184,8 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
             <form id={formId} onSubmit={submit}>
               <Field label={shown.options.label ?? shown.options.title}>
                 <Input
+                  type={shown.options.type}
+                  enterKeyHint="done"
                   value={value}
                   placeholder={shown.options.placeholder}
                   onChange={(event) => setValue(event.target.value)}
