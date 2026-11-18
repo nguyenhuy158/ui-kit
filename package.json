@@ -15,7 +15,8 @@
     "lint": "biome check .",
     "format": "biome format --write .",
     "e2e": "node e2e/run.mjs",
-    "e2e:smoke": "node e2e/gallery-smoke.mjs"
+    "e2e:smoke": "node e2e/gallery-smoke.mjs",
+    "e2e:a11y": "node e2e/a11y.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

@@ -42,9 +42,9 @@ export function useToast(): ToastApi {
 
 const TONE: Record<ToastTone, string> = {
   info: "border-border bg-surface text-fg",
-  success: "border-success/40 bg-success-soft text-success",
-  warning: "border-warning/40 bg-warning-soft text-warning",
-  error: "border-danger/40 bg-danger-soft text-danger",
+  success: "border-success/40 bg-success-soft text-success-strong",
+  warning: "border-warning/40 bg-warning-soft text-warning-strong",
+  error: "border-danger/40 bg-danger-soft text-danger-strong",
 };
 
 /** Boc quanh app mot lan. Khong dung thu vien ngoai de copy sang project khac la chay. */

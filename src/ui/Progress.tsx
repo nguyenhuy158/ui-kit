@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useId } from "react";
 import { cn } from "./cn";
 
 export type ProgressProps = {
@@ -27,6 +27,7 @@ export function Progress({
   className,
 }: ProgressProps) {
   // Kep trong [0, max] de du lieu sai khong lam thanh tran ra ngoai khung.
+  const labelId = useId();
   const clamped = Math.min(Math.max(value, 0), max);
   const percent = max === 0 ? 0 : Math.round((clamped / max) * 100);
 
@@ -34,7 +35,9 @@ export function Progress({
     <div className={cn("space-y-1.5", className)}>
       {(label || showValue) && (
         <div className="flex items-center justify-between text-xs">
-          <span className="text-fg-muted">{label}</span>
+          <span id={labelId} className="text-fg-muted">
+            {label}
+          </span>
           {showValue && (
             <span className="font-medium text-fg tabular">{percent}%</span>
           )}
@@ -43,6 +46,7 @@ export function Progress({
 
       <div
         role="progressbar"
+        aria-labelledby={label ? labelId : undefined}
         aria-valuenow={clamped}
         aria-valuemin={0}
         aria-valuemax={max}

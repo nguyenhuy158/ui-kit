@@ -70,7 +70,7 @@ export function BottomNav<TId extends string = string>({
               <span className="relative">
                 <Icon size={20} />
                 {item.badge ? (
-                  <span className="absolute -right-2 -top-1 min-w-4 rounded-full bg-danger px-1 text-[10px] font-bold leading-4 text-white">
+                  <span className="absolute -right-2 -top-1 min-w-4 rounded-full bg-danger px-1 text-[10px] font-bold leading-4 text-danger-fg">
                     {item.badge > 99 ? "99+" : item.badge}
                   </span>
                 ) : null}

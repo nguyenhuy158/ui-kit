@@ -15,7 +15,7 @@ const VARIANT: Record<ButtonVariant, string> = {
   secondary: "bg-surface-muted text-fg hover:bg-border",
   outline: "border border-border bg-surface text-fg hover:bg-surface-muted",
   ghost: "text-fg-muted hover:bg-surface-muted hover:text-fg",
-  danger: "bg-danger text-white hover:brightness-110 shadow-sm",
+  danger: "bg-danger text-danger-fg hover:brightness-110 shadow-sm",
 };
 
 /* Cao toi thieu 44px tren mobile: dat muc tieu cham cua iOS/Android.

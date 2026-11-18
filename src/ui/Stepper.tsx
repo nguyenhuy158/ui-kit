@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { cn } from "./cn";
 
 export type Step = {
@@ -23,6 +24,7 @@ export function Stepper({
   orientation = "horizontal",
   className,
 }: StepperProps) {
+  const baseId = useId();
   return (
     <ol
       className={cn(
@@ -34,6 +36,7 @@ export function Stepper({
     >
       {steps.map((step, index) => {
         const done = index < current;
+        const labelId = `${baseId}-${index}`;
         const active = index === current;
         // Chi cho quay lai buoc da xong: nhay toi buoc chua lam thuong bo qua
         // buoc kiem tra du lieu o giua.
@@ -78,6 +81,7 @@ export function Stepper({
             )}
           >
             <span
+              id={labelId}
               className={cn(
                 "block text-xs font-medium",
                 active ? "text-fg" : "text-fg-muted",
@@ -120,6 +124,7 @@ export function Stepper({
                   {clickable ? (
                     <button
                       type="button"
+                      aria-labelledby={labelId}
                       onClick={() => onStepClick?.(index)}
                       className="outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full"
                     >
@@ -147,6 +152,7 @@ export function Stepper({
                   {clickable ? (
                     <button
                       type="button"
+                      aria-labelledby={labelId}
                       onClick={() => onStepClick?.(index)}
                       className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >

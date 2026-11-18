@@ -76,6 +76,7 @@ export function Gallery() {
               <Button
                 variant="ghost"
                 size="icon"
+                aria-label="Tìm component"
                 onClick={() => setPaletteOpen(true)}
               >
                 <Search size={18} />
@@ -84,7 +85,12 @@ export function Gallery() {
             <ThemeToggle />
             <Menu
               trigger={(props) => (
-                <Button variant="ghost" size="icon" {...props}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Thêm thao tác"
+                  {...props}
+                >
                   <MoreHorizontal size={18} />
                 </Button>
               )}

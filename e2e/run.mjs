@@ -1,4 +1,4 @@
-// Chay E2E mot lenh: build gallery -> bat `vite preview` -> chay smoke -> tat
+// Chay E2E mot lenh: build gallery -> bat `vite preview` -> smoke + axe -> tat
 // server. ui-kit khong co deploy nen chi co ban dev (khong co e2e:prod).
 //
 // Bien moi truong:
@@ -34,6 +34,10 @@ try {
   console.log(`\nServer san sang tai ${BASE}, bat dau smoke suite\n`);
   await run("node", ["e2e/gallery-smoke.mjs"], {
     label: "smoke suite",
+    env: { E2E_BASE_URL: BASE },
+  });
+  await run("node", ["e2e/a11y.mjs"], {
+    label: "a11y suite",
     env: { E2E_BASE_URL: BASE },
   });
 } catch (error) {
