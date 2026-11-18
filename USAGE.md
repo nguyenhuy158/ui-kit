@@ -110,6 +110,8 @@ import { Switch } from "./ui/Switch";
 
 `Field` tự sinh `id`, nối `label` với ô nhập và nối lỗi vào `aria-describedby`. Đừng tự đặt `id` trừ khi cần.
 
+Bàn phím điện thoại theo `type`: `email`, `tel`, `url`, `search`, `number`, `password` tự thêm `inputMode`, `autoComplete`, tắt viết hoa/sửa chính tả khi cần. Truyền prop riêng sẽ ghi đè. Số nguyên (tiền, số lượng, OTP) dùng `inputMode="numeric"` với `type` mặc định, không dùng `type="number"` (lăn chuột đổi giá trị, có nút tăng giảm). `usePrompt({ type: "email" })` cũng nhận `type`.
+
 ```tsx
 <Field label="Tên nhóm" hint="Người khác sẽ thấy tên này" required>
   <Input value={name} onChange={(e) => setName(e.target.value)} />
@@ -121,6 +123,10 @@ import { Switch } from "./ui/Switch";
 
 <Field label="Số tiền">
   <Input inputMode="numeric" trailing="₫" className="tabular" />
+</Field>
+
+<Field label="Mã OTP">
+  <Input inputMode="numeric" autoComplete="one-time-code" maxLength={6} />
 </Field>
 
 <Field label="Ghi chú">

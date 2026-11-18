@@ -57,6 +57,26 @@ export function FormGroup(_: GroupProps) {
             />
           </Field>
 
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Số điện thoại" hint="Bàn phím số điện thoại">
+              <Input type="tel" placeholder="0901 234 567" />
+            </Field>
+            <Field label="Website" hint="Bàn phím có / và .com">
+              <Input type="url" placeholder="https://" />
+            </Field>
+            <Field label="Số tiền" hint="Bàn phím số, không có dấu chấm">
+              <Input inputMode="numeric" placeholder="150000" trailing="đ" />
+            </Field>
+            <Field label="Mã OTP" hint="Tự điền mã từ tin nhắn">
+              <Input
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={6}
+                placeholder="123456"
+              />
+            </Field>
+          </div>
+
           <Anchor id="c-listbox" />
           <Field label="Loại tài khoản">
             <Listbox
