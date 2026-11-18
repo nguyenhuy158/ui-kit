@@ -99,7 +99,7 @@ export function BasicsGroup(_: GroupProps) {
             ))}
           </div>
           <p className="tabular text-lg">
-            <span className="mr-2 text-xs text-fg-muted">.tabular</span>
+            <span className="me-2 text-xs text-fg-muted">.tabular</span>
             1.111.111 ₫ · 8.888.888 ₫
           </p>
         </Card>

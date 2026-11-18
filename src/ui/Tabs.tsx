@@ -85,7 +85,7 @@ export function Tabs<TId extends string = string>({
           >
             {item.label}
             {item.count !== undefined && (
-              <span className="ml-1.5 text-xs text-fg-muted tabular">
+              <span className="ms-1.5 text-xs text-fg-muted tabular">
                 {item.count}
               </span>
             )}

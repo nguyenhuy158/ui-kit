@@ -112,7 +112,7 @@ export function Table<TRow>({
                   }
                   className={cn(
                     "sticky top-0 z-10 bg-surface-muted px-3 py-2.5 text-xs font-semibold uppercase tracking-wide text-fg-muted",
-                    right ? "text-right" : "text-left",
+                    right ? "text-end" : "text-start",
                     column.hideOnMobile && "hidden sm:table-cell",
                   )}
                 >
@@ -156,8 +156,8 @@ export function Table<TRow>({
                     "px-3 py-3 text-fg",
                     column.numeric && "tabular",
                     column.numeric || column.align === "right"
-                      ? "text-right"
-                      : "text-left",
+                      ? "text-end"
+                      : "text-start",
                     column.hideOnMobile && "hidden sm:table-cell",
                   )}
                 >

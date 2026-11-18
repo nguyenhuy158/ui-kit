@@ -33,7 +33,7 @@ export function Link({
         <svg
           viewBox="0 0 20 20"
           aria-hidden="true"
-          className={cn("size-3.5", inline && "ml-0.5 inline align-[-0.125em]")}
+          className={cn("size-3.5", inline && "ms-0.5 inline align-[-0.125em]")}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"

@@ -147,7 +147,7 @@ export function Combobox({
         aria-autocomplete="list"
         aria-invalid={invalid || undefined}
         className={cn(
-          "h-11 w-full rounded-ui border border-border bg-surface px-3 pr-9 text-fg sm:h-10",
+          "h-11 w-full rounded-ui border border-border bg-surface px-3 pe-9 text-fg sm:h-10",
           "text-base sm:pointer-fine:text-sm placeholder:text-fg-muted",
           "outline-none transition focus:border-primary focus:ring-2 focus:ring-ring",
           "disabled:cursor-not-allowed disabled:opacity-60",
@@ -161,7 +161,7 @@ export function Combobox({
         fill="none"
         stroke="currentColor"
         strokeWidth="1.75"
-        className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-fg-muted"
+        className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-fg-muted"
       >
         <path d="M6 8l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -201,7 +201,7 @@ export function Combobox({
                 }}
                 onPointerEnter={() => setHighlight(index)}
                 className={cn(
-                  "flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-sm transition",
+                  "flex w-full items-center gap-2.5 px-3 py-2.5 text-start text-sm transition",
                   index === highlight ? "bg-surface-muted" : "bg-transparent",
                   option.value === value
                     ? "font-semibold text-primary"
