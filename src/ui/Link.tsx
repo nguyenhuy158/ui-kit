@@ -4,15 +4,25 @@ import { cn } from "./cn";
 export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   /** Mo tab moi kem rel an toan va icon mui ten ra ngoai. */
   external?: boolean;
+  inline?: boolean;
 };
 
-/** The <a> mau primary, gach chan khi hover. Router link thi boc className nay vao Link cua router. */
-export function Link({ external, className, children, ...rest }: LinkProps) {
+/** The <a> mau primary, gach chan khi hover; `inline` (link giua doan van) luon gach chan. Router link thi boc className nay vao Link cua router. */
+export function Link({
+  external,
+  inline,
+  className,
+  children,
+  ...rest
+}: LinkProps) {
   return (
     <a
       {...(external && { target: "_blank", rel: "noopener noreferrer" })}
       className={cn(
-        "inline-flex items-center gap-1 rounded font-medium text-primary underline-offset-4 transition hover:underline",
+        "rounded font-medium text-primary underline-offset-4 transition",
+        inline
+          ? "underline hover:decoration-2"
+          : "inline-flex items-center gap-1 hover:underline",
         "outline-none focus-visible:ring-2 focus-visible:ring-ring",
         className,
       )}
@@ -23,7 +33,7 @@ export function Link({ external, className, children, ...rest }: LinkProps) {
         <svg
           viewBox="0 0 20 20"
           aria-hidden="true"
-          className="size-3.5"
+          className={cn("size-3.5", inline && "ml-0.5 inline align-[-0.125em]")}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
