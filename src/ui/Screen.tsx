@@ -22,7 +22,7 @@ export function SkipLink({
   return (
     <a
       href={`#${targetId}`}
-      className="sr-only rounded-ui bg-surface px-3 py-2 text-sm font-medium text-fg shadow-md outline-none ring-2 ring-ring focus:not-sr-only focus:fixed focus:start-2 focus:top-2 focus:z-[100]"
+      className="sr-only rounded-ui bg-surface text-sm font-medium text-fg shadow-md outline-none ring-2 ring-ring focus:not-sr-only focus:fixed focus:start-2 focus:top-2 focus:z-[100] focus:px-3 focus:py-2"
     >
       {label}
     </a>
