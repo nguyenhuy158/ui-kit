@@ -31,6 +31,9 @@ export function Modal({
   const titleId = useId();
   const descId = useId();
   const { mounted, closing } = usePresence(open);
+  // Hop xac nhan khong co noi dung: bo than va vien thua de khong co dai trong.
+  const hasBody =
+    children !== undefined && children !== null && children !== false;
 
   if (!mounted) return null;
 
@@ -74,7 +77,12 @@ export function Modal({
           SIZE[size],
         )}
       >
-        <div className="border-b border-border px-4 py-3">
+        <div
+          className={cn(
+            "px-4 py-3",
+            (hasBody || !footer) && "border-b border-border",
+          )}
+        >
           <h2 id={titleId} className="text-base font-semibold text-fg">
             {title}
           </h2>
@@ -85,9 +93,11 @@ export function Modal({
           )}
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
-          {children}
-        </div>
+        {hasBody && (
+          <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+            {children}
+          </div>
+        )}
 
         {footer && (
           <div className="safe-bottom flex justify-end gap-2 border-t border-border px-4 py-3">

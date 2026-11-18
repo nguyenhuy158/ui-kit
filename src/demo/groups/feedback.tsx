@@ -4,6 +4,7 @@ import { Alert } from "../../ui/Alert";
 import { Backdrop } from "../../ui/Backdrop";
 import { Button } from "../../ui/Button";
 import { Card, CardHeader } from "../../ui/Card";
+import { useConfirm, usePrompt } from "../../ui/ConfirmProvider";
 import { Field } from "../../ui/Field";
 import { Input } from "../../ui/Input";
 import { Modal } from "../../ui/Modal";
@@ -15,6 +16,8 @@ import type { GroupProps } from "./types";
 
 export function FeedbackGroup({ onAskConfirm }: GroupProps) {
   const toast = useToast();
+  const confirm = useConfirm();
+  const prompt = usePrompt();
   const [modal, setModal] = useState(false);
   const [sheet, setSheet] = useState(false);
   const [backdrop, setBackdrop] = useState(false);
@@ -60,6 +63,32 @@ export function FeedbackGroup({ onAskConfirm }: GroupProps) {
             </Button>
             <Button variant="outline" onClick={() => onAskConfirm()}>
               Xác nhận xoá
+            </Button>
+            <Button
+              variant="outline"
+              onClick={async () => {
+                const yes = await confirm({
+                  title: "Xoá khoản chi?",
+                  description: "Gọi bằng await, thay cho window.confirm.",
+                  confirmLabel: "Xoá",
+                  destructive: true,
+                });
+                toast.info(yes ? "Đã đồng ý" : "Đã huỷ");
+              }}
+            >
+              useConfirm
+            </Button>
+            <Button
+              variant="outline"
+              onClick={async () => {
+                const name = await prompt({
+                  title: "Đổi tên cuộc chơi",
+                  defaultValue: "Cầu lông thứ Bảy",
+                });
+                toast.info(name === null ? "Đã huỷ" : `Tên: ${name}`);
+              }}
+            >
+              usePrompt
             </Button>
             <Button
               variant="outline"

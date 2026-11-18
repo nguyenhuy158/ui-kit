@@ -132,6 +132,8 @@ as the page frame and `PagedList` (paging) for any list that can grow. Only
 exceptions: reading-only pages (help, legal) and the inside of a Sheet or
 Modal that holds a form. Apps check this in e2e with `assertFitsViewport`
 from `@huyab/e2e` (kit).
+No native `alert()`, `confirm()` or `prompt()` anywhere (not even `window.confirm`): use
+`useConfirm()`, `usePrompt()` (`ConfirmProvider`) and Toast. `@huyab/config` lints the bare globals.
 Never commit secrets. Every machine runs huyabhome `scripts/install-tools.sh`,
 which installs gitleaks and a global pre-commit hook that scans staged changes.
 Do not bypass it: no `git commit --no-verify`, no change to `core.hooksPath`.
