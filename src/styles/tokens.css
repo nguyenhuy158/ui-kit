@@ -179,7 +179,6 @@ body {
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  touch-action: pan-x pan-y;
 }
 
 /* Co tinh KHONG boc @layer: `font: inherit` phai thang moi utility co chu text-
@@ -254,6 +253,16 @@ textarea {
 @media (min-width: 48rem) {
   .ui-col {
     grid-column: span var(--ui-col-desktop, 12);
+  }
+}
+
+@media print {
+  :root,
+  .dark {
+    color-scheme: light;
+    --ui-bg: oklch(100% 0 0);
+    --ui-surface: oklch(100% 0 0);
+    --ui-fg: oklch(0% 0 0);
   }
 }
 

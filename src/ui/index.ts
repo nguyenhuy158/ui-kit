@@ -68,7 +68,7 @@ export { Pagination } from "./Pagination";
 export { Popover, type PopoverProps } from "./Popover";
 export { Progress } from "./Progress";
 export { Radio, RadioGroup } from "./Radio";
-export { Screen, type ScreenProps } from "./Screen";
+export { Screen, type ScreenProps, SkipLink } from "./Screen";
 export { Sheet } from "./Sheet";
 export { Slider } from "./Slider";
 export { SpeedDial, type SpeedDialAction } from "./SpeedDial";

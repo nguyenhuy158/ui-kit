@@ -16,6 +16,7 @@ import { CommandPalette, useCommandPalette } from "../ui/CommandPalette";
 import { HeaderBar } from "../ui/HeaderBar";
 import { Menu } from "../ui/Menu";
 import { ConfirmDialog } from "../ui/Modal";
+import { SkipLink } from "../ui/Screen";
 import { Sheet } from "../ui/Sheet";
 import { useToast } from "../ui/Toast";
 import { Tooltip } from "../ui/Tooltip";
@@ -24,6 +25,8 @@ import { NAV } from "./fixtures";
 import { GroupMenu } from "./GroupMenu";
 import { GROUP_VIEWS } from "./groups";
 import { parseRoute, type Route, routeHash } from "./menu";
+
+const GALLERY_MAIN_ID = "gallery-main";
 
 export function Gallery() {
   const toast = useToast();
@@ -56,6 +59,7 @@ export function Gallery() {
 
   return (
     <div className="ui-mica min-h-dvh pb-28">
+      <SkipLink targetId={GALLERY_MAIN_ID} />
       <HeaderBar
         title="UI Kit"
         subtitle="Component chuẩn, copy sang project khác là chạy"
@@ -127,7 +131,11 @@ export function Gallery() {
       </Sheet>
 
       <div className="mx-auto max-w-3xl px-4">
-        <main className="space-y-8 py-6">
+        <main
+          id={GALLERY_MAIN_ID}
+          tabIndex={-1}
+          className="space-y-8 py-6 outline-none"
+        >
           {View && <View onAskConfirm={() => setConfirm(true)} />}
         </main>
       </div>
