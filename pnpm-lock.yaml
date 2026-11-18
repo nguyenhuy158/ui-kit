@@ -28,7 +28,7 @@ importers:
         specifier: 2.5.15
         version: 2.5.15
       '@huyab/config':
-        specifier: github:nguyenhuy158/kit#2838dd17401822034c814653af6037b4c2fe969b&path:packages/config
+        specifier: github:nguyenhuy158/kit#v0.3.0&path:packages/config
         version: https://codeload.github.com/nguyenhuy158/kit/tar.gz/2838dd17401822034c814653af6037b4c2fe969b#path:packages/config
       '@huyab/e2e':
         specifier: github:nguyenhuy158/kit#v0.2.0&path:packages/e2e
