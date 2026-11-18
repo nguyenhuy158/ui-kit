@@ -299,9 +299,10 @@ function DateControl(props: Props) {
                       Home: -weekday,
                       End: 6 - weekday,
                     };
-                    if (event.key in steps) {
+                    const step = steps[event.key];
+                    if (step !== undefined) {
                       event.preventDefault();
-                      navigate(moveDay(day, steps[event.key]));
+                      navigate(moveDay(day, step));
                     }
                     if (event.key === "PageUp" || event.key === "PageDown") {
                       event.preventDefault();

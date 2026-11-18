@@ -122,7 +122,7 @@ export function Gallery() {
 
       <div className="mx-auto max-w-3xl px-4">
         <main className="space-y-8 py-6">
-          <View onAskConfirm={() => setConfirm(true)} />
+          {View && <View onAskConfirm={() => setConfirm(true)} />}
         </main>
       </div>
 
