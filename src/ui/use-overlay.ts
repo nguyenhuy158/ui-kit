@@ -45,6 +45,7 @@ export function useOverlay(open: boolean, onClose: () => void) {
 
       const first = items[0];
       const last = items[items.length - 1];
+      if (!first || !last) return;
       const active = document.activeElement;
 
       // Vong lai hai dau: Shift+Tab o phan tu dau -> nhay ve cuoi va nguoc lai.

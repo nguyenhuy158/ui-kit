@@ -11,9 +11,9 @@ export type BadgeTone =
 const TONE: Record<BadgeTone, string> = {
   neutral: "bg-surface-muted text-fg-muted",
   primary: "bg-primary-soft text-primary",
-  success: "bg-success-soft text-success",
-  warning: "bg-warning-soft text-warning",
-  danger: "bg-danger-soft text-danger",
+  success: "bg-success-soft text-success-strong",
+  warning: "bg-warning-soft text-warning-strong",
+  danger: "bg-danger-soft text-danger-strong",
 };
 
 export type BadgeProps = {

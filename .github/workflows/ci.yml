@@ -14,7 +14,7 @@ jobs:
   # ra luc bundle (import vong, asset thieu); `pnpm e2e` tu build, bat vite
   # preview va chay smoke.
   check:
-    uses: nguyenhuy158/kit/.github/workflows/check.yml@v0.1.0
+    uses: nguyenhuy158/kit/.github/workflows/check.yml@v0.4.0
     with:
       run-build: true
       run-e2e: true

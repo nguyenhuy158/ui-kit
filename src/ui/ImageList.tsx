@@ -67,7 +67,7 @@ export function ImageList({
               )}
             />
             {item.title && (
-              <span className="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/70 to-transparent px-2 pb-1.5 pt-6 text-left text-xs font-medium text-white">
+              <span className="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/70 to-transparent px-2 pb-1.5 pt-6 text-start text-xs font-medium text-white">
                 {item.title}
               </span>
             )}

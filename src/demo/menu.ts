@@ -164,10 +164,10 @@ export const MENU: MenuGroup[] = [
   },
 ];
 
-export const DEFAULT_GROUP = MENU[0].id;
+export const DEFAULT_GROUP = MENU[0]?.id ?? "";
 
 export function parseRoute(hash: string): Route {
-  const [group, anchor] = hash.replace(/^#/, "").split("/");
+  const [group = "", anchor] = hash.replace(/^#/, "").split("/");
   return MENU.some((item) => item.id === group)
     ? { group, anchor: anchor || undefined }
     : { group: DEFAULT_GROUP };

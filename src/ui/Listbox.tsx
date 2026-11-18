@@ -173,7 +173,7 @@ export function Listbox({
         aria-controls={open && !disabled ? listId : undefined}
         aria-invalid={invalid || missing || undefined}
         className={cn(
-          "flex h-11 w-full items-center gap-2 rounded-ui border border-border bg-surface px-3 pr-9 text-left text-fg sm:h-10",
+          "flex h-11 w-full items-center gap-2 rounded-ui border border-border bg-surface px-3 pe-9 text-start text-fg sm:h-10",
           "text-base sm:pointer-fine:text-sm",
           "outline-none transition focus:border-primary focus:ring-2 focus:ring-ring",
           "disabled:cursor-not-allowed disabled:opacity-60",
@@ -248,7 +248,7 @@ export function Listbox({
                     if (!option.disabled) setHighlight(index);
                   }}
                   className={cn(
-                    "flex w-full items-center gap-2.5 rounded-[calc(var(--ui-radius)-4px)] min-h-11 px-2.5 py-2 text-left text-sm transition disabled:opacity-40 disabled:cursor-not-allowed",
+                    "flex w-full items-center gap-2.5 rounded-[calc(var(--ui-radius)-4px)] min-h-11 px-2.5 py-2 text-start text-sm transition disabled:opacity-40 disabled:cursor-not-allowed",
                     index === activeIndex
                       ? "bg-surface-muted"
                       : "bg-transparent",

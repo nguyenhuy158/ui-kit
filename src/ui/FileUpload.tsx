@@ -129,6 +129,8 @@ export function FileUpload({
         multiple={multiple}
         disabled={disabled}
         className="sr-only"
+        tabIndex={-1}
+        aria-hidden="true"
         onChange={(event) => {
           addFiles(event.target.files);
           // Xoa value de chon lai dung tep vua go van kich hoat onChange.

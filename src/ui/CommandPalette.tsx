@@ -218,7 +218,7 @@ export function CommandPalette({
                     onPointerEnter={() => setHighlight(index)}
                     onClick={() => run(command)}
                     className={cn(
-                      "flex w-full items-center gap-2.5 rounded-ui px-2 py-2.5 text-left text-sm transition",
+                      "flex w-full items-center gap-2.5 rounded-ui px-2 py-2.5 text-start text-sm transition",
                       index === highlight
                         ? "bg-surface-muted text-fg"
                         : "text-fg",

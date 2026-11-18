@@ -51,7 +51,7 @@ export function Popover({
             closing && "pointer-events-none",
             "absolute z-50 min-w-56 rounded-ui border border-border ui-acrylic p-3 shadow-lg",
             side === "bottom" ? "top-full mt-1" : "bottom-full mb-1",
-            align === "right" ? "right-0" : "left-0",
+            align === "right" ? "end-0" : "start-0",
             panelClassName,
           )}
         >

@@ -42,9 +42,9 @@ export function useToast(): ToastApi {
 
 const TONE: Record<ToastTone, string> = {
   info: "border-border bg-surface text-fg",
-  success: "border-success/40 bg-success-soft text-success",
-  warning: "border-warning/40 bg-warning-soft text-warning",
-  error: "border-danger/40 bg-danger-soft text-danger",
+  success: "border-success/40 bg-success-soft text-success-strong",
+  warning: "border-warning/40 bg-warning-soft text-warning-strong",
+  error: "border-danger/40 bg-danger-soft text-danger-strong",
 };
 
 /** Boc quanh app mot lan. Khong dung thu vien ngoai de copy sang project khac la chay. */
@@ -105,7 +105,7 @@ export function ToastProvider({
         <div
           role="status"
           aria-live="polite"
-          className="safe-bottom pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex flex-col items-center gap-2 px-4 sm:inset-x-auto sm:right-4 sm:items-end"
+          className="safe-bottom pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex flex-col items-center gap-2 px-4 sm:inset-x-auto sm:end-4 sm:items-end"
         >
           {toasts.map((toast) => (
             <button
@@ -120,7 +120,7 @@ export function ToastProvider({
                 ),
               }}
               className={cn(
-                "pointer-events-auto w-full max-w-sm rounded-ui border px-4 py-3 text-left shadow-lg",
+                "pointer-events-auto w-full max-w-sm rounded-ui border px-4 py-3 text-start shadow-lg",
                 TONE[toast.tone],
               )}
             >

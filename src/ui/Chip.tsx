@@ -53,7 +53,7 @@ export function Chip({
   }
 
   return (
-    <span className={cn(base, onRemove && "pr-1")}>
+    <span className={cn(base, onRemove && "pe-1")}>
       {body}
       {onRemove && (
         <button

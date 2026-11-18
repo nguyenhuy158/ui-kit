@@ -190,7 +190,7 @@ function DateControl(props: Props) {
         aria-invalid={invalid || undefined}
         onClick={() => (open ? close() : show())}
         className={cn(
-          "flex min-h-11 w-full items-center justify-between gap-2 rounded-ui border border-border bg-surface px-3 py-2 text-left text-base sm:pointer-fine:text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-60",
+          "flex min-h-11 w-full items-center justify-between gap-2 rounded-ui border border-border bg-surface px-3 py-2 text-start text-base sm:pointer-fine:text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-60",
           invalid && "border-danger",
           display ? "text-fg" : "text-fg-muted",
         )}
@@ -219,7 +219,7 @@ function DateControl(props: Props) {
             }
           }}
           aria-label={label}
-          className="absolute left-0 z-50 mt-1 w-[21rem] max-sm:fixed max-sm:inset-x-2 max-sm:top-1/2 max-sm:mt-0 max-sm:w-auto max-sm:-translate-y-1/2 max-h-[70dvh] overflow-y-auto rounded-ui border border-border bg-surface p-1.5 shadow-lg"
+          className="absolute start-0 z-50 mt-1 w-[21rem] max-sm:fixed max-sm:inset-x-2 max-sm:top-1/2 max-sm:mt-0 max-sm:w-auto max-sm:-translate-y-1/2 max-h-[70dvh] overflow-y-auto rounded-ui border border-border bg-surface p-1.5 shadow-lg"
         >
           <div className="flex items-center justify-between">
             <button
@@ -299,9 +299,10 @@ function DateControl(props: Props) {
                       Home: -weekday,
                       End: 6 - weekday,
                     };
-                    if (event.key in steps) {
+                    const step = steps[event.key];
+                    if (step !== undefined) {
                       event.preventDefault();
-                      navigate(moveDay(day, steps[event.key]));
+                      navigate(moveDay(day, step));
                     }
                     if (event.key === "PageUp" || event.key === "PageDown") {
                       event.preventDefault();

@@ -272,6 +272,28 @@ try {
     throw new Error(`touch-action sai: ${touchActions.join(", ")}`);
   ok("button keeps touch-action manipulation and a utility class overrides it");
 
+  await page.goto(`${BASE}/`);
+  await page.getByText("UI Kit", { exact: true }).waitFor(WAIT);
+  await page.keyboard.press("Tab");
+  const skipLink = page.getByRole("link", { name: "Bỏ qua tới nội dung" });
+  if (!(await skipLink.evaluate((el) => el === document.activeElement)))
+    throw new Error("Tab dau tien khong vao skip link");
+  await page.keyboard.press("Enter");
+  if (
+    !(await page
+      .locator("#gallery-main")
+      .evaluate((el) => el === document.activeElement))
+  )
+    throw new Error("skip link khong dua focus vao main");
+  ok("first Tab reaches the skip link and Enter focuses main");
+
+  const htmlTouchAction = await page.evaluate(
+    () => getComputedStyle(document.documentElement).touchAction,
+  );
+  if (htmlTouchAction !== "auto")
+    throw new Error(`<html> chan pinch zoom: touch-action ${htmlTouchAction}`);
+  ok("html keeps pinch zoom (touch-action auto)");
+
   if (pageErrors.length > 0)
     throw new Error(`loi JS tren trang: ${pageErrors.join(" | ")}`);
   ok("no uncaught page errors");

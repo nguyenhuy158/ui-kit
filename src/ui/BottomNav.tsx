@@ -70,7 +70,7 @@ export function BottomNav<TId extends string = string>({
               <span className="relative">
                 <Icon size={20} />
                 {item.badge ? (
-                  <span className="absolute -right-2 -top-1 min-w-4 rounded-full bg-danger px-1 text-[10px] font-bold leading-4 text-white">
+                  <span className="absolute -end-2 -top-1 min-w-4 rounded-full bg-danger px-1 text-[10px] font-bold leading-4 text-danger-fg">
                     {item.badge > 99 ? "99+" : item.badge}
                   </span>
                 ) : null}
@@ -112,7 +112,7 @@ export function Fab({
           : "calc(1rem + env(safe-area-inset-bottom))",
       }}
       className={cn(
-        "fixed right-4 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full",
+        "fixed end-4 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full",
         "bg-primary text-primary-fg shadow-lg transition active:scale-95 hover:bg-primary-hover",
         "outline-none focus-visible:ring-2 focus-visible:ring-ring",
         className,

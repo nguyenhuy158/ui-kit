@@ -52,33 +52,35 @@ export function InteractGroup(_: GroupProps) {
         </Card>
       </Section>
 
-      <Lightbox
-        open={lightboxIndex !== null}
-        src={photo.src}
-        alt={photo.alt}
-        index={lightboxIndex ?? 0}
-        total={PHOTOS.length}
-        onClose={() => setLightboxIndex(null)}
-        onPrev={() =>
-          setLightboxIndex(
-            (value) => ((value ?? 0) - 1 + PHOTOS.length) % PHOTOS.length,
-          )
-        }
-        onNext={() =>
-          setLightboxIndex((value) => ((value ?? 0) + 1) % PHOTOS.length)
-        }
-        actions={
-          <LightboxButton
-            label="Tải ảnh về"
-            onClick={() => toast.info("Tải ảnh")}
-          >
-            <Download size={20} />
-          </LightboxButton>
-        }
-        footer={
-          <p className="text-center text-sm text-white/80">{photo.title}</p>
-        }
-      />
+      {photo && (
+        <Lightbox
+          open={lightboxIndex !== null}
+          src={photo.src}
+          alt={photo.alt}
+          index={lightboxIndex ?? 0}
+          total={PHOTOS.length}
+          onClose={() => setLightboxIndex(null)}
+          onPrev={() =>
+            setLightboxIndex(
+              (value) => ((value ?? 0) - 1 + PHOTOS.length) % PHOTOS.length,
+            )
+          }
+          onNext={() =>
+            setLightboxIndex((value) => ((value ?? 0) + 1) % PHOTOS.length)
+          }
+          actions={
+            <LightboxButton
+              label="Tải ảnh về"
+              onClick={() => toast.info("Tải ảnh")}
+            >
+              <Download size={20} />
+            </LightboxButton>
+          }
+          footer={
+            <p className="text-center text-sm text-white/80">{photo.title}</p>
+          }
+        />
+      )}
     </>
   );
 }

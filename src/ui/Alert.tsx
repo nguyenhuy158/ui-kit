@@ -5,9 +5,9 @@ export type AlertTone = "info" | "success" | "warning" | "danger";
 
 const TONE: Record<AlertTone, string> = {
   info: "border-border bg-surface-muted text-fg",
-  success: "border-success/40 bg-success-soft text-success",
-  warning: "border-warning/40 bg-warning-soft text-warning",
-  danger: "border-danger/40 bg-danger-soft text-danger",
+  success: "border-success/40 bg-success-soft text-success-strong",
+  warning: "border-warning/40 bg-warning-soft text-warning-strong",
+  danger: "border-danger/40 bg-danger-soft text-danger-strong",
 };
 
 export type AlertProps = {

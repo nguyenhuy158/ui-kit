@@ -79,7 +79,7 @@ export function Accordion({
               onClick={() => toggle(item.id)}
               aria-expanded={isOpen}
               className={cn(
-                "flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left text-sm font-medium text-fg outline-none transition",
+                "flex w-full items-center justify-between gap-3 px-4 py-3.5 text-start text-sm font-medium text-fg outline-none transition",
                 "hover:bg-surface-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
               )}
             >

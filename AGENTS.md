@@ -87,6 +87,12 @@ Use `pnpm` for all package commands. There is no unit test suite and no
 
 ## Coding Style & Naming Conventions
 
+Check UI work against the [Front-End Checklist rules](https://frontendchecklist.io/rules)
+(kit `docs/AGENTS-SKELETON.md`, "Frontend checklist rule"). Use logical
+properties (`ms-`, `pe-`, `start-`, `end-`, `text-start`) unless the
+direction is the meaning (Sheet side, swipe). Text on a `*-soft` background
+uses the `*-strong` token; text on solid `bg-danger` uses `text-danger-fg`.
+
 TypeScript with strict settings (`noUnusedLocals`, `verbatimModuleSyntax`), so
 use `import type` for types. Two-space indentation, double quotes, trailing
 commas. Components are PascalCase files with named exports. Each component
@@ -99,7 +105,10 @@ touch targets at least 44px, and dates as `"YYYY-MM-DD"` strings; see
 
 No unit tests. `pnpm e2e` (also a CI job) smoke-tests the built gallery:
 it renders, Menu/DatePicker close on Escape and outside click, ThemeToggle
-switches the `<html>` class, and no uncaught page errors. Still verify
+switches the `<html>` class, and no uncaught page errors. Then
+`e2e/a11y.mjs` (`pnpm e2e:a11y` against a running server) runs axe-core
+(WCAG 2.2 AA) on every gallery group in light and dark, desktop and mobile,
+and fails on serious or critical violations. Still verify
 changes in the gallery (`pnpm dev`) in both light and dark mode, at a mobile
 width and at desktop width, and keep `pnpm check`, `pnpm build` and
 `pnpm e2e` green. A failed run saves `e2e-failure.png`.

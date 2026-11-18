@@ -54,7 +54,7 @@ export function Menu({
           className={cn(
             closing && "pointer-events-none",
             "absolute z-50 mt-1 min-w-44 overflow-hidden rounded-ui border border-border ui-acrylic py-1 shadow-lg",
-            align === "right" ? "right-0" : "left-0",
+            align === "right" ? "end-0" : "start-0",
           )}
         >
           {items.map((item) => (
@@ -68,7 +68,7 @@ export function Menu({
                 item.onSelect();
               }}
               className={cn(
-                "flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-sm outline-none transition",
+                "flex w-full items-center gap-2.5 px-3 py-2.5 text-start text-sm outline-none transition",
                 "hover:bg-surface-muted focus-visible:bg-surface-muted",
                 "disabled:pointer-events-none disabled:opacity-50",
                 item.destructive ? "text-danger" : "text-fg",

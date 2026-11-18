@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>UI Kit</title>
+  <rect x="16" y="16" width="480" height="480" rx="128" fill="#e4c1f9" stroke="#3d2b4f" stroke-width="16"/>
+  <path d="M96 352c0-96 72-176 160-176s160 80 160 176c0 40-32 64-80 64H176c-48 0-80-24-80-64z" fill="#fff" stroke="#3d2b4f" stroke-width="16" stroke-linejoin="round"/>
+  <ellipse cx="200" cy="318" rx="16" ry="22" fill="#3d2b4f"/>
+  <ellipse cx="312" cy="318" rx="16" ry="22" fill="#3d2b4f"/>
+  <circle cx="206" cy="310" r="6" fill="#fff"/>
+  <circle cx="318" cy="310" r="6" fill="#fff"/>
+  <ellipse cx="160" cy="356" rx="22" ry="12" fill="#ff8fab" opacity=".7"/>
+  <ellipse cx="352" cy="356" rx="22" ry="12" fill="#ff8fab" opacity=".7"/>
+  <path d="M236 352q10 12 20 0q10 12 20 0" fill="none" stroke="#3d2b4f" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="380" cy="132" r="84" fill="#fff" stroke="#3d2b4f" stroke-width="16"/>
+  <text x="380" y="132" dy=".35em" text-anchor="middle" font-family="'Arial Rounded MT Bold','Nunito','Varela Round',system-ui,sans-serif" font-weight="900" font-size="74" fill="#3d2b4f">UI</text>
+  <path d="M112 124l10 22 22 10-22 10-10 22-10-22-22-10 22-10z" fill="#fff" stroke="#3d2b4f" stroke-width="8" stroke-linejoin="round"/>
+</svg>

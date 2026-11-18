@@ -53,7 +53,7 @@ export function Slider({
         {...rest}
       />
       {format && (
-        <span className="tabular w-12 shrink-0 text-right text-sm text-fg">
+        <span className="tabular w-12 shrink-0 text-end text-sm text-fg">
           {format(value)}
         </span>
       )}
