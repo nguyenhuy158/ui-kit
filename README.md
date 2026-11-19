@@ -2,6 +2,7 @@
 
 Bộ component React chuẩn dùng cho mọi project cá nhân: Tailwind v4, không phụ thuộc thư viện UI nào.
 Cách dùng là **copy file sang project khác** (kiểu shadcn), không cài qua npm — mỗi project sửa thoải mái mà không sợ vỡ project khác.
+Checklist cho app và app nào đã làm đủ: [docs/ADOPTION.md](docs/ADOPTION.md).
 
 ```bash
 pnpm install
