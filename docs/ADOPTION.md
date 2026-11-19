@@ -48,7 +48,7 @@ Generated 2026-11-19 by `kit/scripts/adoption.mjs ui`.
 | notes | ✅ | 14/54 | ❌ | ❌ | ❌ |  |
 | monitor | ✅ | 32/54 | ❌ | ❌ | ❌ |  |
 | share | ✅ | ❌ | ❌ | ❌ | ❌ |  |
-| stitch-learn-ai | ✅ | 19/54 | ❌ | ❌ | ❌ | ai-english web |
+| ai-english | ✅ | 19/54 | ❌ | ❌ | ❌ |  |
 | webhook-tester | ❌ | ❌ | ❌ | ❌ | ❌ | hooks |
 | games | ❌ | ❌ | ❌ | ❌ | ❌ |  |
 | huyabhome | ✅ | ❌ | ❌ | ❌ | ❌ |  |
