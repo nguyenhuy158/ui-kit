@@ -84,5 +84,6 @@ export { ToastProvider, type ToastTone, useToast } from "./Toast";
 export { Tooltip } from "./Tooltip";
 export { type TransferItem, TransferList } from "./TransferList";
 export { type ThemeMode, ThemeProvider, ThemeToggle, useTheme } from "./theme";
+export { invalidateCached, useCachedFetch } from "./use-cached-fetch";
 export { useDismiss } from "./use-dismiss";
 export { useOverlay } from "./use-overlay";

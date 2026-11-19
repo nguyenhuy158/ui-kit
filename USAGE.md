@@ -567,6 +567,23 @@ const [open, setOpen] = useCommandPalette();   // tự bắt Ctrl/Cmd + K
 
 Gõ không dấu vẫn ra. `keywords` để tìm được lệnh bằng từ không có trong tên.
 
+### useCachedFetch (tải dữ liệu có cache)
+
+Cần `use-cached-fetch.ts`. Mọi component dùng cùng `key` chia một lần gọi API; dữ liệu còn mới (`staleMs`, mặc định 60 giây) thì không gọi lại, quay lại tab khi dữ liệu đã cũ mới tải lại ngầm. Không đặt `setInterval` để poll.
+
+```tsx
+const { data, error, loading, refresh } = useCachedFetch("/api/tasks", () =>
+  fetch("/api/tasks").then((r) => r.json()),
+);
+
+async function save(task: Task) {
+  await fetch("/api/tasks", { method: "POST", body: JSON.stringify(task) });
+  invalidateCached("/api/tasks");
+}
+```
+
+Phía server dùng `@huyab/cache` (kit) để một lượt tải lại cũng không đụng DB mỗi lần.
+
 ## Giao diện sáng tối
 
 ```tsx
