@@ -61,6 +61,17 @@ export { Input, Select, Textarea } from "./Input";
 export { Lightbox, LightboxButton, type LightboxProps } from "./Lightbox";
 export { Link } from "./Link";
 export { Listbox, type ListboxOption } from "./Listbox";
+export {
+  applyLocale,
+  currentLocale,
+  detectLocale,
+  detectTimeZone,
+  formatDateTime,
+  formatMoney,
+  formatNumber,
+  type Locale,
+  SUPPORTED_LOCALES,
+} from "./locale";
 export { Menu, type MenuItem } from "./Menu";
 export { ConfirmDialog, Modal } from "./Modal";
 export { PagedList, type PagedListProps } from "./PagedList";

@@ -5,6 +5,7 @@ import { Badge } from "../../ui/Badge";
 import { Button } from "../../ui/Button";
 import { Card, Metric } from "../../ui/Card";
 import { ImageList } from "../../ui/ImageList";
+import { formatMoney } from "../../ui/locale";
 import { Pagination } from "../../ui/Pagination";
 import { Stepper } from "../../ui/Stepper";
 import { EmptyState, LoadingState, SkeletonListRow } from "../../ui/states";
@@ -12,7 +13,7 @@ import { Table } from "../../ui/Table";
 import { Timeline } from "../../ui/Timeline";
 import { useToast } from "../../ui/Toast";
 import { useCachedFetch } from "../../ui/use-cached-fetch";
-import { money, PHOTOS, ROWS, STEPS } from "../fixtures";
+import { PHOTOS, ROWS, STEPS } from "../fixtures";
 import { Anchor, Section } from "../section";
 import type { GroupProps } from "./types";
 
@@ -199,7 +200,7 @@ export function DataGroup(_: GroupProps) {
               header: "Số tiền",
               numeric: true,
               sortValue: (row) => row.amount,
-              cell: (row) => money.format(row.amount),
+              cell: (row) => formatMoney(row.amount),
             },
           ]}
           rows={ROWS}

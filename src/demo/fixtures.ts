@@ -83,11 +83,6 @@ export const FONT_SIZES = [
   "text-2xl",
 ];
 
-export const money = new Intl.NumberFormat("vi-VN", {
-  style: "currency",
-  currency: "VND",
-});
-
 export const PHOTOS = [
   [1015, 600, 400, "Sông núi"],
   [1025, 400, 560, "Cún"],
