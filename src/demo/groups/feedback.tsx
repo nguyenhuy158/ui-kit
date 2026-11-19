@@ -106,7 +106,7 @@ export function FeedbackGroup({ onAskConfirm }: GroupProps) {
         <Card>
           <CardHeader
             title="Thông báo nổi"
-            description="Tự tắt sau 4 giây, bấm vào để tắt ngay"
+            description="Tự tắt sau 4 giây, bấm X để tắt ngay; trùng nội dung thì không hiện lại, tối đa 3 cái"
           />
           <div className="mt-3 flex flex-wrap gap-2">
             <Button
