@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { type PointerEvent, type ReactNode, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "./cn";
@@ -10,7 +11,17 @@ export type SheetProps = {
   title: string;
   /** "bottom" cho mobile (mac dinh), "left"/"right" cho menu ngan keo. */
   side?: "bottom" | "left" | "right";
+  size?: SheetSize;
+  closeLabel?: string;
   children?: ReactNode;
+};
+
+export type SheetSize = "sm" | "md" | "lg";
+
+const SIDE_PANEL_WIDTH: Record<SheetSize, string> = {
+  sm: "w-[85%] max-w-xs",
+  md: "w-[85%] max-w-lg",
+  lg: "w-full sm:w-[85%] max-w-3xl",
 };
 
 const SHEET_EXIT_MS = 200;
@@ -26,12 +37,12 @@ const SIDE = {
     exit: "ui-sheet-out-bottom var(--ui-dur) var(--ui-ease-in)",
   },
   left: {
-    position: "inset-y-0 left-0 h-full w-[85%] max-w-xs",
+    position: "inset-y-0 left-0 h-full",
     animation: "ui-slide-in-left var(--ui-dur-gentle) var(--ui-ease-out)",
     exit: "ui-sheet-out-left var(--ui-dur) var(--ui-ease-in)",
   },
   right: {
-    position: "inset-y-0 right-0 h-full w-[85%] max-w-xs",
+    position: "inset-y-0 right-0 h-full",
     animation: "ui-slide-in-right var(--ui-dur-gentle) var(--ui-ease-out)",
     exit: "ui-sheet-out-right var(--ui-dur) var(--ui-ease-in)",
   },
@@ -116,6 +127,8 @@ export function Sheet({
   onClose,
   title,
   side = "bottom",
+  size = "sm",
+  closeLabel = "Đóng",
   children,
 }: SheetProps) {
   const ref = useOverlay(open, onClose);
@@ -154,6 +167,7 @@ export function Sheet({
         className={cn(
           "absolute flex flex-col bg-surface shadow-xl outline-none",
           SIDE[side].position,
+          side !== "bottom" && SIDE_PANEL_WIDTH[size],
         )}
       >
         {/* Vung keo: tieu de (va thanh keo o Sheet duoi) de vuot ra mep dong lai. */}
@@ -165,10 +179,22 @@ export function Sheet({
             />
           )}
 
-          <div className="px-4 py-3">
-            <h2 id={titleId} className="text-base font-semibold text-fg">
+          <div className="flex items-start gap-2 py-2 ps-4 pe-2">
+            <h2
+              id={titleId}
+              className="min-w-0 flex-1 py-1 text-base font-semibold text-fg"
+            >
               {title}
             </h2>
+            <button
+              type="button"
+              aria-label={closeLabel}
+              onClick={onClose}
+              onPointerDown={(event) => event.stopPropagation()}
+              className="grid size-11 shrink-0 place-items-center rounded-ui text-fg-muted outline-none transition hover:bg-surface-muted hover:text-fg focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <X size={18} aria-hidden="true" />
+            </button>
           </div>
         </div>
 
