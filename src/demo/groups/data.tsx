@@ -11,9 +11,71 @@ import { EmptyState, LoadingState, SkeletonListRow } from "../../ui/states";
 import { Table } from "../../ui/Table";
 import { Timeline } from "../../ui/Timeline";
 import { useToast } from "../../ui/Toast";
+import { useCachedFetch } from "../../ui/use-cached-fetch";
 import { money, PHOTOS, ROWS, STEPS } from "../fixtures";
 import { Anchor, Section } from "../section";
 import type { GroupProps } from "./types";
+
+const DEMO_KEY = "demo:summary";
+const DEMO_DELAY_MS = 600;
+const DEMO_STALE_MS = 30_000;
+let demoCalls = 0;
+
+function fetchDemoSummary() {
+  demoCalls += 1;
+  const call = demoCalls;
+  return new Promise<{ call: number; at: string }>((resolve) =>
+    setTimeout(
+      () => resolve({ call, at: new Date().toLocaleTimeString("vi-VN") }),
+      DEMO_DELAY_MS,
+    ),
+  );
+}
+
+function CachedReader({ label }: { label: string }) {
+  const { data, loading } = useCachedFetch(DEMO_KEY, fetchDemoSummary, {
+    staleMs: DEMO_STALE_MS,
+  });
+  return (
+    <Card>
+      <p className="text-sm text-fg-muted">{label}</p>
+      <p className="mt-1 font-medium">
+        {data ? `Lần gọi API #${data.call} lúc ${data.at}` : "Đang tải…"}
+      </p>
+      {loading && data && (
+        <p className="text-xs text-fg-muted">Đang làm mới ngầm…</p>
+      )}
+    </Card>
+  );
+}
+
+function CachedFetchDemo() {
+  const [readers, setReaders] = useState([1, 2]);
+  const { refresh } = useCachedFetch(DEMO_KEY, fetchDemoSummary, {
+    staleMs: DEMO_STALE_MS,
+  });
+  return (
+    <div className="space-y-3">
+      <div className="grid gap-3 sm:grid-cols-3">
+        {readers.map((reader) => (
+          <CachedReader key={reader} label={`Thẻ ${reader}`} />
+        ))}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => setReaders((ids) => [...ids, ids.length + 1])}
+        >
+          Thêm thẻ (không gọi API)
+        </Button>
+        <Button size="sm" onClick={() => refresh()}>
+          Làm mới
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 export function DataGroup(_: GroupProps) {
   const toast = useToast();
@@ -146,6 +208,10 @@ export function DataGroup(_: GroupProps) {
         />
         <Anchor id="c-pagination" />
         <Pagination page={page} pageCount={12} onChange={setPage} />
+      </Section>
+      <Section title="Tải dữ liệu có cache" id="s-cached-fetch">
+        <Anchor id="c-cached-fetch" />
+        <CachedFetchDemo />
       </Section>
       <Section title="Trạng thái" id="s-states">
         <Anchor id="c-skeleton" />

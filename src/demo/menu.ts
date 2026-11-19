@@ -87,6 +87,11 @@ export const MENU: MenuGroup[] = [
       },
       { id: "s-stepper", label: "Stepper" },
       {
+        id: "s-cached-fetch",
+        label: "Tải dữ liệu có cache",
+        items: [{ id: "c-cached-fetch", label: "useCachedFetch" }],
+      },
+      {
         id: "s-states",
         label: "Trạng thái",
         items: [

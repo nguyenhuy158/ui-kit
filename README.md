@@ -34,6 +34,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Tooltip.tsx` | `Tooltip` |
 | `Avatar.tsx` | `Avatar` — chữ cái đầu, màu suy ra từ tên |
 | `states.tsx` | `Skeleton`, `SkeletonListRow`, `EmptyState`, `LoadingState` |
+| `use-cached-fetch.ts` | `useCachedFetch`, `invalidateCached` — tải dữ liệu có cache dùng chung theo key, gộp request trùng, chỉ tải lại khi dữ liệu cũ (quay lại tab hoặc sau khi ghi), không poll |
 | `Modal.tsx` | `Modal`, `ConfirmDialog` |
 | `ConfirmProvider.tsx` | `ConfirmProvider`, `useConfirm`, `usePrompt` (thay `confirm()`/`prompt()` gốc, gọi bằng `await`; cần `Modal`, `Button`, `Input`, `Field`) |
 | `Sheet.tsx` | `Sheet` — ngăn trượt từ dưới / trái / phải (keyframe `ui-slide-up`, `ui-slide-in-left`, `ui-slide-in-right` trong `tokens.css`) |

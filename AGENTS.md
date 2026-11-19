@@ -14,6 +14,7 @@ src/
     cn.ts             #   Class-name joiner, the only shared helper
     use-overlay.ts    #   Esc/scroll-lock/focus-trap shared by Modal and Sheet
     use-dismiss.ts    #   Outside-click/Esc close shared by Menu and DatePicker
+    use-cached-fetch.ts #   useCachedFetch: keyed client cache, dedupe, revalidate when stale, no polling
     theme.tsx         #   ThemeProvider/ThemeToggle: toggles `.dark` on <html>
     index.ts          #   Barrel export for the gallery; do not copy it to apps
   demo/               # Gallery page showing every component
