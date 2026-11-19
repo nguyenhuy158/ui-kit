@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import {
   createContext,
   type ReactNode,
@@ -48,12 +49,36 @@ const TONE: Record<ToastTone, string> = {
 };
 
 /** Boc quanh app mot lan. Khong dung thu vien ngoai de copy sang project khac la chay. */
+const DEFAULT_MAX_VISIBLE = 3;
+
+function isSameActive(toast: Toast, tone: ToastTone, message: string) {
+  return !toast.closing && toast.tone === tone && toast.message === message;
+}
+
+function withinLimit(list: Toast[], max: number) {
+  const overflow = list.filter((toast) => !toast.closing).length - max;
+  if (overflow <= 0) return list;
+  const dropped = new Set(
+    list
+      .filter((toast) => !toast.closing)
+      .slice(0, overflow)
+      .map((toast) => toast.id),
+  );
+  return list.filter((toast) => !dropped.has(toast.id));
+}
+
 export function ToastProvider({
   children,
   duration = 4000,
+  max = DEFAULT_MAX_VISIBLE,
+  label = "Thông báo",
+  dismissLabel = "Đóng thông báo",
 }: {
   children: ReactNode;
   duration?: number;
+  max?: number;
+  label?: string;
+  dismissLabel?: string;
 }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const nextId = useRef(1);
@@ -73,16 +98,23 @@ export function ToastProvider({
     (tone: ToastTone, message: string, options?: ToastOptions) => {
       const id = nextId.current;
       nextId.current += 1;
-      setToasts((list) => [
-        ...list,
-        { id, tone, message, description: options?.description },
-      ]);
+      setToasts((list) =>
+        list.some((toast) => isSameActive(toast, tone, message))
+          ? list
+          : withinLimit(
+              [
+                ...list,
+                { id, tone, message, description: options?.description },
+              ],
+              max,
+            ),
+      );
       // Loi thuong can doc ky hon nen de lau gap doi.
       const ms =
         options?.duration ?? (tone === "error" ? duration * 2 : duration);
       window.setTimeout(() => dismiss(id), ms);
     },
-    [dismiss, duration],
+    [dismiss, duration, max],
   );
 
   const api = useMemo<ToastApi>(
@@ -101,17 +133,14 @@ export function ToastProvider({
     <ToastContext.Provider value={api}>
       {children}
       {createPortal(
-        // aria-live polite: screen reader doc khi ranh, khong cat ngang thao tac.
-        <div
-          role="status"
-          aria-live="polite"
+        <section
+          aria-label={label}
           className="safe-bottom pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex flex-col items-center gap-2 px-4 sm:inset-x-auto sm:end-4 sm:items-end"
         >
           {toasts.map((toast) => (
-            <button
+            <div
               key={toast.id}
-              type="button"
-              onClick={() => dismiss(toast.id)}
+              role={toast.tone === "error" ? "alert" : "status"}
               style={{
                 animation: motion(
                   toast.closing === true,
@@ -120,17 +149,29 @@ export function ToastProvider({
                 ),
               }}
               className={cn(
-                "pointer-events-auto w-full max-w-sm rounded-ui border px-4 py-3 text-start shadow-lg",
+                "pointer-events-auto flex w-full max-w-sm items-start gap-2 rounded-ui border py-3 ps-4 pe-2 shadow-lg",
                 TONE[toast.tone],
               )}
             >
-              <p className="text-sm font-medium">{toast.message}</p>
-              {toast.description && (
-                <p className="mt-0.5 text-xs opacity-80">{toast.description}</p>
-              )}
-            </button>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium">{toast.message}</p>
+                {toast.description && (
+                  <p className="mt-0.5 text-xs opacity-80">
+                    {toast.description}
+                  </p>
+                )}
+              </div>
+              <button
+                type="button"
+                aria-label={dismissLabel}
+                onClick={() => dismiss(toast.id)}
+                className="-my-2 grid size-11 shrink-0 place-items-center rounded-ui opacity-70 outline-none transition hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <X size={16} aria-hidden="true" />
+              </button>
+            </div>
           ))}
-        </div>,
+        </section>,
         document.body,
       )}
     </ToastContext.Provider>

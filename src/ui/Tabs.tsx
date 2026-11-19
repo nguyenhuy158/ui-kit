@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { type KeyboardEvent, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "./cn";
 
 export type TabItem<TId extends string = string> = {
@@ -13,14 +13,25 @@ export type TabsProps<TId extends string = string> = {
   onChange: (id: TId) => void;
   /** "line": gach chan, hop trang noi dung. "pill": nen bo tron, hop bo loc. */
   variant?: "line" | "pill";
+  label?: string;
   className?: string;
 };
+
+const TAB_KEY_STEP: Record<string, number> = { ArrowRight: 1, ArrowLeft: -1 };
+
+function targetTabIndex(key: string, current: number, count: number) {
+  if (key === "Home") return 0;
+  if (key === "End") return count - 1;
+  const step = TAB_KEY_STEP[key];
+  return step === undefined ? undefined : (current + step + count) % count;
+}
 
 export function Tabs<TId extends string = string>({
   items,
   active,
   onChange,
   variant = "line",
+  label,
   className,
 }: TabsProps<TId>) {
   const listRef = useRef<HTMLDivElement>(null);
@@ -34,10 +45,25 @@ export function Tabs<TId extends string = string>({
     if (node) setBar({ left: node.offsetLeft, width: node.offsetWidth });
   }, [active, items, variant]);
 
+  const moveFocus = (event: KeyboardEvent<HTMLDivElement>) => {
+    const current = items.findIndex((item) => item.id === active);
+    const next = targetTabIndex(event.key, current, items.length);
+    if (next === undefined) return;
+    const target = items[next];
+    if (!target) return;
+    event.preventDefault();
+    onChange(target.id);
+    listRef.current
+      ?.querySelectorAll<HTMLButtonElement>('[role="tab"]')
+      [next]?.focus();
+  };
+
   return (
     <div
       ref={listRef}
       role="tablist"
+      aria-label={label}
+      onKeyDown={moveFocus}
       className={cn(
         // overflow-x-auto: nhieu tab thi cuon ngang thay vi xuong dong roi vo layout.
         "relative flex gap-1 overflow-x-auto",
@@ -70,6 +96,7 @@ export function Tabs<TId extends string = string>({
             type="button"
             role="tab"
             aria-selected={isActive}
+            tabIndex={isActive ? 0 : -1}
             onClick={() => onChange(item.id)}
             className={cn(
               "relative z-10 shrink-0 whitespace-nowrap px-3 py-2 text-sm font-medium outline-none transition",

@@ -225,6 +225,7 @@ export function NavGroup(_: GroupProps) {
           ]}
           active={tab}
           onChange={setTab}
+          label="Lọc theo trạng thái"
         />
         <Tabs
           variant="pill"
@@ -243,6 +244,7 @@ export function NavGroup(_: GroupProps) {
         onClose={() => setDrawer(false)}
         title="Drawer"
         side="right"
+        size="md"
       >
         <nav className="flex flex-col gap-1">
           {NAV.map((item) => (
