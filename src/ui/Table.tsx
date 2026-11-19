@@ -17,7 +17,6 @@ export type Column<TRow> = {
 
 type Sort = { key: string; dir: "asc" | "desc" } | null;
 
-const collator = new Intl.Collator("vi", { numeric: true });
 function SortIcon({ dir }: { dir?: "asc" | "desc" }) {
   return (
     <svg viewBox="0 0 10 14" aria-hidden="true" className="h-3 w-2.5 shrink-0">
@@ -66,15 +65,21 @@ export function Table<TRow>({
   const sortValue = sortColumn?.sortValue;
   const sorted =
     sort && sortValue
-      ? [...rows].sort((rowA, rowB) => {
-          const a = sortValue(rowA);
-          const b = sortValue(rowB);
-          const result =
-            typeof a === "number" && typeof b === "number"
-              ? a - b
-              : collator.compare(String(a), String(b));
-          return sort.dir === "asc" ? result : -result;
-        })
+      ? (() => {
+          const collator = new Intl.Collator(
+            document.documentElement.lang || undefined,
+            { numeric: true },
+          );
+          return [...rows].sort((rowA, rowB) => {
+            const a = sortValue(rowA);
+            const b = sortValue(rowB);
+            const result =
+              typeof a === "number" && typeof b === "number"
+                ? a - b
+                : collator.compare(String(a), String(b));
+            return sort.dir === "asc" ? result : -result;
+          });
+        })()
       : rows;
 
   const toggleSort = (key: string) =>

@@ -47,6 +47,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Menu.tsx` | `Menu` — menu thả xuống |
 | `Popover.tsx` | `Popover` — bong bóng chứa nội dung tuỳ ý (cần `use-dismiss.ts`) |
 | `theme.tsx` | `ThemeProvider`, `ThemeToggle`, `useTheme` — sáng / tối / theo hệ thống |
+| `locale.ts` | `applyLocale` (gọi một lần lúc khởi động, đặt `<html lang>` theo trình duyệt: vi/en, mặc định vi), `detectTimeZone`, `formatDateTime`, `formatNumber`, `formatMoney`. `Table` và `DatePicker` đọc `<html lang>` nên tự theo |
 | `Spinner.tsx` | `Spinner` |
 | `Lightbox.tsx` | `Lightbox`, `LightboxButton` — xem ảnh toàn màn hình, ← → / vuốt, khe `actions` + `footer` (cần `use-overlay.ts`) |
 | `SwipeAction.tsx` | `SwipeAction` — vuốt trái lộ một nút hành động (chỉ cảm ứng) |

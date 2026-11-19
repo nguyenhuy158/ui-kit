@@ -2,6 +2,12 @@ import { Search } from "lucide-react";
 import { Button } from "../../ui/Button";
 import { Card } from "../../ui/Card";
 import { Col, Grid } from "../../ui/Grid";
+import {
+  currentLocale,
+  detectTimeZone,
+  formatDateTime,
+  formatMoney,
+} from "../../ui/locale";
 import { FONT_SIZES, FONT_WEIGHTS, ICONS, LAYOUT_BOX } from "../fixtures";
 import { Section } from "../section";
 import type { GroupProps } from "./types";
@@ -117,6 +123,20 @@ export function BasicsGroup(_: GroupProps) {
               </div>
             ))}
           </div>
+        </Card>
+      </Section>
+      <Section title="Ngôn ngữ & múi giờ" id="s-locale">
+        <Card>
+          <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+            <dt className="text-fg-muted">Ngôn ngữ</dt>
+            <dd data-testid="locale">{currentLocale()}</dd>
+            <dt className="text-fg-muted">Múi giờ</dt>
+            <dd data-testid="timezone">{detectTimeZone()}</dd>
+            <dt className="text-fg-muted">Bây giờ</dt>
+            <dd className="tabular">{formatDateTime(new Date())}</dd>
+            <dt className="text-fg-muted">Tiền</dt>
+            <dd className="tabular">{formatMoney(1234567)}</dd>
+          </dl>
         </Card>
       </Section>
     </>

@@ -3,11 +3,14 @@ import { createRoot } from "react-dom/client";
 import "./styles/tokens.css";
 import { Gallery } from "./demo/Gallery";
 import { ConfirmProvider } from "./ui/ConfirmProvider";
+import { applyLocale } from "./ui/locale";
 import { ToastProvider } from "./ui/Toast";
 import { ThemeProvider } from "./ui/theme";
 
 const root = document.getElementById("root");
 if (!root) throw new Error("Missing #root element");
+
+applyLocale();
 
 createRoot(root).render(
   <StrictMode>

@@ -15,6 +15,7 @@ export const MENU: MenuGroup[] = [
       { id: "s-layout", label: "Layout" },
       { id: "s-font", label: "Font chữ" },
       { id: "s-icon", label: "Icon" },
+      { id: "s-locale", label: "Ngôn ngữ & múi giờ" },
     ],
   },
   {

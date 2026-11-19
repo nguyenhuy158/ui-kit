@@ -27,7 +27,20 @@ export type DateRangePickerProps = CommonProps & {
 type Props =
   | (DatePickerProps & { range?: false })
   | (DateRangePickerProps & { range: true });
-const WEEKDAYS = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
+const FIRST_MONDAY = new Date(2024, 0, 1);
+const DAYS_PER_WEEK = 7;
+
+function weekdayNames(locale?: string) {
+  const format = new Intl.DateTimeFormat(locale, { weekday: "narrow" });
+  return Array.from({ length: DAYS_PER_WEEK }, (_, offset) => {
+    const day = new Date(
+      FIRST_MONDAY.getFullYear(),
+      FIRST_MONDAY.getMonth(),
+      FIRST_MONDAY.getDate() + offset,
+    );
+    return { id: toDateString(day), name: format.format(day) };
+  });
+}
 
 function parse(value?: string) {
   if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
@@ -107,6 +120,12 @@ function DateControl(props: Props) {
   const month = base.getMonth();
   const offset = (new Date(year, month, 1).getDay() + 6) % 7;
   const total = new Date(year, month + 1, 0).getDate();
+  const locale = document.documentElement.lang || undefined;
+  const weekdays = weekdayNames(locale);
+  const monthLabel = new Intl.DateTimeFormat(locale, {
+    month: "long",
+    year: "numeric",
+  }).format(base);
   const label = props.range ? "Chọn khoảng ngày" : "Chọn ngày";
   const display =
     props.range && valueStart && valueEnd
@@ -233,8 +252,11 @@ function DateControl(props: Props) {
             >
               ‹
             </button>
-            <span aria-live="polite" className="text-sm font-semibold text-fg">
-              Tháng {month + 1} / {year}
+            <span
+              aria-live="polite"
+              className="text-sm font-semibold text-fg first-letter:uppercase"
+            >
+              {monthLabel}
             </span>
             <button
               type="button"
@@ -256,16 +278,16 @@ function DateControl(props: Props) {
             </p>
           )}
           <div ref={calendar} className="grid grid-cols-7">
-            {WEEKDAYS.map((day) => (
+            {weekdays.map((day) => (
               <span
-                key={day}
+                key={day.id}
                 className="py-2 text-center text-xs text-fg-muted"
               >
-                {day}
+                {day.name}
               </span>
             ))}
-            {WEEKDAYS.slice(0, offset).map((day) => (
-              <span key={day} />
+            {weekdays.slice(0, offset).map((day) => (
+              <span key={day.id} />
             ))}
             {Array.from({ length: total }, (_, index) => {
               const date = `${year}-${String(month + 1).padStart(2, "0")}-${String(index + 1).padStart(2, "0")}`;
