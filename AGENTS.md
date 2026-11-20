@@ -147,6 +147,10 @@ Modal that holds a form. Apps check this in e2e with `assertFitsViewport`
 from `@huyab/e2e` (kit).
 No native `alert()`, `confirm()` or `prompt()` anywhere (not even `window.confirm`): use
 `useConfirm()`, `usePrompt()` (`ConfirmProvider`) and Toast. `@huyab/config` lints the bare globals.
+Help pages: an app builds its `/help` page with `Accordion` (items with `id`, `title`,
+`content`), never a hand-rolled one. The text stays in the app as data. ui-kit has no
+help component, because the content is specific to each app. Rule: kit
+`docs/AGENTS-SKELETON.md` ("Help rule"); reference: `chia-keo` `HelpPage.tsx`.
 Access control: components in `src/ui/` never decide who may do what. An app computes
 what the user may do and passes it as props (`disabled`, or it does not render the
 control); the server is the only real check. A disabled action says why (text or
