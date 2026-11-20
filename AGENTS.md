@@ -67,6 +67,9 @@ See the [huyab.cfd ecosystem map](https://github.com/nguyenhuy158/kit/blob/main/
   `nguyenhuy158/kit/.github/workflows/check.yml@v0.1.0`.
 - Talks to: no repo at runtime. `src/styles/tokens.css` and components are
   copied into ai-english, chia-keo, notes, monitor, share, cardstat and huyabhome.
+- Layout: apps with a frontend and a Worker backend use `frontend/src/` and
+  `backend/src/` (kit `docs/AGENTS-SKELETON.md`, "Layout rule"), so copy
+  components to `frontend/src/ui/` there. This repo has no backend and keeps `src/`.
 
 ## Build, Test, and Development Commands
 
