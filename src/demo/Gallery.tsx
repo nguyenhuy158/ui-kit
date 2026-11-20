@@ -9,7 +9,7 @@ import {
   Settings,
   Trash2,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { BottomNav, Fab } from "../ui/BottomNav";
 import { Button } from "../ui/Button";
 import { CommandPalette, useCommandPalette } from "../ui/CommandPalette";
@@ -28,6 +28,13 @@ import { parseRoute, type Route, routeHash } from "./menu";
 
 const GALLERY_MAIN_ID = "gallery-main";
 
+function ScrollToAnchor({ route }: { route: Route }) {
+  useEffect(() => {
+    if (route.anchor) document.getElementById(route.anchor)?.scrollIntoView();
+  }, [route]);
+  return null;
+}
+
 export function Gallery() {
   const toast = useToast();
   const [nav, setNav] = useState("home");
@@ -43,10 +50,6 @@ export function Gallery() {
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
-
-  useEffect(() => {
-    if (route.anchor) document.getElementById(route.anchor)?.scrollIntoView();
-  }, [route]);
 
   const selectTarget = (group: string, anchor: string) => {
     const next: Route = { group, anchor };
@@ -136,7 +139,12 @@ export function Gallery() {
           tabIndex={-1}
           className="space-y-8 py-6 outline-none"
         >
-          {View && <View onAskConfirm={() => setConfirm(true)} />}
+          {View && (
+            <Suspense fallback={null}>
+              <View onAskConfirm={() => setConfirm(true)} />
+              <ScrollToAnchor route={route} />
+            </Suspense>
+          )}
         </main>
       </div>
 
