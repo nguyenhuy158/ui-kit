@@ -147,6 +147,12 @@ Modal that holds a form. Apps check this in e2e with `assertFitsViewport`
 from `@huyab/e2e` (kit).
 No native `alert()`, `confirm()` or `prompt()` anywhere (not even `window.confirm`): use
 `useConfirm()`, `usePrompt()` (`ConfirmProvider`) and Toast. `@huyab/config` lints the bare globals.
+Access control: components in `src/ui/` never decide who may do what. An app computes
+what the user may do and passes it as props (`disabled`, or it does not render the
+control); the server is the only real check. A disabled action says why (text or
+`Tooltip`). Do not add role names or permission logic to `src/ui/`. Rule and
+checklist: kit `docs/AGENTS-SKELETON.md` ("Access control rule") and
+`docs/RBAC-CHECKLIST.md`.
 Never commit secrets. Every machine runs huyabhome `scripts/install-tools.sh`,
 which installs gitleaks and a global pre-commit hook that scans staged changes.
 Do not bypass it: no `git commit --no-verify`, no change to `core.hooksPath`.
