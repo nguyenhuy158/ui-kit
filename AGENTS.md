@@ -75,7 +75,9 @@ See the [huyab.cfd ecosystem map](https://github.com/nguyenhuy158/kit/blob/main/
 
 - `pnpm install`: install dependencies.
 - `pnpm dev`: start the gallery on `http://127.0.0.1:5173`.
-- `pnpm check`: TypeScript project check (`tsc -b`).
+- `pnpm check`: `tsc -b`, then knip (unused files and dependencies), then Vitest.
+- `pnpm test`: Vitest + Testing Library (jsdom), colocated `*.test.tsx`.
+- `pnpm size`: size-limit on the built gallery (`pnpm build` runs it).
 - `pnpm lint`: Biome lint + format check (`biome check .`).
 - `pnpm format`: apply Biome formatting (`biome format --write .`).
 - `pnpm build`: type-check, then build the gallery with Vite.
@@ -86,8 +88,8 @@ See the [huyab.cfd ecosystem map](https://github.com/nguyenhuy158/kit/blob/main/
 - `pnpm e2e:smoke`: run only the smoke against a running server
   (`E2E_BASE_URL`).
 
-Use `pnpm` for all package commands. There is no unit test suite and no
-`e2e:prod`; the gallery is the visual check.
+Use `pnpm` for all package commands. Unit tests are few and cover behavior only; there is no
+`e2e:prod`, and the gallery is the visual check.
 
 ## Coding Style & Naming Conventions
 
@@ -101,13 +103,16 @@ TypeScript with strict settings (`noUnusedLocals`, `verbatimModuleSyntax`), so
 use `import type` for types. Two-space indentation, double quotes, trailing
 commas. Components are PascalCase files with named exports. Each component
 file depends only on `cn.ts` and the tokens (plus `use-overlay.ts` for
-overlays, `use-dismiss.ts` for popovers) so it can be copied alone. Open the right phone keyboard: set `type` (`email`, `tel`, `url`, `search`) or `inputMode="numeric"` for whole numbers; `Input` adds the matching `inputMode`/`autoComplete`. Keep inputs at 16px on mobile (iOS zoom),
+overlays, `use-dismiss.ts` for popovers) so it can be copied alone. Light
+libraries are allowed when a component needs them, and the copy list says so:
+`@floating-ui/react` (Popover, Tooltip), `embla-carousel-react` (Carousel),
+`@formkit/auto-animate` (AnimatedList), `@tanstack/react-virtual` (VirtualList). Open the right phone keyboard: set `type` (`email`, `tel`, `url`, `search`) or `inputMode="numeric"` for whole numbers; `Input` adds the matching `inputMode`/`autoComplete`. Keep inputs at 16px on mobile (iOS zoom),
 touch targets at least 44px, and dates as `"YYYY-MM-DD"` strings; see
 "Vài quy ước cố ý" in `README.md` before changing those.
 
 ## Testing Guidelines
 
-No unit tests. `pnpm e2e` (also a CI job) smoke-tests the built gallery:
+Vitest + Testing Library cover small behavior checks (`src/ui/ui.test.tsx`). `pnpm e2e` (also a CI job) smoke-tests the built gallery:
 it renders, Menu/DatePicker close on Escape and outside click, ThemeToggle
 switches the `<html>` class, and no uncaught page errors. Then
 `e2e/a11y.mjs` (`pnpm e2e:a11y` against a running server) runs axe-core

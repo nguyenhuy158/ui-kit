@@ -11,6 +11,9 @@ export const GROUP_VIEWS: Record<string, ComponentType<GroupProps>> = {
   feedback: lazy(() =>
     import("./feedback").then((m) => ({ default: m.FeedbackGroup })),
   ),
+  extras: lazy(() =>
+    import("./extras").then((m) => ({ default: m.ExtrasGroup })),
+  ),
   interact: lazy(() =>
     import("./interact").then((m) => ({ default: m.InteractGroup })),
   ),
