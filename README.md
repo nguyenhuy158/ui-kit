@@ -43,7 +43,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `HeaderBar.tsx` | `HeaderBar` — thanh tiêu đề dính, an toàn với notch |
 | `BottomNav.tsx` | `BottomNav` (`inline` để đặt trong `Screen`), `Fab` |
 | `Screen.tsx` | `Screen` — khung vừa viewport: header và thanh dưới cố định, vùng giữa tự co, không cuộn |
-| `PagedList.tsx` | `PagedList` — danh sách chia trang theo chiều cao còn lại, mỗi dòng cao cố định, thanh phân trang gọn `‹ 1/7 ›` |
+| `PagedList.tsx` | `PagedList` — danh sách chia trang theo chiều cao còn lại, tự animate khi đổi dòng (cần `@formkit/auto-animate`) |
 | `Tabs.tsx` | `Tabs` (line / pill) |
 | `Menu.tsx` | `Menu` — menu thả xuống |
 | `Popover.tsx` | `Popover` — bong bóng chứa nội dung tuỳ ý (cần `use-dismiss.ts` và `@floating-ui/react`) |
