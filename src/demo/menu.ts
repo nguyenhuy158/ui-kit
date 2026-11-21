@@ -98,6 +98,7 @@ export const MENU: MenuGroup[] = [
         items: [
           { id: "c-skeleton", label: "Skeleton" },
           { id: "c-loading", label: "LoadingState" },
+          { id: "c-page-loading", label: "PageLoading" },
           { id: "c-empty", label: "EmptyState" },
         ],
       },

@@ -5,6 +5,7 @@ import { AnimatedList } from "./AnimatedList";
 import { cn } from "./cn";
 import { PagedList } from "./PagedList";
 import { Popover } from "./Popover";
+import { PageLoading } from "./states";
 import { Tooltip } from "./Tooltip";
 
 describe("cn", () => {
@@ -86,5 +87,16 @@ describe("PagedList", () => {
     expect(container?.textContent).toBe("HaiMộtBa");
     rerender(<PagedList {...props} items={[]} />);
     expect(screen.getByText("Trống").parentElement).toBe(container);
+  });
+});
+
+describe("PageLoading", () => {
+  it("announces the default and a custom label as a status", () => {
+    const { rerender } = render(<PageLoading />);
+    expect(
+      screen.getByRole("status", { name: "Đang tải..." }),
+    ).toBeInTheDocument();
+    rerender(<PageLoading label="Đang mở" />);
+    expect(screen.getByRole("status", { name: "Đang mở" })).toBeInTheDocument();
   });
 });

@@ -89,7 +89,13 @@ export { Spinner } from "./Spinner";
 export { type Step, Stepper } from "./Stepper";
 export { SwipeAction, type SwipeActionProps } from "./SwipeAction";
 export { Switch } from "./Switch";
-export { EmptyState, LoadingState, Skeleton, SkeletonListRow } from "./states";
+export {
+  EmptyState,
+  LoadingState,
+  PageLoading,
+  Skeleton,
+  SkeletonListRow,
+} from "./states";
 export { type Column, Table } from "./Table";
 export { type TabItem, Tabs } from "./Tabs";
 export { Timeline, type TimelineItem } from "./Timeline";
