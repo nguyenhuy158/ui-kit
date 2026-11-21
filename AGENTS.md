@@ -151,6 +151,10 @@ Help pages: an app builds its `/help` page with `Accordion` (items with `id`, `t
 `content`), never a hand-rolled one. The text stays in the app as data. ui-kit has no
 help component, because the content is specific to each app. Rule: kit
 `docs/AGENTS-SKELETON.md` ("Help rule"); reference: `chia-keo` `HelpPage.tsx`.
+Settings pages: an app builds its Settings page from `Card`, `Switch`, `Radio`, `Listbox`,
+`Field`, `Input` and `ThemeToggle`, never from hand-rolled controls. ui-kit has no settings
+component, because the options are specific to each app. Rule: kit
+`docs/AGENTS-SKELETON.md` ("Settings rule"); reference: `notes` `SettingsScreen.tsx`.
 Access control: components in `src/ui/` never decide who may do what. An app computes
 what the user may do and passes it as props (`disabled`, or it does not render the
 control); the server is the only real check. A disabled action says why (text or
