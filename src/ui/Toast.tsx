@@ -1,4 +1,11 @@
-import { X } from "lucide-react";
+import {
+  CircleCheck,
+  CircleX,
+  Info,
+  type LucideIcon,
+  TriangleAlert,
+  X,
+} from "lucide-react";
 import {
   createContext,
   type ReactNode,
@@ -49,6 +56,13 @@ const TONE: Record<ToastTone, string> = {
 };
 
 /** Boc quanh app mot lan. Khong dung thu vien ngoai de copy sang project khac la chay. */
+const TONE_ICON: Record<ToastTone, LucideIcon> = {
+  info: Info,
+  success: CircleCheck,
+  warning: TriangleAlert,
+  error: CircleX,
+};
+
 const DEFAULT_MAX_VISIBLE = 3;
 
 function isSameActive(toast: Toast, tone: ToastTone, message: string) {
@@ -135,42 +149,50 @@ export function ToastProvider({
       {createPortal(
         <section
           aria-label={label}
-          className="safe-bottom pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex flex-col items-center gap-2 px-4 sm:inset-x-auto sm:end-4 sm:items-end"
+          className="safe-top pointer-events-none fixed inset-x-0 top-0 z-[60] flex flex-col items-center gap-2 px-4 sm:inset-x-auto sm:end-4 sm:items-end"
         >
-          {toasts.map((toast) => (
-            <div
-              key={toast.id}
-              role={toast.tone === "error" ? "alert" : "status"}
-              style={{
-                animation: motion(
-                  toast.closing === true,
-                  "ui-slide-up var(--ui-dur) var(--ui-ease-out)",
-                  "ui-slide-up-out var(--ui-dur-fast) var(--ui-ease-in)",
-                ),
-              }}
-              className={cn(
-                "pointer-events-auto flex w-full max-w-sm items-start gap-2 rounded-ui border py-3 ps-4 pe-2 shadow-lg",
-                TONE[toast.tone],
-              )}
-            >
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium">{toast.message}</p>
-                {toast.description && (
-                  <p className="mt-0.5 text-xs opacity-80">
-                    {toast.description}
-                  </p>
+          {toasts.map((toast) => {
+            const Icon = TONE_ICON[toast.tone];
+            return (
+              <div
+                key={toast.id}
+                role={toast.tone === "error" ? "alert" : "status"}
+                style={{
+                  animation: motion(
+                    toast.closing === true,
+                    "ui-slide-down var(--ui-dur) var(--ui-ease-out)",
+                    "ui-slide-down-out var(--ui-dur-fast) var(--ui-ease-in)",
+                  ),
+                }}
+                className={cn(
+                  "pointer-events-auto flex w-full max-w-sm items-start gap-2 rounded-ui border py-3 ps-4 pe-2 shadow-lg",
+                  TONE[toast.tone],
                 )}
-              </div>
-              <button
-                type="button"
-                aria-label={dismissLabel}
-                onClick={() => dismiss(toast.id)}
-                className="-my-2 grid size-11 shrink-0 place-items-center rounded-ui opacity-70 outline-none transition hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <X size={16} aria-hidden="true" />
-              </button>
-            </div>
-          ))}
+                <Icon
+                  size={20}
+                  aria-hidden="true"
+                  className="mt-0.5 shrink-0"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium">{toast.message}</p>
+                  {toast.description && (
+                    <p className="mt-0.5 text-xs opacity-80">
+                      {toast.description}
+                    </p>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  aria-label={dismissLabel}
+                  onClick={() => dismiss(toast.id)}
+                  className="-my-2 grid size-11 shrink-0 place-items-center rounded-ui opacity-70 outline-none transition hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <X size={16} aria-hidden="true" />
+                </button>
+              </div>
+            );
+          })}
         </section>,
         document.body,
       )}
