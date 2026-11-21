@@ -178,4 +178,5 @@ not hand-roll or fork primitives locally.
 When changing `tokens.css`, keep the token names stable and update this file,
 `README.md`, and every component that relies on a renamed token.
 Every repo keeps a full `.gitignore` and `.dockerignore` (rule: `kit/docs/AGENTS-SKELETON.md`, "Ignore files rule").
+Device sign-in page (RFC 8628): the approve page of an app (`/login/device`) is a root route built only from ui-kit parts (`Screen`, `Card`, `Field`, `Input`, `Button`, Toast). It shows the app and device name, takes the `user_code` (16px input, `autoCapitalize="characters"`, accepts any case with or without the dash) and asks to approve or deny. The server decides who may approve; the page only shows the result. Rules and checklist: `kit/docs/CLI-CHECKLIST.md`, "Device sign-in (RFC 8628)". Reference: `chia-keo` `/login/device`.
 ui-kit has no command line. If one is added, it follows the CLI rule in `kit/docs/AGENTS-SKELETON.md` and the checklist in `kit/docs/CLI-CHECKLIST.md` (simple English, device-code sign-in, token mode 600; reference: `chia-keo` `cli/`).
