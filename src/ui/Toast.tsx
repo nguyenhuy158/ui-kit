@@ -63,6 +63,25 @@ const TONE_ICON: Record<ToastTone, LucideIcon> = {
   error: CircleX,
 };
 
+export type ToastPosition =
+  | "top-start"
+  | "top"
+  | "top-end"
+  | "bottom-start"
+  | "bottom"
+  | "bottom-end";
+
+const DEFAULT_POSITION: ToastPosition = "bottom-end";
+
+const POSITION: Record<ToastPosition, string> = {
+  "top-start": "safe-top top-0 sm:items-start",
+  top: "safe-top top-0 sm:items-center",
+  "top-end": "safe-top top-0 sm:items-end",
+  "bottom-start": "safe-bottom bottom-0 sm:items-start",
+  bottom: "safe-bottom bottom-0 sm:items-center",
+  "bottom-end": "safe-bottom bottom-0 sm:items-end",
+};
+
 const DEFAULT_MAX_VISIBLE = 3;
 
 function isSameActive(toast: Toast, tone: ToastTone, message: string) {
@@ -87,12 +106,14 @@ export function ToastProvider({
   max = DEFAULT_MAX_VISIBLE,
   label = "Thông báo",
   dismissLabel = "Đóng thông báo",
+  position = DEFAULT_POSITION,
 }: {
   children: ReactNode;
   duration?: number;
   max?: number;
   label?: string;
   dismissLabel?: string;
+  position?: ToastPosition;
 }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const nextId = useRef(1);
@@ -143,13 +164,18 @@ export function ToastProvider({
     [show, dismiss],
   );
 
+  const isTop = position.startsWith("top");
+
   return (
     <ToastContext.Provider value={api}>
       {children}
       {createPortal(
         <section
           aria-label={label}
-          className="safe-top pointer-events-none fixed inset-x-0 top-0 z-[60] flex flex-col items-center gap-2 px-4 sm:inset-x-auto sm:end-4 sm:items-end"
+          className={cn(
+            "pointer-events-none fixed inset-x-0 z-[60] flex flex-col items-center gap-2 px-4",
+            POSITION[position],
+          )}
         >
           {toasts.map((toast) => {
             const Icon = TONE_ICON[toast.tone];
@@ -160,8 +186,12 @@ export function ToastProvider({
                 style={{
                   animation: motion(
                     toast.closing === true,
-                    "ui-slide-down var(--ui-dur) var(--ui-ease-out)",
-                    "ui-slide-down-out var(--ui-dur-fast) var(--ui-ease-in)",
+                    isTop
+                      ? "ui-slide-down var(--ui-dur) var(--ui-ease-out)"
+                      : "ui-slide-up var(--ui-dur) var(--ui-ease-out)",
+                    isTop
+                      ? "ui-slide-down-out var(--ui-dur-fast) var(--ui-ease-in)"
+                      : "ui-slide-up-out var(--ui-dur-fast) var(--ui-ease-in)",
                   ),
                 }}
                 className={cn(

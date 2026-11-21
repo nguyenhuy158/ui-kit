@@ -7,6 +7,7 @@ import { ERROR_PAGE_STATUSES, ErrorPage } from "./ErrorPage";
 import { PagedList } from "./PagedList";
 import { Popover } from "./Popover";
 import { PageLoading } from "./states";
+import { type ToastPosition, ToastProvider, useToast } from "./Toast";
 import { Tooltip } from "./Tooltip";
 
 describe("cn", () => {
@@ -124,5 +125,38 @@ describe("ErrorPage", () => {
       screen.getByRole("heading", { name: "Hết rồi" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Về" })).toBeInTheDocument();
+  });
+});
+
+function ShowToast() {
+  const toast = useToast();
+  return (
+    <button type="button" onClick={() => toast.success("Đã lưu")}>
+      show
+    </button>
+  );
+}
+
+describe("ToastProvider position", () => {
+  const stackAt = async (position?: ToastPosition) => {
+    render(
+      <ToastProvider position={position}>
+        <ShowToast />
+      </ToastProvider>,
+    );
+    await userEvent.click(screen.getByText("show"));
+    return screen.getByRole("region", { name: "Thông báo" });
+  };
+
+  it("defaults to bottom-end", async () => {
+    const stack = await stackAt();
+    expect(stack.className).toContain("bottom-0");
+    expect(stack.className).toContain("sm:items-end");
+  });
+
+  it("places the stack at the top", async () => {
+    const stack = await stackAt("top-end");
+    expect(stack.className).toContain("top-0");
+    expect(stack.className).not.toContain("bottom-0");
   });
 });
