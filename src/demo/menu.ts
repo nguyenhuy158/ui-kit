@@ -168,6 +168,27 @@ export const MENU: MenuGroup[] = [
       },
     ],
   },
+  {
+    id: "extras",
+    label: "Thư viện nhẹ",
+    sections: [
+      {
+        id: "s-carousel",
+        label: "Carousel",
+        items: [{ id: "c-carousel", label: "Carousel" }],
+      },
+      {
+        id: "s-animated",
+        label: "Animate danh sách",
+        items: [{ id: "c-animated", label: "AnimatedList" }],
+      },
+      {
+        id: "s-virtual",
+        label: "Danh sách rất dài",
+        items: [{ id: "c-virtual", label: "VirtualList" }],
+      },
+    ],
+  },
 ];
 
 export const DEFAULT_GROUP = MENU[0]?.id ?? "";

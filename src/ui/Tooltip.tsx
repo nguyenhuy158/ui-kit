@@ -1,3 +1,10 @@
+import {
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  useFloating,
+} from "@floating-ui/react";
 import { type ReactNode, useId, useState } from "react";
 import { cn } from "./cn";
 import { motion, usePresence } from "./use-presence";
@@ -9,10 +16,7 @@ export type TooltipProps = {
   className?: string;
 };
 
-const SIDE = {
-  top: "bottom-full mb-1.5",
-  bottom: "top-full mt-1.5",
-};
+const TOOLTIP_OFFSET_PX = 6;
 
 /**
  * Chu goi y khi ro chuot hoac focus ban phim.
@@ -30,10 +34,18 @@ export function Tooltip({
   const [open, setOpen] = useState(false);
   const id = useId();
   const { mounted, closing } = usePresence(open);
+  const { refs, floatingStyles } = useFloating({
+    open,
+    placement: side,
+    middleware: [offset(TOOLTIP_OFFSET_PX), flip(), shift({ padding: 8 })],
+    transform: false,
+    whileElementsMounted: autoUpdate,
+  });
 
   return (
     // biome-ignore lint/a11y/noStaticElementInteractions: hover and focus listeners only toggle the hint
     <span
+      ref={refs.setReference}
       className={cn("relative inline-flex", className)}
       onPointerEnter={() => setOpen(true)}
       onPointerLeave={() => setOpen(false)}
@@ -45,9 +57,11 @@ export function Tooltip({
 
       {mounted && (
         <span
+          ref={refs.setFloating}
           id={id}
           role="tooltip"
           style={{
+            ...floatingStyles,
             animation: motion(
               closing,
               "ui-slide-down var(--ui-dur-fast) var(--ui-ease-out)",
@@ -55,9 +69,8 @@ export function Tooltip({
             ),
           }}
           className={cn(
-            "pointer-events-none absolute left-1/2 z-50 -translate-x-1/2 whitespace-nowrap",
+            "pointer-events-none z-50 whitespace-nowrap",
             "rounded-md bg-fg px-2 py-1 text-xs font-medium text-bg shadow-lg",
-            SIDE[side],
           )}
         >
           {label}

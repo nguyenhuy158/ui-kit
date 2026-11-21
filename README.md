@@ -32,7 +32,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Table.tsx` | `Table` — cuộn ngang, ẩn cột trên mobile, cột số canh phải |
 | `Pagination.tsx` | `Pagination` — tự rút gọn bằng dấu `…` |
 | `Accordion.tsx` | `Accordion` — mở nhiều hoặc chỉ một mục |
-| `Tooltip.tsx` | `Tooltip` |
+| `Tooltip.tsx` | `Tooltip` (cần `@floating-ui/react`, tự lật khi sát mép) |
 | `Avatar.tsx` | `Avatar` — chữ cái đầu, màu suy ra từ tên |
 | `states.tsx` | `Skeleton`, `SkeletonListRow`, `EmptyState`, `LoadingState` |
 | `use-cached-fetch.ts` | `useCachedFetch`, `invalidateCached` — tải dữ liệu có cache dùng chung theo key, gộp request trùng, chỉ tải lại khi dữ liệu cũ (quay lại tab hoặc sau khi ghi), không poll |
@@ -46,7 +46,10 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `PagedList.tsx` | `PagedList` — danh sách chia trang theo chiều cao còn lại, mỗi dòng cao cố định, thanh phân trang gọn `‹ 1/7 ›` |
 | `Tabs.tsx` | `Tabs` (line / pill) |
 | `Menu.tsx` | `Menu` — menu thả xuống |
-| `Popover.tsx` | `Popover` — bong bóng chứa nội dung tuỳ ý (cần `use-dismiss.ts`) |
+| `Popover.tsx` | `Popover` — bong bóng chứa nội dung tuỳ ý (cần `use-dismiss.ts` và `@floating-ui/react`) |
+| `Carousel.tsx` | `Carousel` — vuốt ngang trên mobile (cần `embla-carousel-react`) |
+| `AnimatedList.tsx` | `AnimatedList` — animate khi thêm/xoá/đổi chỗ (cần `@formkit/auto-animate`) |
+| `VirtualList.tsx` | `VirtualList` — danh sách rất dài, chỉ dùng trong Sheet/Modal (cần `@tanstack/react-virtual`) |
 | `theme.tsx` | `ThemeProvider`, `ThemeToggle`, `useTheme` — sáng / tối / theo hệ thống |
 | `locale.ts` | `applyLocale` (gọi một lần lúc khởi động, đặt `<html lang>` theo trình duyệt: vi/en, mặc định vi), `detectTimeZone`, `formatDateTime`, `formatNumber`, `formatMoney`. `Table` và `DatePicker` đọc `<html lang>` nên tự theo |
 | `Spinner.tsx` | `Spinner` |
@@ -60,7 +63,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 ## Copy sang project khác
 
 1. Copy `src/styles/tokens.css`, import nó thay cho `@import "tailwindcss"` trong file CSS gốc.
-2. Copy `src/ui/cn.ts` và những file component thực sự cần. Mỗi component chỉ phụ thuộc `cn.ts` + biến màu trong `tokens.css` (riêng `Modal`/`Sheet` cần thêm `use-overlay.ts`, `Menu`/`Popover`/`DatePicker` cần thêm `use-dismiss.ts`).
+2. Copy `src/ui/cn.ts` và những file component thực sự cần. Mỗi component chỉ phụ thuộc `cn.ts` + biến màu trong `tokens.css` (trừ Popover, Tooltip, Carousel, AnimatedList, VirtualList: cài thêm lib ghi trong bảng) (riêng `Modal`/`Sheet` cần thêm `use-overlay.ts`, `Menu`/`Popover`/`DatePicker` cần thêm `use-dismiss.ts`).
 3. Bọc app bằng `ThemeProvider` và `ToastProvider` nếu dùng theme / toast.
 
 Không copy `src/ui/index.ts` trừ khi lấy gần hết — nó import mọi thứ, để lại sẽ kéo cả bộ vào bundle.

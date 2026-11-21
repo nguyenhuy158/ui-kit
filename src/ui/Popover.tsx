@@ -1,7 +1,16 @@
+import {
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  useFloating,
+} from "@floating-ui/react";
 import { type ReactNode, useState } from "react";
 import { cn } from "./cn";
 import { useDismiss } from "./use-dismiss";
 import { motion, usePresence } from "./use-presence";
+
+const PANEL_OFFSET_PX = 4;
 
 export type PopoverProps = {
   trigger: (props: {
@@ -27,10 +36,23 @@ export function Popover({
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
   const ref = useDismiss(open, close);
+  const { refs, floatingStyles } = useFloating({
+    open,
+    placement: `${side}-${align === "right" ? "end" : "start"}`,
+    middleware: [offset(PANEL_OFFSET_PX), flip(), shift({ padding: 8 })],
+    transform: false,
+    whileElementsMounted: autoUpdate,
+  });
   const { mounted, closing } = usePresence(open);
 
   return (
-    <div ref={ref} className={cn("relative inline-block", className)}>
+    <div
+      ref={(node) => {
+        ref.current = node;
+        refs.setReference(node);
+      }}
+      className={cn("relative inline-block", className)}
+    >
       {trigger({
         onClick: () => setOpen((value) => !value),
         "aria-expanded": open,
@@ -39,8 +61,10 @@ export function Popover({
 
       {mounted && (
         <div
+          ref={refs.setFloating}
           role="dialog"
           style={{
+            ...floatingStyles,
             animation: motion(
               closing,
               "ui-slide-down var(--ui-dur-fast) var(--ui-ease-out)",
@@ -49,9 +73,7 @@ export function Popover({
           }}
           className={cn(
             closing && "pointer-events-none",
-            "absolute z-50 min-w-56 rounded-ui border border-border ui-acrylic p-3 shadow-lg",
-            side === "bottom" ? "top-full mt-1" : "bottom-full mb-1",
-            align === "right" ? "end-0" : "start-0",
+            "z-50 min-w-56 rounded-ui border border-border ui-acrylic p-3 shadow-lg",
             panelClassName,
           )}
         >

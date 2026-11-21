@@ -1,0 +1,7 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["e2e/*.mjs", "hosted/loader.js", "src/ui/index.ts"],
+  "ignore": ["src/dom/feedback.css"],
+  "ignoreDependencies": ["axe-core", "lefthook"],
+  "rules": { "exports": "off", "types": "off" }
+}

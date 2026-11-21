@@ -7,7 +7,15 @@ import { chromium } from "playwright-core";
 
 const BASE = process.env.E2E_BASE_URL || "http://127.0.0.1:4173";
 const AXE_PATH = createRequire(import.meta.url).resolve("axe-core/axe.min.js");
-const GROUPS = ["basics", "form", "data", "nav", "feedback", "interact"];
+const GROUPS = [
+  "basics",
+  "form",
+  "data",
+  "nav",
+  "feedback",
+  "interact",
+  "extras",
+];
 const THEMES = ["light", "dark"];
 const VIEWPORTS = {
   desktop: { width: 1280, height: 800 },

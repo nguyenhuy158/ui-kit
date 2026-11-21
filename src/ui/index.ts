@@ -5,6 +5,7 @@
 
 export { Accordion, type AccordionItem } from "./Accordion";
 export { Alert, type AlertTone } from "./Alert";
+export { AnimatedList, type AnimatedListProps } from "./AnimatedList";
 export { Avatar } from "./Avatar";
 export { Backdrop } from "./Backdrop";
 export { Badge, type BadgeTone } from "./Badge";
@@ -17,6 +18,7 @@ export {
   type ButtonVariant,
 } from "./Button";
 export { Card, CardHeader, Metric } from "./Card";
+export { Carousel, type CarouselProps } from "./Carousel";
 export { Celebrate, type CelebrateProps } from "./Celebrate";
 export { Checkbox } from "./Checkbox";
 export { Chip } from "./Chip";
@@ -98,3 +100,4 @@ export { type ThemeMode, ThemeProvider, ThemeToggle, useTheme } from "./theme";
 export { invalidateCached, useCachedFetch } from "./use-cached-fetch";
 export { useDismiss } from "./use-dismiss";
 export { useOverlay } from "./use-overlay";
+export { VirtualList, type VirtualListProps } from "./VirtualList";
