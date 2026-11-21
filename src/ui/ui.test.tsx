@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { AnimatedList } from "./AnimatedList";
 import { cn } from "./cn";
+import { PagedList } from "./PagedList";
 import { Popover } from "./Popover";
 import { Tooltip } from "./Tooltip";
 
@@ -64,5 +65,26 @@ describe("AnimatedList", () => {
     );
     expect(screen.getByRole("list")).toBeInTheDocument();
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
+  });
+});
+
+describe("PagedList", () => {
+  it("preserves keyed rows and its animation container across list updates", () => {
+    const props = {
+      getKey: (item: string) => item,
+      renderItem: (item: string) => <span>{item}</span>,
+      rowHeight: 48,
+      empty: <span>Trống</span>,
+    };
+    const { rerender } = render(<PagedList {...props} items={[]} />);
+    const container = screen.getByText("Trống").parentElement;
+    rerender(<PagedList {...props} items={["Một", "Hai"]} />);
+    const firstRow = screen.getByText("Một").parentElement;
+    expect(firstRow?.parentElement).toBe(container);
+    rerender(<PagedList {...props} items={["Hai", "Một", "Ba"]} />);
+    expect(screen.getByText("Một").parentElement).toBe(firstRow);
+    expect(container?.textContent).toBe("HaiMộtBa");
+    rerender(<PagedList {...props} items={[]} />);
+    expect(screen.getByText("Trống").parentElement).toBe(container);
   });
 });

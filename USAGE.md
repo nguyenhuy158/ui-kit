@@ -364,6 +364,9 @@ Nhớ chừa `padding-bottom` cho nội dung, nếu không bottom nav sẽ che m
 
 ### Một màn hình, không cuộn: Screen + PagedList
 
+Cài `@formkit/auto-animate` khi copy `PagedList.tsx`. Các dòng tự chuyển động
+khi thêm, xoá, đổi thứ tự hoặc chuyển trang; tôn trọng `prefers-reduced-motion`.
+
 ```tsx
 <Screen
   header={<HeaderBar sticky={false} title="Ăn tối quận 1" />}
