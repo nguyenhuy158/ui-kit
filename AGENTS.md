@@ -178,3 +178,4 @@ not hand-roll or fork primitives locally.
 When changing `tokens.css`, keep the token names stable and update this file,
 `README.md`, and every component that relies on a renamed token.
 Every repo keeps a full `.gitignore` and `.dockerignore` (rule: `kit/docs/AGENTS-SKELETON.md`, "Ignore files rule").
+ui-kit has no command line. If one is added, it follows the CLI rule in `kit/docs/AGENTS-SKELETON.md` (simple English, device-code sign-in, token mode 600; reference: `chia-keo` `cli/`).
