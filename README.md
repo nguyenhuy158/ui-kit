@@ -40,7 +40,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Modal.tsx` | `Modal`, `ConfirmDialog` |
 | `ConfirmProvider.tsx` | `ConfirmProvider`, `useConfirm`, `usePrompt` (thay `confirm()`/`prompt()` gốc, gọi bằng `await`; cần `Modal`, `Button`, `Input`, `Field`) |
 | `Sheet.tsx` | `Sheet` — ngăn trượt từ dưới / trái / phải (keyframe `ui-slide-up`, `ui-slide-in-left`, `ui-slide-in-right` trong `tokens.css`) |
-| `Toast.tsx` | `ToastProvider`, `useToast` |
+| `Toast.tsx` | `ToastProvider` (`position`: `top-start`, `top`, `top-end`, `bottom-start`, `bottom`, `bottom-end`; mặc định `bottom-end`), `useToast` |
 | `HeaderBar.tsx` | `HeaderBar` — thanh tiêu đề dính, an toàn với notch |
 | `BottomNav.tsx` | `BottomNav` (`inline` để đặt trong `Screen`), `Fab` |
 | `Screen.tsx` | `Screen` — khung vừa viewport: header và thanh dưới cố định, vùng giữa tự co, không cuộn |
