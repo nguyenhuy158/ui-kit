@@ -8,7 +8,12 @@ import { ImageList } from "../../ui/ImageList";
 import { formatMoney } from "../../ui/locale";
 import { Pagination } from "../../ui/Pagination";
 import { Stepper } from "../../ui/Stepper";
-import { EmptyState, LoadingState, SkeletonListRow } from "../../ui/states";
+import {
+  EmptyState,
+  LoadingState,
+  PageLoading,
+  SkeletonListRow,
+} from "../../ui/states";
 import { Table } from "../../ui/Table";
 import { Timeline } from "../../ui/Timeline";
 import { useToast } from "../../ui/Toast";
@@ -16,6 +21,30 @@ import { useCachedFetch } from "../../ui/use-cached-fetch";
 import { PHOTOS, ROWS, STEPS } from "../fixtures";
 import { Anchor, Section } from "../section";
 import type { GroupProps } from "./types";
+
+const PAGE_LOADING_DEMO_MS = 1500;
+
+function PageLoadingDemo() {
+  const [open, setOpen] = useState(false);
+
+  function show() {
+    setOpen(true);
+    setTimeout(() => setOpen(false), PAGE_LOADING_DEMO_MS);
+  }
+
+  return (
+    <>
+      <Button variant="secondary" onClick={show}>
+        Xem PageLoading
+      </Button>
+      {open && (
+        <div className="fixed inset-0 z-50">
+          <PageLoading />
+        </div>
+      )}
+    </>
+  );
+}
 
 const DEMO_KEY = "demo:summary";
 const DEMO_DELAY_MS = 600;
@@ -222,6 +251,8 @@ export function DataGroup(_: GroupProps) {
         </Card>
         <Anchor id="c-loading" />
         <LoadingState />
+        <Anchor id="c-page-loading" />
+        <PageLoadingDemo />
         <Anchor id="c-empty" />
         <EmptyState
           title="Chưa có gì ở đây"

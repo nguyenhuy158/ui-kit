@@ -58,6 +58,17 @@ export function EmptyState({
   );
 }
 
+export function PageLoading({ label = "Đang tải..." }: { label?: string }) {
+  return (
+    <div className="flex min-h-dvh items-center justify-center bg-bg text-fg-muted">
+      <div className="flex flex-col items-center gap-3 text-sm">
+        <Spinner size={32} label={label} />
+        {label}
+      </div>
+    </div>
+  );
+}
+
 export function LoadingState({ label = "Đang tải..." }: { label?: string }) {
   return (
     <div className="flex items-center justify-center gap-2 py-10 text-sm text-fg-muted">

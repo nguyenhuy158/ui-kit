@@ -307,6 +307,15 @@ Bảng cuộn ngang khi hẹp. Nhiều cột quá thì đánh dấu `hideOnMobil
 
 ```tsx
 if (isLoading) return <LoadingState />;
+```
+
+Cả trang hoặc route đang tải (fallback của `Suspense`, lần vào đầu tiên) thì dùng `PageLoading`, nó chiếm cả màn hình:
+
+```tsx
+<Suspense fallback={<PageLoading />}>{children}</Suspense>
+```
+
+```tsx
 if (rows.length === 0) {
   return (
     <EmptyState

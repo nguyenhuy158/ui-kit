@@ -34,7 +34,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 | `Accordion.tsx` | `Accordion` — mở nhiều hoặc chỉ một mục |
 | `Tooltip.tsx` | `Tooltip` (cần `@floating-ui/react`, tự lật khi sát mép) |
 | `Avatar.tsx` | `Avatar` — chữ cái đầu, màu suy ra từ tên |
-| `states.tsx` | `Skeleton`, `SkeletonListRow`, `EmptyState`, `LoadingState` |
+| `states.tsx` | `Skeleton`, `SkeletonListRow`, `EmptyState`, `LoadingState`, `PageLoading` |
 | `use-cached-fetch.ts` | `useCachedFetch`, `invalidateCached` — tải dữ liệu có cache dùng chung theo key, gộp request trùng, chỉ tải lại khi dữ liệu cũ (quay lại tab hoặc sau khi ghi), không poll |
 | `Modal.tsx` | `Modal`, `ConfirmDialog` |
 | `ConfirmProvider.tsx` | `ConfirmProvider`, `useConfirm`, `usePrompt` (thay `confirm()`/`prompt()` gốc, gọi bằng `await`; cần `Modal`, `Button`, `Input`, `Field`) |
