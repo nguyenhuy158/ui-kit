@@ -5,6 +5,7 @@ import { Backdrop } from "../../ui/Backdrop";
 import { Button } from "../../ui/Button";
 import { Card, CardHeader } from "../../ui/Card";
 import { useConfirm, usePrompt } from "../../ui/ConfirmProvider";
+import { ERROR_PAGE_STATUSES, ErrorPage } from "../../ui/ErrorPage";
 import { Field } from "../../ui/Field";
 import { Input } from "../../ui/Input";
 import { Modal } from "../../ui/Modal";
@@ -47,6 +48,20 @@ export function FeedbackGroup({ onAskConfirm }: GroupProps) {
           <Progress value={92} label="Dung lượng" showValue tone="warning" />
           <Progress value={38} label="Tiến độ chia tiền" showValue />
         </Card>
+      </Section>
+      <Section title="Trang lỗi" id="s-error-page">
+        <Anchor id="c-error-page" />
+        <div className="grid gap-3 sm:grid-cols-2">
+          {ERROR_PAGE_STATUSES.map((status) => (
+            <Card key={status} padded={false}>
+              <ErrorPage
+                status={status}
+                fill="parent"
+                action={<Button size="sm">Về trang chính</Button>}
+              />
+            </Card>
+          ))}
+        </div>
       </Section>
       <Section title="Lớp phủ và thông báo" id="s-overlays">
         <Card>
