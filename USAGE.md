@@ -309,6 +309,12 @@ Bảng cuộn ngang khi hẹp. Nhiều cột quá thì đánh dấu `hideOnMobil
 if (isLoading) return <LoadingState />;
 ```
 
+Trang lỗi: truyền `status`, chữ tiếng Việt tự điền, đổi được bằng `title` và `description`. `fill="parent"` khi đặt trong khung nhỏ.
+
+```tsx
+<ErrorPage status={404} action={<Button onClick={goHome}>Về trang chính</Button>} />
+```
+
 Cả trang hoặc route đang tải (fallback của `Suspense`, lần vào đầu tiên) thì dùng `PageLoading`, nó chiếm cả màn hình:
 
 ```tsx

@@ -150,6 +150,11 @@ export const MENU: MenuGroup[] = [
           { id: "c-progress", label: "Progress" },
         ],
       },
+      {
+        id: "s-error-page",
+        label: "Trang lỗi",
+        items: [{ id: "c-error-page", label: "ErrorPage" }],
+      },
       { id: "s-overlays", label: "Lớp phủ" },
       { id: "s-toast", label: "Snackbar (Toast)" },
     ],

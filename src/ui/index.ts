@@ -47,6 +47,12 @@ export {
   type DateString,
   formatDate,
 } from "./DatePicker";
+export {
+  ERROR_PAGE_STATUSES,
+  ErrorPage,
+  type ErrorPageProps,
+  type ErrorPageStatus,
+} from "./ErrorPage";
 export { Field } from "./Field";
 export { FileUpload, formatBytes } from "./FileUpload";
 export {

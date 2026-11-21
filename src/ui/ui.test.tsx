@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { AnimatedList } from "./AnimatedList";
 import { cn } from "./cn";
+import { ERROR_PAGE_STATUSES, ErrorPage } from "./ErrorPage";
 import { PagedList } from "./PagedList";
 import { Popover } from "./Popover";
 import { PageLoading } from "./states";
@@ -98,5 +99,30 @@ describe("PageLoading", () => {
     ).toBeInTheDocument();
     rerender(<PageLoading label="Đang mở" />);
     expect(screen.getByRole("status", { name: "Đang mở" })).toBeInTheDocument();
+  });
+});
+
+describe("ErrorPage", () => {
+  it.each(ERROR_PAGE_STATUSES)(
+    "shows the code and a message for %i",
+    (status) => {
+      render(<ErrorPage status={status} />);
+      expect(screen.getByRole("alert")).toHaveTextContent(String(status));
+      expect(screen.getByRole("heading")).not.toBeEmptyDOMElement();
+    },
+  );
+
+  it("uses a custom title and action", () => {
+    render(
+      <ErrorPage
+        status={404}
+        title="Hết rồi"
+        action={<button type="button">Về</button>}
+      />,
+    );
+    expect(
+      screen.getByRole("heading", { name: "Hết rồi" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Về" })).toBeInTheDocument();
   });
 });
