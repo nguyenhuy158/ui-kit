@@ -1,9 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import { describe, expect, it } from "vitest";
 import { AnimatedList } from "./AnimatedList";
+import { CodeInput, type CodeInputProps, normalizeCode } from "./CodeInput";
 import { cn } from "./cn";
 import { ERROR_PAGE_STATUSES, ErrorPage } from "./ErrorPage";
+import { Field } from "./Field";
 import { PagedList } from "./PagedList";
 import { Popover } from "./Popover";
 import { PageLoading } from "./states";
@@ -158,5 +161,113 @@ describe("ToastProvider position", () => {
     const stack = await stackAt("top-end");
     expect(stack.className).toContain("top-0");
     expect(stack.className).not.toContain("bottom-0");
+  });
+});
+
+describe("CodeInput", () => {
+  function Harness({
+    initial = "",
+    ...props
+  }: { initial?: string } & Partial<
+    Omit<CodeInputProps, "value" | "onChange">
+  >) {
+    const [value, setValue] = useState(initial);
+    return (
+      <>
+        <Field label="Mã trên máy">
+          <CodeInput value={value} onChange={setValue} {...props} />
+        </Field>
+        <output data-testid="value">{value}</output>
+      </>
+    );
+  }
+
+  it("is labelled by its Field and keeps the typed code upper case", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    const input = screen.getByLabelText("Mã trên máy");
+    await user.type(input, "abcd2345");
+    expect(screen.getByTestId("value").textContent).toBe("ABCD2345");
+    expect((input as HTMLInputElement).value).toBe("ABCD2345");
+  });
+
+  it("draws one box per character with a dash between groups", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<Harness />);
+    await user.type(screen.getByLabelText("Mã trên máy"), "abcd2345");
+    expect(container.textContent).toContain("ABCD-2345");
+    expect(container.querySelectorAll("span[aria-hidden='true']")).toHaveLength(
+      9,
+    );
+  });
+
+  it("takes a pasted code with or without the dash, in any case", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    const input = screen.getByLabelText("Mã trên máy");
+    await user.click(input);
+    await user.paste("abcd-2345");
+    expect(screen.getByTestId("value").textContent).toBe("ABCD2345");
+    await user.clear(input);
+    await user.paste(" wx yz 98!76 extra");
+    expect(screen.getByTestId("value").textContent).toBe("WXYZ9876");
+  });
+
+  it("supports another length, group size and character set", async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <Harness length={6} groupSize={3} allowed={/[0-9]/} />,
+    );
+    await user.type(screen.getByLabelText("Mã trên máy"), "12a3456789");
+    expect(screen.getByTestId("value").textContent).toBe("123456");
+    expect(container.textContent).toContain("123-456");
+  });
+
+  it("marks itself invalid and can be disabled", () => {
+    render(
+      <CodeInput
+        value="AB"
+        onChange={() => {}}
+        invalid
+        disabled
+        aria-label="Mã"
+      />,
+    );
+    const input = screen.getByLabelText("Mã") as HTMLInputElement;
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(input.disabled).toBe(true);
+  });
+
+  it("turns invalid and reads the message when its Field has an error", () => {
+    render(
+      <Field label="Mã trên máy" error="Mã không đúng">
+        <CodeInput value="AB" onChange={() => {}} />
+      </Field>,
+    );
+    const input = screen.getByLabelText("Mã trên máy");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+  });
+
+  it("asks the phone for a one-time code and forwards focus events", async () => {
+    const user = userEvent.setup();
+    const events: string[] = [];
+    render(
+      <Harness
+        onFocus={() => events.push("focus")}
+        onBlur={() => events.push("blur")}
+      />,
+    );
+    const input = screen.getByLabelText("Mã trên máy");
+    expect(input.getAttribute("autocomplete")).toBe("one-time-code");
+    expect(input.getAttribute("autocapitalize")).toBe("characters");
+    await user.click(input);
+    await user.tab();
+    expect(events).toEqual(["focus", "blur"]);
+  });
+
+  it("normalizeCode strips, upper-cases and trims to the length", () => {
+    expect(normalizeCode("ab-cd 23 45xyz")).toBe("ABCD2345");
+    expect(normalizeCode("12-34", 3, /[0-9]/)).toBe("123");
   });
 });

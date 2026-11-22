@@ -133,6 +133,10 @@ Bàn phím điện thoại theo `type`: `email`, `tel`, `url`, `search`, `number
   <Textarea rows={4} placeholder="Không bắt buộc" />
 </Field>
 
+<Field label="Mã trên máy" hint="Gõ hay dán ABCD-2345, abcd2345 đều được">
+  <CodeInput value={code} onChange={setCode} />
+</Field>
+
 <Field label="Loại">
   <Select value={type} onChange={(e) => setType(e.target.value)}>
     <option value="an">Ăn uống</option>
@@ -142,6 +146,8 @@ Bàn phím điện thoại theo `type`: `email`, `tel`, `url`, `search`, `number
 ```
 
 Truyền `error` là ô tự chuyển viền đỏ và đọc lỗi cho screen reader. Không cần tự set `invalid`.
+
+`CodeInput` (chỉ cần `cn.ts`) nhận `value` là các ký tự **không có dấu gạch** (`"ABCD2345"`), `length` (mặc định 8), `groupSize` (mặc định 4, chèn dấu gạch giữa các nhóm) và `allowed` (regex một ký tự, mặc định chữ và số; chữ thường được viết hoa trước khi lọc). Dán `abcd-2345` hay `ABCD2345` đều ra cùng một giá trị. Dùng trong `Field` như `Input`; muốn bàn phím số thì thêm `inputMode="numeric"` và `allowed={/[0-9]/}`.
 
 Icon trong ô tên là `leading` / `trailing`, **không phải** `prefix` / `suffix` — hai cái sau là thuộc tính HTML thật, đè lên sẽ sai kiểu.
 

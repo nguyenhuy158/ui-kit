@@ -22,6 +22,7 @@ export { Carousel, type CarouselProps } from "./Carousel";
 export { Celebrate, type CelebrateProps } from "./Celebrate";
 export { Checkbox } from "./Checkbox";
 export { Chip } from "./Chip";
+export { CodeInput, type CodeInputProps, normalizeCode } from "./CodeInput";
 export { Combobox, type ComboboxOption } from "./Combobox";
 export {
   type Command,

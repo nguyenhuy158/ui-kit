@@ -15,6 +15,7 @@ pnpm dev      # http://127.0.0.1:5173 — trang gallery xem toàn bộ component
 |---|---|
 | `Button.tsx` | `Button` (primary / secondary / outline / ghost / danger, size sm-md-lg-icon, loading, block) |
 | `Input.tsx` | `Input` (leading/trailing icon), `Textarea`, `Select` |
+| `CodeInput.tsx` | `CodeInput`, `normalizeCode` — ô nhập mã ngắn (mã thiết bị, OTP): mỗi ký tự một ô, dán được, nhận hoa/thường, có hay không dấu gạch |
 | `Field.tsx` | `Field` — label + hint + lỗi, tự nối `id` / `aria-describedby` |
 | `Combobox.tsx` | `Combobox` — chọn có tìm kiếm, gõ không dấu vẫn ra |
 | `DatePicker.tsx` | `DatePicker`, `DateRangePicker`, `formatDate` — chọn một ngày hoặc khoảng ngày |
