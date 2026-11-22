@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Card } from "../../ui/Card";
 import { Checkbox } from "../../ui/Checkbox";
 import { Chip } from "../../ui/Chip";
+import { CodeInput } from "../../ui/CodeInput";
 import { Combobox } from "../../ui/Combobox";
 import { DatePicker } from "../../ui/DatePicker";
 import { Field } from "../../ui/Field";
@@ -22,6 +23,8 @@ export function FormGroup(_: GroupProps) {
   const [notify, setNotify] = useState(true);
   const [plan, setPlan] = useState("free");
   const [email, setEmail] = useState("");
+  const [deviceCode, setDeviceCode] = useState("");
+  const [pin, setPin] = useState("");
   const [date, setDate] = useState("");
   const [city, setCity] = useState("");
   const [accountType, setAccountType] = useState("personal");
@@ -73,6 +76,33 @@ export function FormGroup(_: GroupProps) {
                 autoComplete="one-time-code"
                 maxLength={6}
                 placeholder="123456"
+              />
+            </Field>
+          </div>
+
+          <Anchor id="c-code-input" />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field
+              label="Mã thiết bị"
+              hint="Gõ hay dán ABCD-2345, abcd2345 đều được"
+            >
+              <CodeInput value={deviceCode} onChange={setDeviceCode} />
+            </Field>
+            <Field
+              label="Mã PIN 6 số"
+              error={
+                pin.length === 6 && pin !== "123456"
+                  ? "Mã PIN không đúng (thử 123456)"
+                  : undefined
+              }
+            >
+              <CodeInput
+                value={pin}
+                onChange={setPin}
+                length={6}
+                groupSize={3}
+                allowed={/[0-9]/}
+                inputMode="numeric"
               />
             </Field>
           </div>

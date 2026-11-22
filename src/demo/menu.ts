@@ -27,6 +27,7 @@ export const MENU: MenuGroup[] = [
         label: "Trường nhập liệu",
         items: [
           { id: "c-input", label: "Input" },
+          { id: "c-code-input", label: "CodeInput" },
           { id: "c-listbox", label: "Listbox" },
           { id: "c-select", label: "Select" },
           { id: "c-textarea", label: "Textarea" },
