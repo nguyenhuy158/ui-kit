@@ -83,9 +83,8 @@ export function BasicsGroup(_: GroupProps) {
       <Section title="Font chữ" id="s-font">
         <Card className="space-y-4">
           <p className="text-sm text-fg-muted">
-            Be Vietnam Pro, dự phòng Inter → system-ui. Tải từ Google Fonts
-            trong{" "}
-            <code className="rounded bg-surface-muted px-1">index.html</code>.
+            Be Vietnam Pro, dự phòng Inter → system-ui. Font được phục vụ cùng
+            origin với gallery.
           </p>
           <div className="space-y-1">
             {FONT_WEIGHTS.map((weight) => (
