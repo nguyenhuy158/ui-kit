@@ -7,6 +7,11 @@ not an npm package. Other personal projects copy the files they need and own
 them afterwards. The repo itself is a Vite app that renders a gallery of every
 component.
 
+The shared Be Vietnam Pro webfont bundle lives in
+`public/fonts/be-vietnam-pro/`. Copy that directory from a pinned UI Kit revision
+and serve its stylesheet and WOFF2 files from the app's own origin. Keep
+`OFL.txt`, the supported character subsets and `font-display: swap` together.
+
 ```text
 src/
   styles/tokens.css   # Design-token source of truth for every personal repo
